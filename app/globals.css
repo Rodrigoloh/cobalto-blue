@@ -2,19 +2,78 @@
 @tailwind components;
 @tailwind utilities;
 
+:root { color-scheme: dark light; }
 html, body, :root { height: 100%; }
 
-/* Parallax utility */
-.parallax {
-  perspective: 1px;
-  height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
+/* Self-hosted fonts */
+@font-face {
+  font-family: 'NeueMachina';
+  src: url('/fonts/NeueMachina-Ultrabold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
-.parallax__layer {
-  position: absolute;
-  top: 0; right: 0; bottom: 0; left: 0;
-  transform-origin: center;
+@font-face {
+  font-family: 'CircularStd';
+  src: url('/fonts/CircularStd-Book.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
-.parallax__layer--back { transform: translateZ(-1px) scale(2); }
-.parallax__layer--deep { transform: translateZ(-2px) scale(3); }
+@font-face {
+  font-family: 'CircularStd';
+  src: url('/fonts/CircularStd-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PPRightGroteskMono';
+  src: url('/fonts/PPRightGroteskMono-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PPRightGroteskMono';
+  src: url('/fonts/PPRightGroteskMono-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  background: #1F00FF; /* Portada azul sólido */
+  color: white;
+  overflow-x: hidden; /* evita barras de scroll horizontales por elementos full-bleed */
+}
+
+/* Scroll snap por sección */
+.wrapper {
+  scroll-snap-type: y proximity;
+}
+.section {
+  min-height: 100svh;
+  scroll-snap-align: start;
+}
+
+/* Deshabilitar scroll snap para el carrusel */
+.no-snap {
+  scroll-snap-align: none !important;
+}
+
+/* Zona segura a la derecha para no empalmar con cb_icon */
+.pr-safe-right {
+  padding-right: clamp(64px, 10vw, 160px);
+}
+
+/* Underline style para item activo del menú */
+.nav-underline {
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+/* Utilidad para deshabilitar scroll cuando el modal está abierto */
+.body-lock {
+  overflow: hidden;
+}

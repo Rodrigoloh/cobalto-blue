@@ -1,0 +1,5 @@
+<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  <rect width="60" height="60" fill="none" stroke="white" stroke-width="2"/>
+  <text x="30" y="32" text-anchor="middle" fill="white" font-family="Arial" font-size="8">ICON</text>
+  <text x="30" y="42" text-anchor="middle" fill="white" font-family="Arial" font-size="6">60x60px</text>
+</svg>

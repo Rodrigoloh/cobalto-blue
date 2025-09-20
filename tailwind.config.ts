@@ -8,22 +8,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        cobalt: {
-          50: '#e8f6ff',
-          100: '#cfeeff',
-          200: '#a6ddff',
-          300: '#6dc6ff',
-          400: '#36aaff',
-          500: '#0b8bff', // near cobalt
-          600: '#006fe6',
-          700: '#0057b3',
-          800: '#003f80',
-          900: '#002a59'
-        }
+        cobaltBase: '#1F00FF',
+        gradientA: '#1F00FF', // top
+        gradientB: '#3a00ff',
+        gradientC: '#0076ff',
+        gradientD: '#ff0022', // bottom right hue
       },
       fontFamily: {
-        sans: ['ui-sans-serif', 'system-ui', 'Inter', 'sans-serif']
-      }
+        neueMachina: ['NeueMachina', 'system-ui', 'sans-serif'],
+        circularStd: ['CircularStd', 'system-ui', 'sans-serif'],
+        groteskMono: ['PPRightGroteskMono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+      },
     },
   },
   plugins: [],
