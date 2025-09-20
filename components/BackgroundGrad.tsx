@@ -58,7 +58,7 @@ export default function BackgroundGrad() {
         key="hero-solid"
         className="absolute inset-0 bg-[#1F00FF]"
         animate={{ opacity: activeGradient === -1 ? 1 : 0 }}
-        initial={activeGradient === -1 ? 1 : 0}
+        initial={{ opacity: activeGradient === -1 ? 1 : 0 }}
         transition={{ duration: 0.8, ease: 'easeInOut' }}
       />
       {gradients.map((gradient, index) => (
@@ -66,7 +66,7 @@ export default function BackgroundGrad() {
           key={gradient.id}
           className={`absolute inset-0 ${gradient.className}`}
           animate={{ opacity: activeGradient === index ? 1 : 0 }}
-          initial={activeGradient === index ? 1 : 0}
+          initial={{ opacity: activeGradient === index ? 1 : 0 }}
           transition={{ duration: 0.8, ease: 'easeInOut' }}
         />
       ))}
