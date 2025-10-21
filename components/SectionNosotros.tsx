@@ -1,6 +1,7 @@
 'use client'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
+import ServicesCarousel from './ServicesCarousel'
 
 // === Contenido editable ===
 // Edita los textos y listas de la sección en las constantes siguientes.
@@ -61,14 +62,11 @@ export default function SectionNosotros(){
       {/* C. Banner servicios */}
       <div className="bg-white border-y border-neutral-200">
         <div className="mx-auto max-w-7xl px-6 py-20">
-          <h3 className="text-center text-2xl md:text-3xl font-semibold">Nuestros servicios</h3>
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {SERVICES.map((s) => (
-              <div key={s.title} className="p-6 rounded-xl border border-neutral-200 bg-white">
-                <h4 className="text-xl md:text-2xl font-semibold">{s.title}</h4>
-                <p className="mt-2 text-neutral-600">{s.desc}</p>
-              </div>
-            ))}
+          <h3 className="text-center text-2xl md:text-3xl font-semibold">
+            <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> servicios
+          </h3>
+          <div className="mt-10">
+            <ServicesCarousel items={SERVICES} />
           </div>
         </div>
       </div>
