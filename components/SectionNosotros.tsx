@@ -1,6 +1,4 @@
 'use client'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef } from 'react'
 import ServicesCarousel from './ServicesCarousel'
 
 // === Contenido editable ===
@@ -43,11 +41,6 @@ const TEAM: Member[] = [
 // La imagen de parallax debe colocarse en: public/nosotros/parallax.jpg
 
 export default function SectionNosotros(){
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  // Parallax sutil: la imagen se mueve más lento que el scroll
-  const y = useTransform(scrollYProgress, [0, 1], ['-8%', '8%'])
-
   return (
     <section id="nosotros" className="bg-white text-black">
       {/* A. Texto centrado */}
@@ -57,16 +50,16 @@ export default function SectionNosotros(){
         ))}
       </div>
 
-      {/* B. Imagen en parallax */}
-      <div ref={ref} className="relative h-[38vh] md:h-[52vh] overflow-hidden">
-        <motion.div style={{ y }} className="absolute inset-0">
+      {/* B. Imagen sticky (efecto cover mientras el contenido sube) */}
+      <div className="relative h-[140vh] md:h-[180vh]">
+        <div className="sticky top-0 h-screen">
           <img src="/nosotros/parallax.jpg" alt="Parallax" className="w-full h-full object-cover" />
-        </motion.div>
+        </div>
       </div>
 
       {/* C. Banner servicios */}
       <div className="bg-white border-y border-neutral-200">
-        <div className="mx-auto max-w-7xl px-6 py-20">
+        <div className="mx-auto max-w-7xl px-6 py-28 md:py-36">
           <h3 className="text-center text-2xl md:text-3xl font-semibold">
             <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> servicios
           </h3>
