@@ -5,9 +5,14 @@ import ServicesCarousel from './ServicesCarousel'
 
 // === Contenido editable ===
 // Edita los textos y listas de la sección en las constantes siguientes.
-const ABOUT_TEXT: string[] = [
-  'Somos un estudio de diseño con enfoque en claridad y atemporalidad.',
-  'Unimos estrategia, estética y tecnología para resolver problemas reales de negocio.'
+const ABOUT_TEXT: React.ReactNode[] = [
+  <>
+    <span className="font-semibold text-[#1F00FF]">Cobalto Blue</span> existe para dar forma a las ideas que merecen ser vistas.
+  </>,
+  <>
+    Construimos marcas que comunican con claridad y se sienten vivas. En cada proyecto buscamos equilibrio entre lo racional y lo sensorial: {' '}
+    <span className="font-semibold text-[#1F00FF]">estrategia, estética y una narrativa que permanezca.</span>
+  </>,
 ]
 
 type Service = { title: string; desc: string }
