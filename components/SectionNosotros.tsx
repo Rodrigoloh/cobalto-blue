@@ -52,14 +52,14 @@ export default function SectionNosotros(){
 
       {/* B. Imagen sticky (efecto cover mientras el contenido sube) */}
       <div className="relative h-[140vh] md:h-[180vh]">
-        <div className="sticky top-0 h-screen">
+        <div className="sticky top-0 h-screen z-0">
           <img src="/nosotros/parallax.jpg" alt="Parallax" className="w-full h-full object-cover" />
         </div>
       </div>
 
       {/* C. Banner servicios */}
-      <div className="bg-white border-y border-neutral-200">
-        <div className="mx-auto max-w-7xl px-6 py-28 md:py-36">
+      <div className="relative z-10 bg-white -mt-[28vh] md:-mt-[40vh] border-b border-neutral-200">
+        <div className="mx-auto max-w-7xl px-6 pt-[28vh] md:pt-[40vh] pb-28 md:pb-36">
           <h3 className="text-center text-2xl md:text-3xl font-semibold">
             <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> servicios
           </h3>
