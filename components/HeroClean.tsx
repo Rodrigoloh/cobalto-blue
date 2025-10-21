@@ -19,7 +19,7 @@ export default function HeroClean() {
       {/* Fondo imagen */}
       <div
         className="absolute inset-0 -z-10 bg-center bg-cover"
-        style={{ backgroundImage: 'url(/hero/hero.jpg), url(/cb_gradient-01.png)' }}
+        style={{ backgroundImage: 'url(/hero/hero.jpg)' }}
       />
       {/* Video opcional */}
       {showVideo && (
