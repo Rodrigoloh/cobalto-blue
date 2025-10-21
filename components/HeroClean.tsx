@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 // Hero con media de fondo configurable.
 // Coloca tus assets en:
@@ -9,6 +9,7 @@ import { useCallback } from 'react'
 // Este componente muestra imagen de fondo y, si existe el video, lo superpone.
 
 export default function HeroClean() {
+  const [showVideo, setShowVideo] = useState(true)
   const goNext = useCallback(() => {
     document.getElementById('nosotros')?.scrollIntoView({ behavior: 'smooth' })
   }, [])
@@ -18,18 +19,21 @@ export default function HeroClean() {
       {/* Fondo imagen */}
       <div
         className="absolute inset-0 -z-10 bg-center bg-cover"
-        style={{ backgroundImage: 'url(/hero/hero.jpg)' }}
+        style={{ backgroundImage: 'url(/hero/hero.jpg), url(/cb_gradient-01.png)' }}
       />
       {/* Video opcional */}
-      <video
-        className="absolute inset-0 -z-10 h-full w-full object-cover"
-        src="/hero/hero.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-        poster="/hero/hero.jpg"
-      />
+      {showVideo && (
+        <video
+          className="absolute inset-0 -z-10 h-full w-full object-cover"
+          src="/hero/hero.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/hero/hero.jpg"
+          onError={() => setShowVideo(false)}
+        />
+      )}
 
       {/* Overlay para legibilidad si el fondo es claro */}
       <div className="absolute inset-0 -z-10 bg-black/20" />
