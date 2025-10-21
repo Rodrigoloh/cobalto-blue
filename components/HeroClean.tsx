@@ -10,7 +10,7 @@ import { useCallback } from 'react'
 
 export default function HeroClean() {
   const goNext = useCallback(() => {
-    document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })
+    document.getElementById('nosotros')?.scrollIntoView({ behavior: 'smooth' })
   }, [])
 
   return (

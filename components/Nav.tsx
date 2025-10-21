@@ -34,8 +34,8 @@ export function Nav() {
       <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
         <Link href="/" className={`font-semibold tracking-tight ${onHero ? 'text-white' : 'text-neutral-900'}`}>cobalto.blue</Link>
         <nav className="hidden md:flex items-center gap-6 text-sm">
-          <Link href="/work" className={`${linkBase} ${linkCls}`}>Proyectos</Link>
           <Link href="/nosotros" className={`${linkBase} ${linkCls}`}>Nosotros</Link>
+          <Link href="/work" className={`${linkBase} ${linkCls}`}>Proyectos</Link>
           <Link href="/contacto" className={`${linkBase} ${linkCls}`}>Contacto</Link>
           <button
             onClick={() => {
