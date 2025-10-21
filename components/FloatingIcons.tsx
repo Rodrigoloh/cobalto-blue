@@ -1,74 +1,85 @@
 'use client'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { useStageMetrics } from '@/hooks/useStageMetrics'
+import { useRef } from 'react'
 
-const defaultInput = [0, 1, 2, 3, 4, 5]
-const defaultOutput = [0, 0, 0, 0, 0, 0]
+/**
+ * FloatingIcons (staged)
+ * - Contenedor alto (300vh) + hijo sticky top-0: esto mantiene los íconos "anclados"
+ *   mientras el progreso de scroll de ESTA sección avanza de 0 → 1.
+ * - Etapas:
+ *   STAGE 1 (0.00 → 0.20): cb_circles baja desde ~5vh hasta ~90vh.
+ *   STAGE 2 (0.20 → 0.70): cb_circles se queda en ~90vh (pausa).
+ *   STAGE 3 (0.70 → 1.00): cb_circles sube un poco (a ~40vh) junto con todo lo demás.
+ *   El icono cb_icon acompaña con su propia curva (sube más y con ajuste horizontal suave).
+ *
+ * Importante:
+ * - NO usar contenedor fixed aquí. La sección debe participar en el flujo del documento para
+ *   que useScroll calcule bien el progreso.
+ * - Si usas scroll-snap global, añade la clase .no-snap a esta sección para evitar saltos.
+ */
 
 export default function FloatingIcons() {
-  const { scrollY } = useScroll()
-  const metrics = useStageMetrics()
+  // Sección "alta" para producir progreso de scroll local
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'], // cuando el bottom de la sección toca el top del viewport => 1
+  })
 
-  // Comportamiento solicitado:
-  // - En Hero: círculo fijo cerca de la parte superior.
-  // - En Nosotros: se mueve hacia arriba junto con el contenido (como si fuera estático en el flujo).
-  // - Al comenzar Servicios: ya va fuera del viewport por arriba.
-  const circlesInput = metrics.ready
-    ? [metrics.heroTop, metrics.heroBottom, metrics.serviciosTop]
-    : [0, 1, 2]
+  // === CB_CIRCLES: Baja → Pausa → Sube ===
+  const circlesY = useTransform(
+    scrollYProgress,
+    [0.0, 0.20, 0.70, 1.0],
+    ['5vh', '90vh', '90vh', '40vh'] // Arriba → fondo → PAUSA → sube un poco
+  )
+  const circlesOpacity = useTransform(scrollYProgress, [0, 1], [1, 1])
 
-  const topY = metrics.ready ? metrics.windowHeight * 0.12 : 0
-  const endY = metrics.ready ? topY - (metrics.serviciosTop - metrics.heroBottom) : 0
-  const circlesOutput = metrics.ready ? [topY, topY, endY] : [0, 0, 0]
-
-
-  // cb_icon: fijo en la parte inferior derecha hasta que Contacto lo
-  // lleve a la esquina superior derecha, con movimiento sólo vertical.
-  const iconInput = metrics.ready
-    ? [metrics.heroTop, metrics.contactoTop, metrics.contactoRelease]
-    : defaultInput
-  const iconBottomY = metrics.ready ? metrics.windowHeight * 0.88 : 0
-  const iconTopY = metrics.ready ? metrics.windowHeight * 0.08 : 0
-  const iconOutput = metrics.ready ? [iconBottomY, iconBottomY, iconTopY] : defaultOutput
-
-  const circlesY = useTransform(scrollY, circlesInput, circlesOutput)
-  const iconY = useTransform(scrollY, iconInput, iconOutput)
+  // === CB_ICON: Pausa y sube más en Stage 3 ===
+  const iconTop = useTransform(
+    scrollYProgress,
+    [0.0, 0.25, 0.70, 1.0],
+    ['85vh', '10vh', '10vh', '-20vh'] // Parte baja → arriba → PAUSA → sube más (sale del viewport)
+  )
+  const iconLeft = useTransform(
+    scrollYProgress,
+    [0.0, 0.5, 1.0],
+    ['85vw', '90vw', '88vw'] // Ajuste horizontal sutil
+  )
 
   return (
-    <div
-      className="fixed inset-0 pointer-events-none z-10"
-      style={{ visibility: metrics.ready ? 'visible' : 'hidden' }}
+    <section
+      ref={sectionRef}
+      id="floating-icons-stage"
+      className="section no-snap relative"
+      style={{ height: '300vh' }} // 3 pantallas de alto; ajusta si quieres más/menos tiempo
+      aria-label="Floating icons staged"
     >
-      {/* CB_CIRCLES */}
-      <motion.div
-        style={{
-          y: circlesY,
-          x: '50vw',
-          translateX: '-50%'
-        }}
-        className="absolute"
-      >
-        <img
-          src="/brand/cb_circles.png"
-          alt="cobalto circles"
-          className="w-40 h-14 object-contain"
-        />
-      </motion.div>
+      {/* El viewport "anclado" donde viven los íconos */}
+      <div className="sticky top-0 h-screen pointer-events-none z-40">
+        {/* CB_CIRCLES (centrado horizontalmente) */}
+        <motion.div
+          style={{ y: circlesY, opacity: circlesOpacity }}
+          className="absolute left-1/2 -translate-x-1/2"
+        >
+          <img
+            src="/brand/cb_circles.png"
+            alt="cobalto circles"
+            className="w-40 h-14 object-contain"
+          />
+        </motion.div>
 
-      {/* CB_ICON */}
-      <motion.div
-        style={{
-          y: iconY,
-          right: '3vw'
-        }}
-        className="absolute"
-      >
-        <img
-          src="/brand/cb_icon.png"
-          alt="cobalto icon"
-          className="w-20 h-20 object-contain"
-        />
-      </motion.div>
-    </div>
+        {/* CB_ICON (movimiento vertical+ajuste horizontal) */}
+        <motion.div
+          style={{ top: iconTop, left: iconLeft }}
+          className="absolute -translate-x-1/2 -translate-y-1/2"
+        >
+          <img
+            src="/brand/cb_icon.png"
+            alt="cobalto icon"
+            className="w-20 h-20 object-contain"
+          />
+        </motion.div>
+      </div>
+    </section>
   )
 }

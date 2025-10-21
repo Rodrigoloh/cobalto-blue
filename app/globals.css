@@ -43,8 +43,8 @@ html, body, :root { height: 100%; }
 }
 
 body {
-  background: #1F00FF; /* Portada azul sólido */
-  color: white;
+  background: #ffffff; /* Fondo claro para look clean */
+  color: #111111;
   overflow-x: hidden; /* evita barras de scroll horizontales por elementos full-bleed */
 }
 

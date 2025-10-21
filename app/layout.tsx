@@ -1,7 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import ScrollSpyNav from '@/components/ScrollSpyNav'
-import FloatingIcons from '@/components/FloatingIcons'
+import { Nav } from '@/components/Nav'
 
 export const metadata: Metadata = {
   title: 'cobalto.blue — Branding & Digital',
@@ -12,8 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" className="scroll-smooth">
       <body>
-        <ScrollSpyNav />
-        <FloatingIcons />
+        <Nav />
         {children}
       </body>
     </html>

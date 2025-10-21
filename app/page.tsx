@@ -1,21 +1,19 @@
-import BackgroundGrad from '@/components/BackgroundGrad'
-import Hero from '@/components/Hero'
+import HeroClean from '@/components/HeroClean'
+import ProjectsGrid from '@/components/ProjectsGrid'
 import SectionNosotros from '@/components/SectionNosotros'
 import SectionServicios from '@/components/SectionServicios'
-import WorkCarousel from '@/components/WorkCarousel'
 import SectionClientes from '@/components/SectionClientes'
-import SectionContacto from '@/components/SectionContacto'
+import FooterClean from '@/components/FooterClean'
 
 export default function Page(){
   return (
     <div className="wrapper">
-      <BackgroundGrad />
-      <Hero />
-      <SectionNosotros />
+      <HeroClean />
+      <ProjectsGrid />
       <SectionServicios />
-      <WorkCarousel />
+      <SectionNosotros />
       <SectionClientes />
-      <SectionContacto />
+      <FooterClean />
     </div>
   )
 }

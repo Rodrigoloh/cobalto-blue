@@ -2,16 +2,13 @@
 
 export default function SectionNosotros(){
   return (
-    <section id="nosotros" className="section no-snap relative min-h-[240vh]">
-      {/* Contenido estático: sin fade ni animaciones; sube con el scroll */}
-      <div className="mx-auto max-w-4xl px-6 pr-safe-right min-h-screen flex items-center">
+    <section id="nosotros" className="section relative bg-white">
+      <div className="mx-auto max-w-4xl px-6 min-h-[60vh] flex items-center">
         <div>
-          <h2 className="font-neueMachina font-bold text-5xl mb-6">Nosotros</h2>
-          <p className="font-circularStd text-lg leading-relaxed text-white/90">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra, purus non malesuada
-            bibendum, libero tortor luctus mi, in commodo arcu augue eu risus. Donec faucibus, nisl at
-            fermentum posuere, leo enim fermentum tellus, vitae pulvinar est quam quis nisi. Integer
-            faucibus elit sed erat gravida, a aliquet lorem cursus. Integer consequat maximus leo.
+          <h2 className="text-4xl md:text-5xl font-semibold mb-6">Nosotros</h2>
+          <p className="text-lg leading-relaxed text-neutral-700">
+            Cobalto.blue es un estudio pequeño que combina estrategia, estética y código para resolver
+            problemas de negocio. Trabajamos con marcas que buscan claridad y una ejecución impecable.
           </p>
         </div>
       </div>
