@@ -10,13 +10,14 @@ export default function ServicesCarousel({ items }: { items: ServiceItem[] }) {
   const frameRef = useRef<HTMLDivElement>(null)
   const [perView, setPerView] = useState(3)
   const [page, setPage] = useState(0)
+  const [frameW, setFrameW] = useState(0)
 
-  // Compute slides per view responsive
+  // Responsive perView + frame width for pixel-perfect translate
   useEffect(() => {
     const compute = () => {
       const w = frameRef.current?.clientWidth ?? window.innerWidth
-      const next = w >= 1200 ? 3 : w >= 760 ? 2 : 1
-      setPerView(next)
+      setFrameW(w)
+      setPerView(w >= 1200 ? 3 : w >= 760 ? 2 : 1)
     }
     compute()
     window.addEventListener('resize', compute)
@@ -30,19 +31,28 @@ export default function ServicesCarousel({ items }: { items: ServiceItem[] }) {
   const pages = useMemo(() => Math.max(1, Math.ceil(items.length / perView)), [items.length, perView])
   useEffect(() => { setPage((p) => Math.min(p, pages - 1)) }, [pages])
 
+  const pagesData = useMemo(() => chunk(items, perView), [items, perView])
+
   const next = () => setPage((p) => (p + 1) % pages)
   const prev = () => setPage((p) => (p - 1 + pages) % pages)
 
   return (
-    <div className="relative">
+    <div className="relative" aria-roledescription="carousel">
       <div ref={frameRef} className="overflow-hidden">
         <div
-          className="flex transition-transform duration-500"
-          style={{ transform: `translateX(-${page * 100}%)`, width: `${(items.length / perView) * 100}%` }}
+          className="flex transition-transform duration-500 will-change-transform"
+          style={{ transform: `translateX(-${page * frameW}px)` }}
         >
-          {items.map((s, i) => (
-            <div key={i} style={{ width: `${100 / items.length}%` }} className="px-6 md:px-10">
-              <ServiceSlide index={i} item={s} />
+          {pagesData.map((group, gi) => (
+            <div key={gi} className="shrink-0" style={{ width: frameW }}>
+              <div
+                className="grid gap-x-12 gap-y-10 px-6 md:px-10"
+                style={{ gridTemplateColumns: `repeat(${perView}, minmax(0,1fr))` }}
+              >
+                {group.map((s, i) => (
+                  <ServiceSlide key={`${gi}-${i}`} index={gi * perView + i} item={s} />
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -106,3 +116,8 @@ function Arrow({ dir }: { dir: 'left' | 'right' }) {
   )
 }
 
+function chunk<T>(arr: T[], size: number): T[][] {
+  const out: T[][] = []
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size))
+  return out
+}
