@@ -35,7 +35,7 @@ export function Nav() {
         <Link href="/" aria-label="cobalto.blue" className="block">
           {/* Imagotipo: blanco sobre hero, negro sobre fondo blanco */}
           <img
-            src={onHero ? '/brand/cb_logo-main-white.png' : '/brand/cb_logo-main-black.png'}
+            src={onHero ? '/brand/logo-main-white.png' : '/brand/logo-main-blue.png'}
             alt="cobalto.blue"
             className="h-6 md:h-7 w-auto"
           />
