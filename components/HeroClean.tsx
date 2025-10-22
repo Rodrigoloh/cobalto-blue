@@ -49,14 +49,6 @@ export default function HeroClean() {
             priority
             className="mx-auto w-[min(80vw,720px)] h-auto"
           />
-          <div className="mt-10 flex items-center justify-center">
-            <Link
-              href="/nosotros"
-              className="inline-flex items-center rounded-full bg-white/10 backdrop-blur px-5 py-2.5 text-white hover:bg-white/20 transition"
-            >
-              Nosotros
-            </Link>
-          </div>
         </div>
 
         {/* Flecha flotante hacia siguiente sección */}
