@@ -51,7 +51,7 @@ export default function SectionNosotros(){
       </div>
 
       {/* B. Imagen sticky (efecto cover mientras el contenido sube) */}
-      <div className="relative h-[320vh] md:h-[340vh]">
+      <div className="relative h-[300vh] md:h-[320vh]">
         <div className="sticky top-0 h-screen z-0">
           <img src="/nosotros/parallax.jpg" alt="Parallax" className="w-full h-full object-cover" />
         </div>
@@ -59,7 +59,7 @@ export default function SectionNosotros(){
 
       {/* C. Banner servicios (overlay 1) */}
       <div className="relative z-10 bg-white -mt-[100vh] border-b border-neutral-200">
-        <div className="mx-auto max-w-7xl px-6 pt-[76vh] md:pt-[80vh] pb-12 md:pb-16">
+        <div className="mx-auto max-w-7xl px-6 pt-[64vh] md:pt-[68vh] pb-14 md:pb-16">
           <h3 className="text-center text-2xl md:text-3xl font-semibold">
             <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> servicios
           </h3>
@@ -71,9 +71,9 @@ export default function SectionNosotros(){
 
       {/* D. Proceso (overlay 2) */}
       <div className="relative z-10 -mt-[100vh] bg-black text-white">
-        <div className="mx-auto max-w-7xl px-6 pt-[76vh] md:pt-[80vh] pb-12 md:pb-16">
+        <div className="mx-auto max-w-7xl px-6 pt-[64vh] md:pt-[68vh] pb-14 md:pb-16">
           <h3 className="text-center text-2xl md:text-3xl font-semibold"><span className="italic mr-1 text-[#1F00FF]">Nuestro</span> proceso</h3>
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
             {PROCESS_STEPS.map((st, idx) => (
               <div key={st.title}>
                 <div className="text-[#1F00FF] text-sm mb-2">{String(idx + 1).padStart(2, '0')}</div>
@@ -87,7 +87,7 @@ export default function SectionNosotros(){
 
       {/* E. Contacto (overlay 3) */}
       <div id="contacto" className="relative z-10 -mt-[100vh] bg-[#1F00FF] text-white">
-        <div className="mx-auto max-w-7xl px-6 pt-[76vh] md:pt-[80vh] pb-12 md:pb-16">
+        <div className="mx-auto max-w-7xl px-6 pt-[64vh] md:pt-[68vh] pb-14 md:pb-16">
           <h3 className="text-center text-2xl md:text-3xl font-semibold">
             <span className="italic mr-1 text-white">Nuestro</span>
             <span className="text-black">contacto</span>
