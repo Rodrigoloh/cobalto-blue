@@ -31,7 +31,7 @@ ${formData.mensaje}
     <section
       id="contacto"
       className="section relative bg-white"
-      style={{ backgroundImage: 'url(/contacto/bg.jpg)' }}
+      style={{ backgroundImage: 'url(/contacto/bg.png), url(/contacto/bg.jpg)' }}
     >
       <div className="absolute inset-0 bg-white/70" aria-hidden />
       <div className="relative mx-auto max-w-6xl w-full px-6 py-20 md:py-24">
