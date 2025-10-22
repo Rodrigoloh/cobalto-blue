@@ -72,7 +72,7 @@ export default function SectionNosotros(){
       {/* D. Proceso (banner negro) */}
       <div className="bg-black text-white">
         <div className="mx-auto max-w-7xl px-6 py-20">
-          <h3 className="text-center text-2xl md:text-3xl font-semibold">Nuestro proceso</h3>
+          <h3 className="text-center text-2xl md:text-3xl font-semibold"><span className="italic mr-1 text-[#1F00FF]">Nuestro</span> proceso</h3>
           <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
             {PROCESS_STEPS.map((st, idx) => (
               <div key={st.title}>
