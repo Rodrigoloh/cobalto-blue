@@ -51,15 +51,15 @@ export default function SectionNosotros(){
       </div>
 
       {/* B. Imagen sticky (efecto cover mientras el contenido sube) */}
-      <div className="relative h-[140vh] md:h-[180vh]">
+      <div className="relative h-[320vh] md:h-[340vh]">
         <div className="sticky top-0 h-screen z-0">
           <img src="/nosotros/parallax.jpg" alt="Parallax" className="w-full h-full object-cover" />
         </div>
       </div>
 
-      {/* C. Banner servicios */}
+      {/* C. Banner servicios (overlay 1) */}
       <div className="relative z-10 bg-white -mt-[100vh] border-b border-neutral-200">
-        <div className="mx-auto max-w-7xl px-6 pt-[72vh] md:pt-[84vh] pb-12 md:pb-16">
+        <div className="mx-auto max-w-7xl px-6 pt-[76vh] md:pt-[80vh] pb-12 md:pb-16">
           <h3 className="text-center text-2xl md:text-3xl font-semibold">
             <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> servicios
           </h3>
@@ -69,11 +69,11 @@ export default function SectionNosotros(){
         </div>
       </div>
 
-      {/* D. Proceso (banner negro) */}
-      <div className="bg-black text-white">
-        <div className="mx-auto max-w-7xl px-6 py-20">
+      {/* D. Proceso (overlay 2) */}
+      <div className="relative z-10 -mt-[100vh] bg-black text-white">
+        <div className="mx-auto max-w-7xl px-6 pt-[76vh] md:pt-[80vh] pb-12 md:pb-16">
           <h3 className="text-center text-2xl md:text-3xl font-semibold"><span className="italic mr-1 text-[#1F00FF]">Nuestro</span> proceso</h3>
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
             {PROCESS_STEPS.map((st, idx) => (
               <div key={st.title}>
                 <div className="text-[#1F00FF] text-sm mb-2">{String(idx + 1).padStart(2, '0')}</div>
@@ -85,7 +85,43 @@ export default function SectionNosotros(){
         </div>
       </div>
 
-      {/* E. Nuestro equipo (oculto) */}
+      {/* E. Contacto (overlay 3) */}
+      <div id="contacto" className="relative z-10 -mt-[100vh] bg-[#1F00FF] text-white">
+        <div className="mx-auto max-w-7xl px-6 pt-[76vh] md:pt-[80vh] pb-12 md:pb-16">
+          <h3 className="text-center text-2xl md:text-3xl font-semibold">
+            <span className="italic mr-1 text-white">Nuestro</span>
+            <span className="text-black">contacto</span>
+          </h3>
+          <div className="mt-8 grid md:grid-cols-2 gap-12 items-start">
+            <div>
+              <p className="text-lg text-white/90">
+                Escríbenos a {' '}
+                <a className="underline text-white" href="mailto:hey@cobalto.blue">hey@cobalto.blue</a>
+                {' '}o envíanos un WhatsApp.
+              </p>
+              <p className="mt-3 text-white/90">
+                <a
+                  href="https://wa.me/524422009964?text=Hola! Me interesa conocer más sobre los servicios de Cobalto.blue"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-white underline"
+                >
+                  WhatsApp
+                </a>
+              </p>
+            </div>
+            <form className="space-y-4" onSubmit={(e)=>e.preventDefault()}>
+              <input className="w-full bg-transparent border-b border-white/60 pb-2 text-white placeholder-white/70 focus:outline-none focus:border-white" placeholder="Nombre" />
+              <input className="w-full bg-transparent border-b border-white/60 pb-2 text-white placeholder-white/70 focus:outline-none focus:border-white" placeholder="Correo electrónico" type="email" />
+              <input className="w-full bg-transparent border-b border-white/60 pb-2 text-white placeholder-white/70 focus:outline-none focus:border-white" placeholder="Teléfono" />
+              <textarea className="w-full bg-transparent border-b border-white/60 pb-2 text-white placeholder-white/70 focus:outline-none focus:border-white resize-none" placeholder="Cuéntanos sobre tu proyecto" rows={4} />
+              <button className="rounded-full border border-white px-5 py-2.5 text-white hover:bg-white hover:text-[#1F00FF] transition">Enviar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* F. Nuestro equipo (oculto) */}
     </section>
   )
 }
