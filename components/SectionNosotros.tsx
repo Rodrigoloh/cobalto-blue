@@ -58,7 +58,7 @@ export default function SectionNosotros(){
       </div>
 
       {/* C. Banner servicios (overlay 1) */}
-      <div className="relative z-10 -mt-[100vh] bg-white min-h-screen flex items-center border-b border-neutral-200">
+      <div className="relative z-50 -mt-[100vh] bg-white text-black min-h-screen flex items-center border-b border-neutral-200">
         <div className="mx-auto max-w-7xl px-6 w-full py-12">
           <h3 className="text-center text-2xl md:text-3xl font-semibold">
             <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> servicios
@@ -70,7 +70,7 @@ export default function SectionNosotros(){
       </div>
 
       {/* D. Proceso (overlay 2) */}
-      <div className="relative z-10 -mt-[100vh] bg-black text-white min-h-screen flex items-center">
+      <div className="relative z-50 -mt-[100vh] bg-black text-white min-h-screen flex items-center">
         <div className="mx-auto max-w-7xl px-6 w-full py-12">
           <h3 className="text-center text-2xl md:text-3xl font-semibold"><span className="italic mr-1 text-[#1F00FF]">Nuestro</span> proceso</h3>
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -86,7 +86,7 @@ export default function SectionNosotros(){
       </div>
 
       {/* E. Contacto (overlay 3) */}
-      <div id="contacto" className="relative z-10 -mt-[100vh] bg-[#1F00FF] text-white min-h-screen flex items-center">
+      <div id="contacto" className="relative z-50 -mt-[100vh] bg-[#1F00FF] text-white min-h-screen flex items-center">
         <div className="mx-auto max-w-7xl px-6 w-full py-12">
           <h3 className="text-center text-2xl md:text-3xl font-semibold">
             <span className="italic mr-1 text-white">Nuestro</span>
