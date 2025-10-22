@@ -91,12 +91,12 @@ export default function ServicesCarousel({ items }: { items: ServiceItem[] }) {
 
 function ServiceSlide({ index, item }: { index: number; item: ServiceItem }) {
   return (
-    <div className="text-center select-none">
+    <div className="text-left select-none">
       <div className="text-[#1F00FF] font-groteskMono text-lg">{String(index + 1).padStart(2, '0')}</div>
       <div className="mt-2 text-4xl md:text-5xl font-semibold leading-tight text-black">
         {item.title}
       </div>
-      <div className="mt-4 text-neutral-500 max-w-md mx-auto">
+      <div className="mt-4 text-neutral-500 max-w-md">
         {item.desc}
       </div>
     </div>

@@ -44,9 +44,14 @@ export default function SectionNosotros(){
   return (
     <section id="nosotros" className="bg-white text-black">
       {/* A. Texto centrado */}
-      <div className="mx-auto max-w-3xl px-6 py-36 md:py-44 text-center">
+      <div className="mx-auto max-w-3xl md:max-w-6xl px-6 py-36 md:py-44 text-center">
         {ABOUT_TEXT.map((p, i) => (
-          <p key={i} className={`text-xl md:text-2xl leading-relaxed ${i > 0 ? 'mt-6' : ''}`}>{p}</p>
+          <p
+            key={i}
+            className={`text-xl md:text-2xl leading-relaxed ${i > 0 ? 'mt-6' : ''} ${i === 0 ? 'md:whitespace-nowrap' : ''}`}
+          >
+            {p}
+          </p>
         ))}
       </div>
 
