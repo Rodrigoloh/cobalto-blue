@@ -30,10 +30,9 @@ ${formData.mensaje}
   return (
     <section
       id="contacto"
-      className="section relative bg-white"
+      className="section relative bg-white bg-center bg-cover bg-no-repeat"
       style={{ backgroundImage: 'url(/contacto/bg.png), url(/contacto/bg.jpg)' }}
     >
-      <div className="absolute inset-0 bg-white/70" aria-hidden />
       <div className="relative mx-auto max-w-6xl w-full px-6 py-20 md:py-24">
         <h2 className="text-center text-2xl md:text-3xl font-semibold">
           <span className="italic mr-1 text-[#1F00FF]">Nuestro</span> contacto
