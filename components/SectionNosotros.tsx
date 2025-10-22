@@ -59,7 +59,7 @@ export default function SectionNosotros(){
 
       {/* C. Banner servicios */}
       <div className="relative z-10 bg-white -mt-[100vh] border-b border-neutral-200">
-        <div className="mx-auto max-w-7xl px-6 pt-[100vh] pb-12 md:pb-16">
+        <div className="mx-auto max-w-7xl px-6 pt-[72vh] md:pt-[84vh] pb-12 md:pb-16">
           <h3 className="text-center text-2xl md:text-3xl font-semibold">
             <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> servicios
           </h3>
