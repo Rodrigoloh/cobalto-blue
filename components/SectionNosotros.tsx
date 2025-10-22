@@ -55,6 +55,8 @@ export default function SectionNosotros(){
         <div className="sticky top-0 h-screen z-0">
           <img src="/nosotros/parallax.jpg" alt="Parallax" className="w-full h-full object-cover" />
         </div>
+        {/* Ventana inicial para ver el parallax antes de que aparezcan los paneles */}
+        <div className="h-screen" aria-hidden />
 
         {/* Servicios */}
         <section className="relative z-10 min-h-screen flex items-center bg-white text-black border-b border-neutral-200">
