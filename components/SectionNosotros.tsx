@@ -85,25 +85,7 @@ export default function SectionNosotros(){
         </div>
       </div>
 
-      {/* E. Equipo (banner negro con cards hover) */}
-      <div className="bg-black text-white border-t border-white/10">
-        <div className="mx-auto max-w-7xl px-6 py-20">
-          <h3 className="text-center text-2xl md:text-3xl font-semibold">Nuestro equipo</h3>
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {TEAM.map((m) => (
-              <div key={m.name} className="group relative overflow-hidden rounded-xl border border-white/10 bg-neutral-900">
-                <img src={m.image} alt={m.name} className="w-full h-[320px] md:h-[380px] object-cover transition-transform duration-300 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-black/90 opacity-0 group-hover:opacity-100 transition-opacity grid place-items-center">
-                  <div className="text-center px-6">
-                    <div className="text-xl font-semibold">{m.name}</div>
-                    <div className="text-sm text-neutral-400 mt-1">{m.role}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/* E. Nuestro equipo (oculto) */}
     </section>
   )
 }
