@@ -50,17 +50,14 @@ export default function SectionNosotros(){
         ))}
       </div>
 
-      {/* B. Imagen sticky (efecto cover mientras el contenido sube) */}
-      <div className="relative h-[300vh] md:h-[300vh]">
+      {/* B-E. Parallax (sticky) + 3 paneles apilados sin márgenes negativos */}
+      <div className="relative">
         <div className="sticky top-0 h-screen z-0">
           <img src="/nosotros/parallax.jpg" alt="Parallax" className="w-full h-full object-cover" />
         </div>
-      </div>
 
-      {/* C-E. Capas superpuestas en un solo contenedor */}
-      <div className="relative -mt-[300vh] z-50">
         {/* Servicios */}
-        <section className="min-h-screen flex items-center bg-white text-black border-b border-neutral-200">
+        <section className="relative z-10 min-h-screen flex items-center bg-white text-black border-b border-neutral-200">
           <div className="mx-auto max-w-7xl px-6 w-full py-12">
             <h3 className="text-center text-2xl md:text-3xl font-semibold">
               <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> servicios
@@ -72,7 +69,7 @@ export default function SectionNosotros(){
         </section>
 
         {/* Proceso */}
-        <section className="min-h-screen flex items-center bg-black text-white">
+        <section className="relative z-10 min-h-screen flex items-center bg-black text-white">
           <div className="mx-auto max-w-7xl px-6 w-full py-12">
             <h3 className="text-center text-2xl md:text-3xl font-semibold"><span className="italic mr-1 text-[#1F00FF]">Nuestro</span> proceso</h3>
             <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -88,7 +85,7 @@ export default function SectionNosotros(){
         </section>
 
         {/* Contacto */}
-        <section id="contacto" className="min-h-screen flex items-center bg-[#1F00FF] text-white">
+        <section id="contacto" className="relative z-10 min-h-screen flex items-center bg-[#1F00FF] text-white">
           <div className="mx-auto max-w-7xl px-6 w-full py-12">
             <h3 className="text-center text-2xl md:text-3xl font-semibold">
               <span className="italic mr-1 text-white">Nuestro</span>
