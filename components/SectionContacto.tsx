@@ -38,28 +38,33 @@ ${formData.mensaje}
           <span className="text-black">contacto</span>
         </h2>
 
-        <div className="mt-10 grid md:grid-cols-2 gap-12 items-start">
+        <div className="mt-10 grid md:grid-cols-2 gap-12 items-start justify-items-start">
           {/* Información */}
-          <div>
-            <p className="text-lg text-white/90">
-              Escríbenos a {' '}
-              <a className="underline text-white" href="mailto:hey@cobalto.blue">hey@cobalto.blue</a>
-              {' '}o envíanos un WhatsApp.
-            </p>
-            <p className="mt-3 text-white/90">
+          <div className="w-full">
+            <div className="flex items-center gap-3 flex-wrap text-white/90">
+              <span className="text-lg">Escríbenos a</span>
+              <a
+                href="mailto:hey@cobalto.blue"
+                className="inline-flex items-center rounded-full border border-white px-4 py-1.5 text-white hover:bg-white hover:text-[#1F00FF] transition"
+              >
+                hey@cobalto.blue
+              </a>
+            </div>
+            <div className="flex items-center gap-3 mt-3 text-white/90">
+              <span className="text-lg">Envíanos un</span>
               <a
                 href="https://wa.me/524422009964?text=Hola! Me interesa conocer más sobre los servicios de Cobalto.blue"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-white underline"
+                className="inline-flex items-center rounded-full border border-white px-4 py-1.5 text-white hover:bg-white hover:text-[#1F00FF] transition"
               >
                 WhatsApp
               </a>
-            </p>
+            </div>
           </div>
 
           {/* Formulario */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md justify-self-start">
             <input
               type="text"
               placeholder="Nombre"
