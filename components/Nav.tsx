@@ -32,7 +32,14 @@ export function Nav() {
   return (
     <header className={`fixed top-0 inset-x-0 z-40 ${headerCls}`}>
       <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
-        <Link href="/" className={`font-semibold tracking-tight ${onHero ? 'text-white' : 'text-neutral-900'}`}>cobalto.blue</Link>
+        <Link href="/" aria-label="cobalto.blue" className="block">
+          {/* Imagotipo: blanco sobre hero, negro sobre fondo blanco */}
+          <img
+            src={onHero ? '/brand/cb_logo-main-white.png' : '/brand/cb_logo-main-black.png'}
+            alt="cobalto.blue"
+            className="h-6 md:h-7 w-auto"
+          />
+        </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm">
           <Link href="/nosotros" className={`${linkBase} ${linkCls}`}>Nosotros</Link>
           <Link href="/work" className={`${linkBase} ${linkCls}`}>Proyectos</Link>

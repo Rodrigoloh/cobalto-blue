@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useCallback, useState } from 'react'
 
 // Hero con media de fondo configurable.
@@ -39,15 +40,16 @@ export default function HeroClean() {
       <div className="absolute inset-0 -z-10 bg-black/20" />
 
       <div className="relative mx-auto max-w-6xl w-full px-6 h-full flex items-center text-white">
-        <div>
-          <p className="text-sm tracking-wider text-white/80 uppercase">Estudio</p>
-          <h1 className="mt-3 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05]">
-            Branding y Producto Digital con enfoque limpio y atemporal
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg text-white/80">
-            Estrategia, diseño y tecnología para marcas que buscan claridad. Menos ruido, más intención.
-          </p>
-          <div className="mt-8 flex items-center gap-4">
+        <div className="w-full text-center">
+          <Image
+            src="/brand/cb_logo-main-fullwhite.png"
+            alt="cobalto.blue"
+            width={800}
+            height={240}
+            priority
+            className="mx-auto w-[min(80vw,720px)] h-auto"
+          />
+          <div className="mt-10 flex items-center justify-center">
             <Link
               href="/nosotros"
               className="inline-flex items-center rounded-full bg-white/10 backdrop-blur px-5 py-2.5 text-white hover:bg-white/20 transition"
