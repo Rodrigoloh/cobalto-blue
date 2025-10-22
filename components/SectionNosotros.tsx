@@ -44,7 +44,7 @@ export default function SectionNosotros(){
   return (
     <section id="nosotros" className="bg-white text-black">
       {/* A. Texto centrado */}
-      <div className="mx-auto max-w-3xl px-6 py-24 text-center">
+      <div className="mx-auto max-w-3xl px-6 py-28 md:py-32 text-center">
         {ABOUT_TEXT.map((p, i) => (
           <p key={i} className={`text-xl md:text-2xl leading-relaxed ${i > 0 ? 'mt-6' : ''}`}>{p}</p>
         ))}
@@ -58,8 +58,8 @@ export default function SectionNosotros(){
       </div>
 
       {/* C. Banner servicios */}
-      <div className="relative z-10 bg-white -mt-[28vh] md:-mt-[40vh] border-b border-neutral-200">
-        <div className="mx-auto max-w-7xl px-6 pt-[28vh] md:pt-[40vh] pb-28 md:pb-36">
+      <div className="relative z-10 bg-white -mt-[100vh] border-b border-neutral-200">
+        <div className="mx-auto max-w-7xl px-6 pt-[100vh] pb-20 md:pb-24">
           <h3 className="text-center text-2xl md:text-3xl font-semibold">
             <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> servicios
           </h3>
