@@ -45,7 +45,7 @@ ${formData.mensaje}
               <span className="text-lg">Escríbenos a</span>
               <a
                 href="mailto:hey@cobalto.blue"
-                className="inline-flex items-center rounded-full border border-white px-4 py-1.5 text-white hover:bg-white hover:text-[#1F00FF] transition"
+                className="inline-flex items-center rounded-full border border-white px-4 py-1.5 text-white hover:bg-[#1F00FF] hover:text-white transition"
               >
                 hey@cobalto.blue
               </a>
@@ -56,7 +56,7 @@ ${formData.mensaje}
                 href="https://wa.me/524422009964?text=Hola! Me interesa conocer más sobre los servicios de Cobalto.blue"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center rounded-full border border-white px-4 py-1.5 text-white hover:bg-white hover:text-[#1F00FF] transition"
+                className="inline-flex items-center rounded-full border border-white px-4 py-1.5 text-white hover:bg-[#1F00FF] hover:text-white transition"
               >
                 WhatsApp
               </a>
@@ -98,7 +98,7 @@ ${formData.mensaje}
             />
             <button
               type="submit"
-              className="rounded-full border border-white px-5 py-2.5 text-white hover:bg-white hover:text-[#1F00FF] transition"
+              className="rounded-full border border-white px-5 py-2.5 text-white hover:bg-[#1F00FF] hover:text-white transition"
             >
               Enviar
             </button>
