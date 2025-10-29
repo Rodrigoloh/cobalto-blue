@@ -32,9 +32,12 @@ export default function WorkPage(){
   const filtered = useMemo(() => active === 'Ver todos' ? allProjects : allProjects.filter(p => p.rubro === active), [active])
 
   return (
-    <main id="top">
-      {/* 3.a Barra superior de filtros: fondo negro desde el píxel 0 hasta antes de los tiles, detrás de la navbar */}
-      <div className="relative z-0 -mt-[var(--nav-h)] pt-[var(--nav-h)] bg-black">
+    <main id="top" className="relative pt-[var(--nav-h)]">
+      {/* Fondo fijo negro para que no se vea blanco al estirar el scroll */}
+      <div className="fixed inset-0 -z-10 bg-black" aria-hidden />
+
+      {/* 3.a Barra superior de filtros (justo debajo de la navbar) */}
+      <div className="bg-black">
         <div className="mx-auto max-w-7xl px-6 py-3 flex flex-wrap gap-3 items-center justify-center">
           {RUBROS.map((r) => (
             <button
@@ -53,7 +56,7 @@ export default function WorkPage(){
       </div>
 
       {/* 3.b Galería */}
-      <section className="bg-white">
+      <section className="bg-black">
         <div className="grid grid-cols-2 portrait-grid-1 gap-px bg-black">
           {filtered.map((p) => (
             <a key={p.id} href={`/work/${p.slug}`} className="group relative block bg-white" aria-label={p.title}>
