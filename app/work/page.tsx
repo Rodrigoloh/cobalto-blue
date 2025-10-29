@@ -32,9 +32,9 @@ export default function WorkPage(){
   const filtered = useMemo(() => active === 'Ver todos' ? allProjects : allProjects.filter(p => p.rubro === active), [active])
 
   return (
-    <main id="top" className="pt-24">
-      {/* 3.a Barra superior de filtros (pegada bajo la navbar) */}
-      <div className="bg-black sticky top-[var(--nav-h)] z-30">
+    <main id="top">
+      {/* 3.a Barra superior de filtros: fondo negro desde el píxel 0 hasta antes de los tiles, detrás de la navbar */}
+      <div className="relative z-0 -mt-[var(--nav-h)] pt-[var(--nav-h)] bg-black">
         <div className="mx-auto max-w-7xl px-6 py-3 flex flex-wrap gap-3 items-center justify-center">
           {RUBROS.map((r) => (
             <button
