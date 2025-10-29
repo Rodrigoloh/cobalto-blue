@@ -38,10 +38,9 @@ export default function RecentProjects() {
       <div className="bg-black">
         <div className="mx-auto max-w-7xl px-6 py-6 flex items-center justify-between">
           <span className="text-white/80">Explora todo nuestro portafolio</span>
-          <a href="/work" className="rounded-full bg-white text-black hover:bg-cobaltBase hover:text-white transition px-4 py-2 text-sm">Más proyectos</a>
+          <a href="/work#top" className="rounded-full bg-white text-black hover:bg-cobaltBase hover:text-white transition px-4 py-2 text-sm">Más proyectos</a>
         </div>
       </div>
     </section>
   )
 }
-
