@@ -84,7 +84,9 @@ export default function WorkPage(){
       {/* 3.d Logos de clientes (placeholders) */}
       <section className="bg-black text-white">
         <div className="mx-auto max-w-7xl px-6 py-14">
-          <h3 className="text-lg md:text-xl mb-6">Clientes</h3>
+          <h3 className="text-center text-2xl md:text-3xl font-semibold mb-8">
+            <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> clientes
+          </h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 items-center">
             {Array.from({ length: 6 }, (_, i) => {
               const n = String(i + 1).padStart(2, '0')
