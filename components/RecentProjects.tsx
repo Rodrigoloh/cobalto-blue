@@ -14,9 +14,11 @@ const projects: Project[] = Array.from({ length: 4 }, (_, i) => {
 
 export default function RecentProjects() {
   return (
-    <section className="bg-white">
+    <section className="bg-black text-white">
       <div className="mx-auto max-w-7xl px-6 py-10">
-        <h3 className="text-2xl md:text-3xl font-semibold">Nuestros más recientes proyectos</h3>
+        <h3 className="text-center text-2xl md:text-3xl font-semibold">
+          <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> más recientes proyectos
+        </h3>
       </div>
       <div className="grid grid-cols-2 portrait-grid-1 gap-px bg-black">
         {projects.map((p) => (
