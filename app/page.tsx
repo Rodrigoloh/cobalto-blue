@@ -6,7 +6,7 @@ export default function Page(){
     <main className="wrapper">
       {/* 1.a Hero con fondo hero.png y logo centrado */}
       <section className="section relative h-screen">
-        <div className="absolute inset-0 -z-10 bg-center bg-cover" style={{ backgroundImage: 'url(/hero/hero.png)' }} />
+        <div className="absolute inset-0 -z-10 bg-center bg-cover" style={{ backgroundImage: 'url(/hero/hero.jpg)' }} />
         <div className="absolute inset-0 -z-10 bg-black/20" />
         <div className="h-full w-full flex items-center justify-center">
           <img src="/brand/cb_logo-main-fullwhite.png" alt="cobalto.blue" className="w-[min(80vw,720px)] h-auto" />

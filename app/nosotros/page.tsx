@@ -31,7 +31,7 @@ export default function NosotrosPage(){
       </section>
 
       {/* Parallax simple con imagen */}
-      <section className="h-[70vh] md:h-screen bg-fixed bg-cover bg-center" style={{ backgroundImage: 'url(/nosotros/parallax.png)' }} aria-label="Parallax" />
+      <section className="h-[70vh] md:h-screen bg-fixed bg-cover bg-center" style={{ backgroundImage: 'url(/nosotros/parallax.jpg)' }} aria-label="Parallax" />
 
       {/* Nuestros servicios */}
       <section className="bg-white text-black">
