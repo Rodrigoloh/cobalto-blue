@@ -57,7 +57,7 @@ export default function WorkPage(){
 
       {/* 3.b Galería */}
       <section className="bg-black">
-        <div className="grid grid-cols-2 portrait-grid-1 gap-px bg-black">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 portrait-grid-1 gap-px bg-black">
           {filtered.map((p) => (
             <a key={p.id} href={`/work/${p.slug}`} className="group relative block bg-white" aria-label={p.title}>
               <div className="aspect-[4/3]">
