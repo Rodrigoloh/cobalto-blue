@@ -4,6 +4,9 @@
 
 :root { color-scheme: dark light; }
 html, body, :root { height: 100%; }
+/* Altura aproximada del header para offsets sticky */
+:root { --nav-h: 64px; }
+@media (min-width: 768px) { :root { --nav-h: 72px; } }
 
 /* Self-hosted fonts */
 @font-face {
@@ -46,6 +49,13 @@ body {
   background: #ffffff; /* Fondo claro para look clean */
   color: #111111;
   overflow-x: hidden; /* evita barras de scroll horizontales por elementos full-bleed */
+}
+
+/* Utilidad: en orientación vertical forzar 1 columna (para grids 2-col de proyectos/servicios) */
+@media (orientation: portrait) {
+  .portrait-grid-1 {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 /* Scroll snap por sección */

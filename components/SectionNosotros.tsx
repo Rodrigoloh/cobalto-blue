@@ -94,35 +94,43 @@ export default function SectionNosotros(){
         {/* Contacto */}
         <section id="contacto" className="relative z-10 min-h-screen flex items-center bg-[#1F00FF] text-white">
           <div className="mx-auto max-w-7xl px-6 w-full py-12">
-            <h3 className="text-center text-2xl md:text-3xl font-semibold">
+            <h3 className="text-left text-2xl md:text-3xl font-semibold">
               <span className="italic mr-1 text-white">Nuestro</span>
               <span className="text-black">contacto</span>
             </h3>
-            <div className="mt-8 grid md:grid-cols-2 gap-12 items-start">
-              <div>
-                <p className="text-lg text-white/90">
-                  Escríbenos a {' '}
-                  <a className="underline text-white" href="mailto:hey@cobalto.blue">hey@cobalto.blue</a>
-                  {' '}o envíanos un WhatsApp.
-                </p>
-                <p className="mt-3 text-white/90">
-                  <a
-                    href="https://wa.me/524422009964?text=Hola! Me interesa conocer más sobre los servicios de Cobalto.blue"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-white underline"
-                  >
-                    WhatsApp
-                  </a>
-                </p>
-              </div>
-              <form className="space-y-4" onSubmit={(e)=>e.preventDefault()}>
+            <div className="mt-8 grid md:grid-cols-2 gap-12 items-start justify-items-start">
+              {/* Formulario (alineado con el título a la izquierda) */}
+              <form className="space-y-4 w-full max-w-md justify-self-start order-1" onSubmit={(e)=>e.preventDefault()}>
                 <input className="w-full bg-transparent border-b border-white/60 pb-2 text-white placeholder-white/70 focus:outline-none focus:border-white" placeholder="Nombre" />
                 <input className="w-full bg-transparent border-b border-white/60 pb-2 text-white placeholder-white/70 focus:outline-none focus:border-white" placeholder="Correo electrónico" type="email" />
                 <input className="w-full bg-transparent border-b border-white/60 pb-2 text-white placeholder-white/70 focus:outline-none focus:border-white" placeholder="Teléfono" />
                 <textarea className="w-full bg-transparent border-b border-white/60 pb-2 text-white placeholder-white/70 focus:outline-none focus:border-white resize-none" placeholder="Cuéntanos sobre tu proyecto" rows={4} />
-                <button className="rounded-full border border-white px-5 py-2.5 text-white hover:bg-white hover:text-[#1F00FF] transition">Enviar</button>
+                <button className="rounded-full border border-white px-5 py-2.5 text-white hover:bg-black hover:text-white transition">Enviar</button>
               </form>
+
+              {/* Botones de contacto (Email / WhatsApp) */}
+              <div className="w-full order-2">
+                <div className="flex flex-col gap-3 text-white/90">
+                  <a
+                    href="mailto:hey@cobalto.blue"
+                    className="inline-flex w-fit items-center rounded-full border border-white px-4 py-2 text-white hover:bg-black hover:text-white transition"
+                    aria-label="Escríbenos a hey@cobalto.blue"
+                  >
+                    <span className="text-lg">Escríbenos a </span>
+                    <span className="text-lg font-medium">hey@cobalto.blue</span>
+                  </a>
+                  <a
+                    href="https://wa.me/524422009964?text=Hola! Me interesa conocer más sobre los servicios de Cobalto.blue"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-fit items-center rounded-full border border-white px-4 py-2 text-white hover:bg-black hover:text-white transition"
+                    aria-label="Envíanos un WhatsApp"
+                  >
+                    <span className="text-lg">Envíanos un </span>
+                    <span className="text-lg font-medium">WhatsApp</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </section>

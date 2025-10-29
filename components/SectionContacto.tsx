@@ -32,39 +32,15 @@ ${formData.mensaje}
       id="contacto"
       className="section relative bg-[#1F00FF] text-white"
     >
-      <div className="relative mx-auto max-w-6xl w-full px-6 py-20 md:py-24">
-        <h2 className="text-center text-2xl md:text-3xl font-semibold">
+      <div className="relative mx-auto max-w-6xl w-full px-6 py-12 md:py-16">
+        <h2 className="text-left text-2xl md:text-3xl font-semibold">
           <span className="italic mr-1 text-white">Nuestro</span>
           <span className="text-black">contacto</span>
         </h2>
 
-        <div className="mt-10 grid md:grid-cols-2 gap-12 items-start justify-items-start">
-          {/* Información */}
-          <div className="w-full">
-            <div className="flex items-center gap-3 flex-wrap text-white/90">
-              <span className="text-lg">Escríbenos a</span>
-              <a
-                href="mailto:hey@cobalto.blue"
-                className="inline-flex items-center rounded-full border border-white px-4 py-1.5 text-white hover:bg-[#1F00FF] hover:text-white transition"
-              >
-                hey@cobalto.blue
-              </a>
-            </div>
-            <div className="flex items-center gap-3 mt-3 text-white/90">
-              <span className="text-lg">Envíanos un</span>
-              <a
-                href="https://wa.me/524422009964?text=Hola! Me interesa conocer más sobre los servicios de Cobalto.blue"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center rounded-full border border-white px-4 py-1.5 text-white hover:bg-[#1F00FF] hover:text-white transition"
-              >
-                WhatsApp
-              </a>
-            </div>
-          </div>
-
-          {/* Formulario */}
-          <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md justify-self-start">
+        <div className="mt-8 grid md:grid-cols-2 gap-10 items-start justify-items-start">
+          {/* Formulario (alineado con el título a la izquierda) */}
+          <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md justify-self-start order-1">
             <input
               type="text"
               placeholder="Nombre"
@@ -98,11 +74,35 @@ ${formData.mensaje}
             />
             <button
               type="submit"
-              className="rounded-full border border-white px-5 py-2.5 text-white hover:bg-[#1F00FF] hover:text-white transition"
+              className="rounded-full border border-white px-5 py-2.5 text-white hover:bg-black hover:text-white transition"
             >
               Enviar
             </button>
           </form>
+
+          {/* Información con dos botones (Email / WhatsApp) */}
+          <div className="w-full order-2">
+            <div className="flex flex-col gap-3 text-white/90">
+              <a
+                href="mailto:hey@cobalto.blue"
+                className="inline-flex w-fit items-center rounded-full border border-white px-4 py-2 text-white hover:bg-black hover:text-white transition"
+                aria-label="Escríbenos a hey@cobalto.blue"
+              >
+                <span className="text-lg">Escríbenos a&nbsp;</span>
+                <span className="text-lg font-medium">hey@cobalto.blue</span>
+              </a>
+              <a
+                href="https://wa.me/524422009964?text=Hola! Me interesa conocer más sobre los servicios de Cobalto.blue"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-fit items-center rounded-full border border-white px-4 py-2 text-white hover:bg-black hover:text-white transition"
+                aria-label="Envíanos un WhatsApp"
+              >
+                <span className="text-lg">Envíanos un&nbsp;</span>
+                <span className="text-lg font-medium">WhatsApp</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
