@@ -1,9 +1,11 @@
 'use client'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 export function Nav() {
   const [onHero, setOnHero] = useState(true)
+  const pathname = typeof window !== 'undefined' ? usePathname() : '/'
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -18,16 +20,21 @@ export function Nav() {
     return () => obs.disconnect()
   }, [])
 
+  const isWork = pathname?.startsWith('/work')
   const headerCls = onHero
     ? 'bg-transparent border-transparent text-white'
-    : 'bg-white/85 backdrop-blur border-b border-neutral-200 text-neutral-900'
+    : isWork
+      ? 'bg-black text-white border-transparent'
+      : 'bg-white/85 backdrop-blur border-b border-neutral-200 text-neutral-900'
 
   const linkBase = 'transition'
   const linkCls = onHero
     ? 'text-white hover:text-[#1F00FF]'
-    : 'text-neutral-800 hover:text-black'
+    : isWork
+      ? 'text-white hover:text-[#1F00FF]'
+      : 'text-neutral-800 hover:text-black'
 
-  const ctaCls = `${onHero ? 'bg-[#1F00FF] text-white hover:bg-black' : 'bg-[#1F00FF] text-white hover:bg-black'} rounded-full px-4 py-2 transition`
+  const ctaCls = `${(onHero || isWork) ? 'bg-[#1F00FF] text-white hover:bg-black' : 'bg-[#1F00FF] text-white hover:bg-black'} rounded-full px-4 py-2 transition`
 
   return (
     <header className={`fixed top-0 inset-x-0 z-40 ${headerCls}`}>
@@ -51,7 +58,7 @@ export function Nav() {
               } catch {}
               window.location.reload()
             }}
-            className={`${linkBase} ${onHero ? 'text-white/90 hover:text-white' : 'text-neutral-800 hover:text-black'} uppercase tracking-wide`}
+            className={`${linkBase} ${(onHero || isWork) ? 'text-white/90 hover:text-white' : 'text-neutral-800 hover:text-black'} uppercase tracking-wide`}
             aria-label="Cambiar idioma a inglés"
           >EN</button>
           <Link href="/#contacto" className={ctaCls}>Contáctanos</Link>

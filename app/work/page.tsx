@@ -40,10 +40,10 @@ export default function WorkPage(){
             <button
               key={r}
               onClick={() => setActive(r)}
-              className={`text-sm px-4 py-2 rounded-full transition border ${
+              className={`text-sm px-4 py-2 rounded-full transition ${
                 active === r
-                  ? 'bg-white text-black border-white'
-                  : 'text-white border-white/20 hover:bg-cobaltBase hover:text-white'
+                  ? 'bg-white text-black'
+                  : 'text-white hover:bg-cobaltBase'
               }`}
             >
               {r}
