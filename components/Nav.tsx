@@ -41,9 +41,9 @@ export function Nav() {
           />
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm">
-          <Link href="/#nosotros" className={`${linkBase} ${linkCls}`}>Nosotros</Link>
-          <Link href="/#work" className={`${linkBase} ${linkCls}`}>Proyectos</Link>
-          <Link href="/#contacto" className={`${linkBase} ${linkCls}`}>Contacto</Link>
+          <Link href="/nosotros" className={`${linkBase} ${linkCls}`}>Nosotros</Link>
+          <Link href="/work" className={`${linkBase} ${linkCls}`}>Proyectos</Link>
+          <Link href="/contacto" className={`${linkBase} ${linkCls}`}>Contacto</Link>
           <button
             onClick={() => {
               try {

@@ -37,6 +37,12 @@ npm start
 
 Este proyecto está configurado para deployment automático en Vercel.
 
+Rutas principales:
+- `/` — Hero simplificado + recientes + footer
+- `/nosotros` — Texto, parallax y secciones de servicios/proceso + footer
+- `/work` — Proyectos con filtros, galería, clientes y footer
+- `/contacto` — Formulario de contacto + footer
+
 ## 📧 Contacto
 
 - Email: hey@cobalto.blue
