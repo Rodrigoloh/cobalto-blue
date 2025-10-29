@@ -1,22 +1,32 @@
 "use client"
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 export function Nav() {
   // Detecta si el hero está visible para mostrar navbar transparente solo ahí
   const [onHero, setOnHero] = useState(true)
+  const pathname = typeof window !== 'undefined' ? usePathname() : '/'
 
   useEffect(() => {
     if (typeof window === 'undefined') return
     const hero = document.getElementById('hero')
-    if (!hero) { setOnHero(false); return }
-    const obs = new IntersectionObserver(
-      ([entry]) => setOnHero(entry.isIntersecting && entry.intersectionRatio > 0.2),
-      { threshold: [0, 0.2, 0.5, 1] }
+    let obs: IntersectionObserver | null = null
+    if (!hero) {
+      setOnHero(false)
+      return
+    }
+    // Estado inicial basado en posición actual
+    const rect = hero.getBoundingClientRect()
+    setOnHero(rect.top < window.innerHeight && rect.bottom > 0)
+
+    obs = new IntersectionObserver(
+      ([entry]) => setOnHero(entry.isIntersecting && entry.intersectionRatio > 0.01),
+      { threshold: [0, 0.01, 0.1, 0.5, 1] }
     )
     obs.observe(hero)
-    return () => obs.disconnect()
-  }, [])
+    return () => { obs && obs.disconnect() }
+  }, [pathname])
 
   const headerCls = onHero
     ? 'bg-transparent text-white border-transparent'
