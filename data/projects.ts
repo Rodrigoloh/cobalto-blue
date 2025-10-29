@@ -16,7 +16,7 @@ export const RUBROS = ['Ver todos', ...ALL_RUBROS] as const
 // Si quieres que un tile sea GIF, defínelo aquí por id
 // Ejemplo: { 5: '/projects/project05.gif' }
 export const GIF_OVERRIDES: Record<number, string> = {
-  5: '/projects/project05.gif',
+  6: '/projects/project06.gif',
 }
 
 // Cambios de nombre por id (opcional)
