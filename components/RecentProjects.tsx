@@ -20,7 +20,7 @@ export default function RecentProjects() {
           <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> más recientes proyectos
         </h3>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 portrait-grid-1 gap-px bg-black">
+      <div className="grid grid-cols-2 md:grid-cols-3 portrait-grid-1 gap-px bg-black">
         {projects.map((p) => (
           <a key={p.id} href={`/work/${p.slug}`} className="group relative block bg-white">
             <div className="aspect-[4/3]">
