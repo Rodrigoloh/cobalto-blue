@@ -4,6 +4,9 @@
 
 :root { color-scheme: dark light; }
 html, body, :root { height: 100%; }
+/* Altura aproximada del header para offsets sticky */
+:root { --nav-h: 64px; }
+@media (min-width: 768px) { :root { --nav-h: 72px; } }
 
 /* Self-hosted fonts */
 @font-face {

@@ -33,14 +33,18 @@ export default function WorkPage(){
 
   return (
     <main id="top" className="pt-24">
-      {/* 3.a Barra superior de filtros */}
-      <div className="bg-black sticky top-0 z-10">
-        <div className="mx-auto max-w-7xl px-6 py-3 flex flex-wrap gap-4 items-center">
+      {/* 3.a Barra superior de filtros (pegada bajo la navbar) */}
+      <div className="bg-black sticky top-[var(--nav-h)] z-30">
+        <div className="mx-auto max-w-7xl px-6 py-3 flex flex-wrap gap-3 items-center justify-center">
           {RUBROS.map((r) => (
             <button
               key={r}
               onClick={() => setActive(r)}
-              className={`text-sm px-3 py-1 rounded-full transition ${active === r ? 'bg-white text-black' : 'text-white hover:text-cobaltBase'}`}
+              className={`text-sm px-4 py-2 rounded-full transition border ${
+                active === r
+                  ? 'bg-white text-black border-white'
+                  : 'text-white border-white/20 hover:bg-cobaltBase hover:text-white'
+              }`}
             >
               {r}
             </button>
@@ -69,9 +73,8 @@ export default function WorkPage(){
 
       {/* 3.c Banner inferior con Volver arriba */}
       <div className="bg-black">
-        <div className="mx-auto max-w-7xl px-6 py-6 flex items-center justify-between">
-          <span className="text-white/80">Has llegado al final</span>
-          <a href="#top" className="rounded-full bg-white text-black hover:bg-cobaltBase hover:text-white transition px-4 py-2 text-sm">Volver arriba</a>
+        <div className="mx-auto max-w-7xl px-6 py-8 flex items-center justify-center">
+          <a href="#top" className="rounded-full bg-cobaltBase text-white hover:bg-white hover:text-black transition px-5 py-2.5 text-sm">Volver arriba</a>
         </div>
       </div>
 
