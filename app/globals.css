@@ -48,6 +48,13 @@ body {
   overflow-x: hidden; /* evita barras de scroll horizontales por elementos full-bleed */
 }
 
+/* Utilidad: en orientación vertical forzar 1 columna (para grids 2-col de proyectos/servicios) */
+@media (orientation: portrait) {
+  .portrait-grid-1 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* Scroll snap por sección */
 .wrapper {
   scroll-snap-type: y proximity;
