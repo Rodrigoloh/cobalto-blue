@@ -58,6 +58,11 @@ body {
   }
 }
 
+/* Aspect ratio utility (4:3) to avoid plugin dependency */
+.aspect-4-3 { position: relative; }
+.aspect-4-3::before { content: ""; display: block; padding-bottom: 75%; }
+.aspect-4-3 > * { position: absolute; inset: 0; }
+
 /* Scroll snap por sección */
 .wrapper {
   scroll-snap-type: y proximity;

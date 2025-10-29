@@ -1,16 +1,4 @@
-type Project = { id: number; title: string; desc: string; image: string; slug: string }
-
-const projects: Project[] = Array.from({ length: 3 }, (_, i) => {
-  const n = i + 1
-  const num = String(n).padStart(2, '0')
-  return {
-    id: n,
-    slug: `proyecto-${num}`,
-    title: `Proyecto ${num}`,
-    desc: 'Pequeña descripción del proyecto.',
-    image: `/projects/project${num}.png`,
-  }
-})
+import { projects as allProjects } from '@/data/projects'
 
 export default function RecentProjects() {
   return (
@@ -21,9 +9,9 @@ export default function RecentProjects() {
         </h3>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 portrait-grid-1 gap-px bg-black">
-        {projects.map((p) => (
+        {allProjects.slice(0, 3).map((p) => (
           <a key={p.id} href={`/work/${p.slug}`} className="group relative block bg-white">
-            <div className="aspect-[4/3]">
+            <div className="aspect-4-3">
               <img src={p.image} alt={p.title} className="h-full w-full object-cover" loading="lazy" />
             </div>
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-cobaltBase/0 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:bg-cobaltBase">

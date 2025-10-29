@@ -1,24 +1,4 @@
-type Project = {
-  id: number
-  slug: string
-  title: string
-  desc: string
-  image: string
-}
-
-// 16 proyectos iniciales; se pueden extender sin tocar el layout
-const projects: Project[] = Array.from({ length: 16 }, (_, i) => {
-  const n = i + 1
-  const num = String(n).padStart(2, '0')
-  return {
-    id: n,
-    slug: `proyecto-${num}`,
-    title: `Proyecto ${num}`,
-    desc: 'Pequeña descripción del proyecto.',
-    // Ruta sugerida (PNG). Si el archivo no existe aún, puedes reemplazarlo por el real cuando lo tengas.
-    image: `/projects/project${num}.png`,
-  }
-})
+import { projects } from '@/data/projects'
 
 export default function ProjectsGrid() {
   return (
@@ -33,7 +13,7 @@ export default function ProjectsGrid() {
             aria-label={p.title}
           >
             {/* Imagen base */}
-            <div className="aspect-[4/3]">
+            <div className="aspect-4-3">
               <img
                 src={p.image}
                 alt={p.title}

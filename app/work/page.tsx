@@ -1,35 +1,14 @@
 "use client"
 import { useMemo, useState } from 'react'
 import FooterClean from '@/components/FooterClean'
-
-type Project = {
-  id: number
-  slug: string
-  title: string
-  desc: string
-  image: string
-  rubro: string
-}
-
-const RUBROS = ['Ver todos', 'Retail', 'Salud', 'Educación', 'Fashion', 'Wellness', 'Industrias'] as const
-
-const allProjects: Project[] = Array.from({ length: 18 }, (_, i) => {
-  const n = i + 1
-  const num = String(n).padStart(2, '0')
-  const rubros = ['Retail', 'Salud', 'Educación', 'Fashion', 'Wellness', 'Industrias']
-  return {
-    id: n,
-    slug: `proyecto-${num}`,
-    title: `Proyecto ${num}`,
-    desc: 'Pequeña descripción del proyecto.',
-    image: `/projects/project${num}.png`,
-    rubro: rubros[i % rubros.length],
-  }
-})
+import { projects as allProjects, RUBROS } from '@/data/projects'
 
 export default function WorkPage(){
   const [active, setActive] = useState<(typeof RUBROS)[number]>('Ver todos')
-  const filtered = useMemo(() => active === 'Ver todos' ? allProjects : allProjects.filter(p => p.rubro === active), [active])
+  const filtered = useMemo(
+    () => (active === 'Ver todos' ? allProjects : allProjects.filter((p) => p.rubro === active)),
+    [active]
+  )
 
   return (
     <main id="top" className="relative pt-[var(--nav-h)]">
@@ -60,7 +39,7 @@ export default function WorkPage(){
         <div className="grid grid-cols-2 md:grid-cols-3 portrait-grid-1 gap-px bg-black">
           {filtered.map((p) => (
             <a key={p.id} href={`/work/${p.slug}`} className="group relative block bg-white" aria-label={p.title}>
-              <div className="aspect-[4/3]">
+              <div className="aspect-4-3">
                 <img src={p.image} alt={p.title} className="h-full w-full object-cover" loading="lazy" />
               </div>
               <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-cobaltBase/0 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:bg-cobaltBase">
