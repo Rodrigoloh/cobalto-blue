@@ -13,7 +13,7 @@ type Project = {
 
 const RUBROS = ['Ver todos', 'Retail', 'Salud', 'Educación', 'Fashion', 'Wellness', 'Industrias'] as const
 
-const allProjects: Project[] = Array.from({ length: 16 }, (_, i) => {
+const allProjects: Project[] = Array.from({ length: 18 }, (_, i) => {
   const n = i + 1
   const num = String(n).padStart(2, '0')
   const rubros = ['Retail', 'Salud', 'Educación', 'Fashion', 'Wellness', 'Industrias']

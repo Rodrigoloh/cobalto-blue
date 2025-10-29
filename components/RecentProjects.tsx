@@ -1,6 +1,6 @@
 type Project = { id: number; title: string; desc: string; image: string; slug: string }
 
-const projects: Project[] = Array.from({ length: 4 }, (_, i) => {
+const projects: Project[] = Array.from({ length: 3 }, (_, i) => {
   const n = i + 1
   const num = String(n).padStart(2, '0')
   return {
