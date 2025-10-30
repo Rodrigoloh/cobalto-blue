@@ -59,8 +59,14 @@ export const DESC_OVERRIDES: Record<number, string> = {
   15: 'Branding + Ad Campaign + Packaging',
 }
 
-// Texto largo opcional para la página de detalle (puede tener saltos de línea)
-// Ejemplo: { 1: 'Párrafo 1...\n\nPárrafo 2...' }
+// Texto largo opcional para la página de detalle.
+// Saltos de línea:
+// - Usa '\n' para un salto de línea.
+// - Usa '\n\n' para separar párrafos.
+// Alternativa sin escapes: puedes usar template strings (backticks) para escribir multi‑línea.
+//   Ejemplo:
+//   1: `Primera línea\n\nSegunda línea`  (o directamente en varias líneas entre backticks)
+// Render: se usa `whitespace-pre-line`, así que los saltos se respetan.
 export const DETAIL_OVERRIDES: Record<number, string> = {
   1: 'Scalpers Barcelona — Eyewear Catalog - Editorial.\n\nAgrega aquí la descripción larga: objetivos, alcance, entregables, resultados y aprendizajes.',
   2: '[Au]rora Lab — Branding + Ad Campaign + Interior.\n\nAgrega aquí la descripción larga: concepto de marca, key visuals, campaña y diseño interior.',
