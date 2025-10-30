@@ -28,7 +28,7 @@ export const TITLE_OVERRIDES: Record<number, string> = {}
 export const RUBRO_OVERRIDES: Record<number, Rubro> = {}
 
 // Proyectos base (16) alineados con public/projects/project01..16.png
-export const projects: Project[] = Array.from({ length: 16 }, (_, i) => {
+export const projects: Project[] = Array.from({ length: 15 }, (_, i) => {
   const n = i + 1
   const num = String(n).padStart(2, '0')
   const rubros = ALL_RUBROS as unknown as Rubro[]
