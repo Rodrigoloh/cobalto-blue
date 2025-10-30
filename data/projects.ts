@@ -7,6 +7,7 @@ export type Project = {
   desc: string
   image: string
   rubro: Rubro
+  detail?: string
 }
 
 // Categorías disponibles para filtros
@@ -58,6 +59,10 @@ export const DESC_OVERRIDES: Record<number, string> = {
   15: 'Branding + Ad Campaign + Packaging',
 }
 
+// Texto largo opcional para la página de detalle (puede tener saltos de línea)
+// Ejemplo: { 1: 'Párrafo 1...\n\nPárrafo 2...' }
+export const DETAIL_OVERRIDES: Record<number, string> = {}
+
 // Cambiar rubro por id (opcional)
 // Ejemplo: { 2: 'Salud', 5: 'Fashion' }
 export const RUBRO_OVERRIDES: Record<number, Rubro> = {}
@@ -74,5 +79,6 @@ export const projects: Project[] = Array.from({ length: 15 }, (_, i) => {
     desc: DESC_OVERRIDES[n] ?? 'Pequeña descripción del proyecto.',
     image: GIF_OVERRIDES[n] ?? `/projects/project${num}.png`,
     rubro: RUBRO_OVERRIDES[n] ?? rubros[i % rubros.length],
+    detail: DETAIL_OVERRIDES[n],
   }
 })
