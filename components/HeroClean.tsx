@@ -51,14 +51,13 @@ export default function HeroClean() {
           />
         </div>
 
-        {/* Flecha flotante hacia siguiente sección */}
+        {/* Flecha flotante hacia siguiente sección (sin texto) */}
         <button
           onClick={goNext}
           aria-label="Siguiente sección"
           className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/90 hover:text-white"
         >
-          <div className="rounded-full bg-black/60 px-4 py-2 text-sm">Siguiente</div>
-          <svg className="mx-auto mt-2 animate-float-y" width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <svg className="mx-auto animate-float-y" width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path d="M12 5v14M12 19l-6-6M12 19l6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
