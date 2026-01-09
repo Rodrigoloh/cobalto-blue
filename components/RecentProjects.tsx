@@ -14,10 +14,10 @@ export default function RecentProjects() {
             <div className="aspect-4-3">
               <img src={p.image} alt={p.title} className="h-full w-full object-cover" loading="lazy" />
             </div>
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-cobaltBase/0 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:bg-cobaltBase">
               <div className="px-6 text-center">
-                <h4 className="font-bold text-cobaltBase text-xl md:text-2xl leading-tight">{p.title}</h4>
-                <p className="mt-1 font-circularStd text-cobaltBase/80 text-sm">{p.desc}</p>
+                <h4 className="font-bold text-white text-xl md:text-2xl leading-tight">{p.title}</h4>
+                <p className="mt-1 font-circularStd text-white/90 text-sm">{p.desc}</p>
               </div>
             </div>
           </div>

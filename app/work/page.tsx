@@ -42,10 +42,10 @@ export default function WorkPage(){
               <div className="aspect-4-3">
                 <img src={p.image} alt={p.title} className="h-full w-full object-cover" loading="lazy" />
               </div>
-              <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-cobaltBase/0 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:bg-cobaltBase">
                 <div className="px-6 text-center">
-                  <h3 className="font-bold text-cobaltBase text-2xl md:text-3xl leading-tight">{p.title}</h3>
-                  <p className="mt-2 font-circularStd text-cobaltBase/80 text-sm md:text-base">{p.desc}</p>
+                  <h3 className="font-bold text-white text-2xl md:text-3xl leading-tight">{p.title}</h3>
+                  <p className="mt-2 font-circularStd text-white/90 text-sm md:text-base">{p.desc}</p>
                 </div>
               </div>
             </div>
