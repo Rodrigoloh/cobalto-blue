@@ -12,7 +12,7 @@ export default function HomeIntroParallax() {
 
   const dotY = useTransform(scrollYProgress, [0, 1], ['0px', '-80px'])
   const dotX = useTransform(scrollYProgress, [0, 1], ['0px', '-30px'])
-  const dashY = useTransform(scrollYProgress, [0, 1], ['0px', '-90px'])
+  const dashY = useTransform(scrollYProgress, [0, 1], ['20px', '-40px'])
   const dashX = useTransform(scrollYProgress, [0, 1], ['0px', '30px'])
 
   return (
@@ -30,7 +30,7 @@ export default function HomeIntroParallax() {
           Brands that <span className="text-cobaltBase">feel alive.</span>
         </h2>
 
-        <motion.div style={{ y: dashY, x: dashX }} className="mt-8 md:mt-10 h-[3px] w-14 bg-black" />
+        <motion.div style={{ y: dashY, x: dashX }} className="mt-12 md:mt-14 h-[3px] w-14 bg-black" />
       </div>
     </section>
   )
