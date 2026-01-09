@@ -22,16 +22,25 @@ const PROCESS_STEPS: Step[] = [
 export default function NosotrosPage(){
   return (
     <main className="pt-24">
-      {/* Texto inicial */}
-      <section className="bg-white text-black">
-        <div className="mx-auto max-w-3xl md:max-w-6xl px-6 py-20 md:py-28 text-center">
-          <p className="text-xl md:text-2xl leading-relaxed">Cobalto Blue existe para dar forma a las ideas que merecen ser vistas.</p>
-          <p className="mt-6 text-xl md:text-2xl leading-relaxed">"Construimos marcas que comunican con claridad y se sienten vivas. En cada proyecto buscamos equilibrio entre lo racional y lo sensorial: estrategia, estética y una narrativa que permanezca."</p>
+      {/* Parallax con texto sobre la imagen */}
+      <section
+        className="relative h-[55vh] md:h-[70vh] bg-fixed bg-cover bg-center text-white"
+        style={{ backgroundImage: 'url(/nosotros/parallax.jpg)' }}
+        aria-label="Parallax"
+      >
+        <div className="absolute inset-0 bg-black/30" aria-hidden />
+        <div className="relative z-10 h-full flex items-center">
+          <div className="w-full md:w-1/2 max-w-xl px-6 md:px-12 text-left">
+            <p className="text-2xl md:text-4xl font-bold leading-tight">
+              Cobalto Blue existe para dar forma a las ideas que merecen ser vistas.
+            </p>
+            <p className="mt-5 text-lg md:text-xl font-bold leading-snug">
+              Construimos marcas que comunican con claridad y se sienten vivas. En cada proyecto buscamos equilibrio
+              entre lo racional y lo sensorial: estrategia, estética y una narrativa que permanezca.
+            </p>
+          </div>
         </div>
       </section>
-
-      {/* Parallax simple con imagen */}
-      <section className="h-[70vh] md:h-screen bg-fixed bg-cover bg-center" style={{ backgroundImage: 'url(/nosotros/parallax.jpg)' }} aria-label="Parallax" />
 
       {/* Nuestros servicios */}
       <section className="bg-white text-black">
