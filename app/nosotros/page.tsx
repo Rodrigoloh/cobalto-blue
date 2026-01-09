@@ -1,5 +1,6 @@
 import ServicesCarousel from '@/components/ServicesCarousel'
 import FooterClean from '@/components/FooterClean'
+import NosotrosParallaxSection from '@/components/NosotrosParallaxSection'
 
 type Service = { title: string; desc: string }
 const SERVICES: Service[] = [
@@ -22,25 +23,7 @@ const PROCESS_STEPS: Step[] = [
 export default function NosotrosPage(){
   return (
     <main>
-      {/* Parallax con texto sobre la imagen */}
-      <section
-        className="relative h-screen bg-fixed bg-cover bg-center text-white"
-        style={{ backgroundImage: 'url(/nosotros/parallax.jpg)' }}
-        aria-label="Parallax"
-      >
-        <div className="absolute inset-0 bg-black/30" aria-hidden />
-        <div className="relative z-10 h-full flex items-center">
-          <div className="w-full md:w-1/2 max-w-xl px-6 md:px-12 text-left">
-            <p className="text-2xl md:text-4xl font-bold leading-tight">
-              Cobalto Blue existe para dar forma a las ideas que merecen ser vistas.
-            </p>
-            <p className="mt-5 text-lg md:text-xl font-bold leading-snug">
-              Construimos marcas que comunican con claridad y se sienten vivas. En cada proyecto buscamos equilibrio
-              entre lo racional y lo sensorial: estrategia, estética y una narrativa que permanezca.
-            </p>
-          </div>
-        </div>
-      </section>
+      <NosotrosParallaxSection />
 
       {/* Servicios + proceso juntos en una pantalla */}
       <div className="h-screen flex flex-col">
