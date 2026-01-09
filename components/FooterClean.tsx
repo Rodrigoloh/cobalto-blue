@@ -6,7 +6,7 @@ export default function FooterClean() {
           <p className="text-sm">© {new Date().getFullYear()} Cobalto.blue</p>
           <p className="text-sm text-white/80">Todos los derechos reservados</p>
         </div>
-        <img src="/brand/cb_logo-main-fullwhite.png" alt="cobalto.blue" className="h-6 md:h-7 w-auto" />
+        <img src="/brand/logo-main-bluewhite.png" alt="cobalto.blue" className="h-6 md:h-7 w-auto" />
       </div>
     </footer>
   )

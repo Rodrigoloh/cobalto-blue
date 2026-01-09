@@ -33,7 +33,7 @@ export default function HeroParallax() {
       <div className="absolute inset-0 -z-10 bg-black/20" />
 
       <div className="h-full w-full flex items-center justify-center will-change-transform" style={{ transform: `translateY(${offsetY}px)` }}>
-        <img src="/brand/cb_logo-main-fullwhite.png" alt="cobalto.blue" className="w-[min(80vw,720px)] h-auto" />
+        <img src="/brand/logo-main-fullwhite.png" alt="cobalto.blue" className="w-[min(80vw,720px)] h-auto" />
       </div>
 
       {/* Flecha para pasar a la siguiente sección (sin texto) */}
