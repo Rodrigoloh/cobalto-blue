@@ -21,7 +21,7 @@ export default function HomeIntroParallax() {
 
   return (
     <section ref={ref} id="intro" className="section bg-white text-black relative overflow-hidden">
-      <div className="mx-auto max-w-5xl px-6 py-28 md:py-40 min-h-[60vh] md:min-h-[70vh] flex flex-col items-center justify-center text-center">
+      <div className="mx-auto max-w-5xl px-6 py-20 md:py-28 min-h-[42vh] md:min-h-[50vh] flex flex-col items-center justify-center text-center">
         <motion.div style={{ y: dotY, x: dotX }} className="mb-6 md:mb-8">
           <div className="h-7 w-7 md:h-10 md:w-10 rounded-full bg-cobaltBase" />
         </motion.div>
