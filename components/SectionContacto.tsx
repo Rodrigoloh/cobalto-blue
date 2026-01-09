@@ -33,7 +33,7 @@ ${formData.mensaje}
       className="section relative bg-[#1F00FF] text-white"
     >
       <div className="relative mx-auto max-w-6xl w-full px-6 py-12 md:py-16">
-        <h2 className="text-left text-2xl md:text-3xl font-semibold">
+        <h2 className="text-left text-2xl md:text-3xl font-bold">
           <span className="italic mr-1 text-white">Nuestro</span>
           <span className="text-black">contacto</span>
         </h2>
@@ -89,7 +89,7 @@ ${formData.mensaje}
                 aria-label="Escríbenos a hey@cobalto.blue"
               >
                 <span className="text-lg">Escríbenos a&nbsp;</span>
-                <span className="text-lg font-medium">hey@cobalto.blue</span>
+                <span className="text-lg">hey@cobalto.blue</span>
               </a>
               <a
                 href="https://wa.me/524422009964?text=Hola! Me interesa conocer más sobre los servicios de Cobalto.blue"
@@ -99,7 +99,7 @@ ${formData.mensaje}
                 aria-label="Envíanos un WhatsApp"
               >
                 <span className="text-lg">Envíanos un&nbsp;</span>
-                <span className="text-lg font-medium">WhatsApp</span>
+                <span className="text-lg">WhatsApp</span>
               </a>
             </div>
           </div>

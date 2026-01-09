@@ -6,11 +6,9 @@ export default function ProjectsGrid() {
       {/* Full-bleed grid: 2 columnas, 1 en pantallas verticales */}
       <div className="grid grid-cols-2 portrait-grid-1 gap-px bg-black">
         {projects.map((p) => (
-          <a
+          <div
             key={p.id}
-            href={`/work/${p.slug}`}
             className="group relative block overflow-hidden bg-white"
-            aria-label={p.title}
           >
             {/* Imagen base */}
             <div className="aspect-4-3">
@@ -22,16 +20,16 @@ export default function ProjectsGrid() {
               />
             </div>
 
-            {/* Overlay al hover: fondo cobalto y texto blanco */}
+            {/* Overlay al hover: texto azul */}
             <div
-              className="pointer-events-none absolute inset-0 flex items-center justify-center bg-cobaltBase/0 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:bg-cobaltBase group-focus-visible:opacity-100 group-focus-visible:bg-cobaltBase"
+              className="pointer-events-none absolute inset-0 flex items-center justify-center bg-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             >
               <div className="px-6 text-center">
-                <h3 className="font-neueMachina text-white text-2xl md:text-3xl leading-tight">{p.title}</h3>
-                <p className="mt-2 font-circularStd text-white/90 text-sm md:text-base">{p.desc}</p>
+                <h3 className="font-bold text-cobaltBase text-2xl md:text-3xl leading-tight">{p.title}</h3>
+                <p className="mt-2 font-circularStd text-cobaltBase/80 text-sm md:text-base">{p.desc}</p>
               </div>
             </div>
-          </a>
+          </div>
         ))}
       </div>
     </section>

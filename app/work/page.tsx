@@ -38,17 +38,17 @@ export default function WorkPage(){
       <section className="bg-black">
         <div className="grid grid-cols-2 md:grid-cols-3 portrait-grid-1 gap-px bg-black">
           {filtered.map((p) => (
-            <a key={p.id} href={`/work/${p.slug}`} className="group relative block bg-white" aria-label={p.title}>
+            <div key={p.id} className="group relative block bg-white">
               <div className="aspect-4-3">
                 <img src={p.image} alt={p.title} className="h-full w-full object-cover" loading="lazy" />
               </div>
-              <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-cobaltBase/0 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:bg-cobaltBase">
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <div className="px-6 text-center">
-                  <h3 className="font-neueMachina text-white text-2xl md:text-3xl leading-tight">{p.title}</h3>
-                  <p className="mt-2 font-circularStd text-white/90 text-sm md:text-base">{p.desc}</p>
+                  <h3 className="font-bold text-cobaltBase text-2xl md:text-3xl leading-tight">{p.title}</h3>
+                  <p className="mt-2 font-circularStd text-cobaltBase/80 text-sm md:text-base">{p.desc}</p>
                 </div>
               </div>
-            </a>
+            </div>
           ))}
         </div>
       </section>
@@ -63,7 +63,7 @@ export default function WorkPage(){
       {/* 3.d Logos de clientes (placeholders) */}
       <section className="bg-black text-white">
         <div className="mx-auto max-w-7xl px-6 py-14">
-          <h3 className="text-center text-2xl md:text-3xl font-semibold mb-8">
+          <h3 className="text-center text-2xl md:text-3xl font-bold mb-8">
             <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> clientes
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 items-center">

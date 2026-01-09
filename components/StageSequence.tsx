@@ -65,7 +65,7 @@ export default function StageSequence() {
             height={168}
             priority
           />
-          <p className="mt-6 font-groteskMono text-lg md:text-xl tracking-wide text-white/90">
+          <p className="mt-6 text-lg md:text-xl tracking-wide text-white/90">
             ARE WE HUMANS OR ARE WE ....?
           </p>
         </motion.div>
@@ -91,8 +91,8 @@ export default function StageSequence() {
           className="absolute inset-0 flex items-center justify-center z-30"
         >
           <div className="mx-auto max-w-4xl px-6 text-center">
-            <h2 className="font-circularBold text-5xl md:text-6xl mb-4">Nosotros</h2>
-            <p className="font-circularBook text-lg md:text-xl leading-relaxed text-white/90">
+            <h2 className="text-5xl md:text-6xl font-bold mb-4">Nosotros</h2>
+            <p className="text-lg md:text-xl leading-relaxed text-white/90">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra,
               purus non malesuada bibendum, libero tortor luctus mi, in commodo arcu augue eu risus.
               Donec faucibus nisl at fermentum posuere. Integer consequat maximus leo.
@@ -108,8 +108,8 @@ export default function StageSequence() {
         >
           <div className="h-full flex items-center justify-center px-6 text-center">
             <div className="mx-auto max-w-4xl">
-              <h3 className="font-circularBold text-5xl md:text-6xl mb-4">Siguiente etapa</h3>
-              <p className="font-circularBook text-lg md:text-xl text-black/80">
+              <h3 className="text-5xl md:text-6xl font-bold mb-4">Siguiente etapa</h3>
+              <p className="text-lg md:text-xl text-black/80">
                 Este bloque blanco entra desde abajo y cubre todo el escenario (stage3).
                 Aquí puedes poner contenido de "Servicios", "Work" o cualquier sección que venga después.
               </p>

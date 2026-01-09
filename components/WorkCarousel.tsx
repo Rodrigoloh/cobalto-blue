@@ -86,7 +86,7 @@ export default function WorkCarousel() {
   return (
     <section id="work" className="section no-snap text-white flex items-center" aria-label="Trabajos">
       <div className="mx-auto max-w-7xl w-full px-4 md:px-8 relative">
-        <h2 className="font-neueMachina text-4xl md:text-5xl absolute top-0 left-4 md:left-0">Work</h2>
+        <h2 className="text-4xl md:text-5xl font-bold absolute top-0 left-4 md:left-0">Work</h2>
 
         {/* Marco 3‑tarjetas centrado por el contenedor (evita desplazamiento a la derecha) */}
         <div
@@ -126,7 +126,7 @@ export default function WorkCarousel() {
                       </div>
                       <div className="p-5 md:p-6">
                         <div className="text-sm text-black/60 mb-1">Bertel • Steen</div>
-                        <h3 className="font-circularStd text-lg md:text-xl leading-snug line-clamp-2">{p.title}</h3>
+                        <h3 className="font-circularStd font-bold text-lg md:text-xl leading-snug line-clamp-2">{p.title}</h3>
                       </div>
                     </div>
                   </motion.a>
@@ -159,7 +159,7 @@ export default function WorkCarousel() {
                     </div>
                     <div className="p-5 md:p-6">
                       <div className="text-sm text-black/60 mb-1">Bertel • Steen</div>
-                      <h3 className="font-circularStd text-lg md:text-xl leading-snug line-clamp-2">{p.title}</h3>
+                      <h3 className="font-circularStd font-bold text-lg md:text-xl leading-snug line-clamp-2">{p.title}</h3>
                     </div>
                   </div>
                 </motion.div>

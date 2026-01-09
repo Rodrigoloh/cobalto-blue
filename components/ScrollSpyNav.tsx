@@ -43,14 +43,14 @@ export default function ScrollSpyNav(){
 
   return (
     <aside className="fixed left-4 top-6 z-40 select-none">
-      <ul className="space-y-1 text-sm font-groteskMono">
+      <ul className="space-y-1 text-sm">
         {items.map(i=>{
           const isActive = active === i.id
           return (
             <li key={i.id}>
               <button
                 onClick={()=>go(i.id)}
-                className={`uppercase tracking-wide transition-all duration-300 font-light ${
+                className={`uppercase tracking-wide transition-all duration-300 font-normal ${
                   isActive 
                     ? 'text-white border-b border-white pb-0.5' 
                     : 'text-white/60 hover:text-white/90'

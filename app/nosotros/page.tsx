@@ -36,7 +36,7 @@ export default function NosotrosPage(){
       {/* Nuestros servicios */}
       <section className="bg-white text-black">
         <div className="mx-auto max-w-7xl px-6 py-16">
-          <h3 className="text-center text-2xl md:text-3xl font-semibold">
+          <h3 className="text-center text-2xl md:text-3xl font-bold">
             <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> servicios
           </h3>
           <div className="mt-8">
@@ -48,12 +48,12 @@ export default function NosotrosPage(){
       {/* Nuestro proceso */}
       <section className="bg-black text-white">
         <div className="mx-auto max-w-7xl px-6 py-16">
-          <h3 className="text-center text-2xl md:text-3xl font-semibold"><span className="italic mr-1 text-[#1F00FF]">Nuestro</span> proceso</h3>
+          <h3 className="text-center text-2xl md:text-3xl font-bold"><span className="italic mr-1 text-[#1F00FF]">Nuestro</span> proceso</h3>
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
             {PROCESS_STEPS.map((st, idx) => (
               <div key={st.title}>
                 <div className="text-[#1F00FF] text-sm mb-2">{String(idx + 1).padStart(2, '0')}</div>
-                <div className="text-xl font-semibold">{st.title}</div>
+                <div className="text-xl font-bold">{st.title}</div>
                 <p className="mt-2 text-neutral-400 text-sm leading-relaxed">{st.desc}</p>
               </div>
             ))}

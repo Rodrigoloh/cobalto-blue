@@ -26,7 +26,7 @@ export default function Hero(){
         </motion.div>
         <motion.p initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:0.7, delay:0.1}}
           style={{ opacity: textOpacity }}
-          className="mt-8 font-groteskMono text-lg md:text-xl tracking-wide">
+          className="mt-8 text-lg md:text-xl tracking-wide">
           ARE WE HUMANS OR ARE WE ....?
         </motion.p>
       </div>

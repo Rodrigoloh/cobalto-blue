@@ -24,7 +24,7 @@ export default function ProjectDetailPage({ params }: Props) {
     <main className="min-h-screen pt-24">
       <div className="mx-auto max-w-5xl px-6">
         <Link href="/work" className="text-sm text-black/60 hover:underline">← Volver a proyectos</Link>
-        <h1 className="mt-4 font-neueMachina text-4xl md:text-6xl">{p.title}</h1>
+        <h1 className="mt-4 text-4xl md:text-6xl font-bold">{p.title}</h1>
         <p className="mt-3 font-circularStd text-black/70">{p.desc}</p>
 
         {p.detail && (

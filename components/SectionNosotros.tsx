@@ -5,11 +5,11 @@ import ServicesCarousel from './ServicesCarousel'
 // Edita los textos y listas de la sección en las constantes siguientes.
 const ABOUT_TEXT: React.ReactNode[] = [
   <>
-    <span className="font-semibold text-[#1F00FF]">Cobalto Blue</span> existe para dar forma a las ideas que merecen ser vistas.
+    <span className="text-[#1F00FF]">Cobalto Blue</span> existe para dar forma a las ideas que merecen ser vistas.
   </>,
   <>
     Construimos marcas que comunican con claridad y se sienten vivas. En cada proyecto buscamos equilibrio entre lo racional y lo sensorial: {' '}
-    <span className="font-semibold text-[#1F00FF]">estrategia, estética y una narrativa que permanezca.</span>
+    <span className="text-[#1F00FF]">estrategia, estética y una narrativa que permanezca.</span>
   </>,
 ]
 
@@ -66,7 +66,7 @@ export default function SectionNosotros(){
         {/* Servicios */}
         <section className="relative z-10 min-h-screen flex items-center bg-white text-black border-b border-neutral-200">
           <div className="mx-auto max-w-7xl px-6 w-full py-12">
-            <h3 className="text-center text-2xl md:text-3xl font-semibold">
+            <h3 className="text-center text-2xl md:text-3xl font-bold">
               <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> servicios
             </h3>
             <div className="mt-8">
@@ -78,12 +78,12 @@ export default function SectionNosotros(){
         {/* Proceso */}
         <section className="relative z-10 min-h-screen flex items-center bg-black text-white">
           <div className="mx-auto max-w-7xl px-6 w-full py-12">
-            <h3 className="text-center text-2xl md:text-3xl font-semibold"><span className="italic mr-1 text-[#1F00FF]">Nuestro</span> proceso</h3>
+            <h3 className="text-center text-2xl md:text-3xl font-bold"><span className="italic mr-1 text-[#1F00FF]">Nuestro</span> proceso</h3>
             <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
               {PROCESS_STEPS.map((st, idx) => (
                 <div key={st.title}>
                   <div className="text-[#1F00FF] text-sm mb-2">{String(idx + 1).padStart(2, '0')}</div>
-                  <div className="text-xl font-semibold">{st.title}</div>
+                  <div className="text-xl font-bold">{st.title}</div>
                   <p className="mt-2 text-neutral-400 text-sm leading-relaxed">{st.desc}</p>
                 </div>
               ))}
@@ -94,7 +94,7 @@ export default function SectionNosotros(){
         {/* Contacto */}
         <section id="contacto" className="relative z-10 min-h-screen flex items-center bg-[#1F00FF] text-white">
           <div className="mx-auto max-w-7xl px-6 w-full py-12">
-            <h3 className="text-left text-2xl md:text-3xl font-semibold">
+            <h3 className="text-left text-2xl md:text-3xl font-bold">
               <span className="italic mr-1 text-white">Nuestro</span>
               <span className="text-black">contacto</span>
             </h3>
@@ -117,7 +117,7 @@ export default function SectionNosotros(){
                     aria-label="Escríbenos a hey@cobalto.blue"
                   >
                     <span className="text-lg">Escríbenos a </span>
-                    <span className="text-lg font-medium">hey@cobalto.blue</span>
+                    <span className="text-lg">hey@cobalto.blue</span>
                   </a>
                   <a
                     href="https://wa.me/524422009964?text=Hola! Me interesa conocer más sobre los servicios de Cobalto.blue"
@@ -127,7 +127,7 @@ export default function SectionNosotros(){
                     aria-label="Envíanos un WhatsApp"
                   >
                     <span className="text-lg">Envíanos un </span>
-                    <span className="text-lg font-medium">WhatsApp</span>
+                    <span className="text-lg">WhatsApp</span>
                   </a>
                 </div>
               </div>

@@ -48,6 +48,8 @@ html, body, :root { height: 100%; }
 body {
   background: #ffffff; /* Fondo claro para look clean */
   color: #111111;
+  font-family: 'CircularStd', system-ui, sans-serif;
+  font-weight: 400;
   overflow-x: hidden; /* evita barras de scroll horizontales por elementos full-bleed */
 }
 

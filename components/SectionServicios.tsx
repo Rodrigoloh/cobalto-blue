@@ -17,7 +17,7 @@ export default function SectionServicios(){
         <div className="flex items-center gap-4 mb-8">
           <Image src="/brand/cb_logo-main-black.png" alt="cobalto.blue" width={200} height={60} />
         </div>
-        <h2 className="font-neueMachina font-bold text-5xl md:text-7xl leading-none mb-10">Nuestros Servicios</h2>
+        <h2 className="font-bold text-5xl md:text-7xl leading-none mb-10">Nuestros Servicios</h2>
         <ul className="divide-y divide-black/20">
           {servicios.map((s, idx)=> (
             <li key={s} className="flex items-center justify-between py-6">
