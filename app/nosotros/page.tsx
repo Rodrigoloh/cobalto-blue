@@ -24,7 +24,7 @@ export default function NosotrosPage(){
     <main>
       {/* Parallax con texto sobre la imagen */}
       <section
-        className="relative h-[45vh] md:h-[60vh] bg-fixed bg-cover bg-center text-white"
+        className="relative h-screen bg-fixed bg-cover bg-center text-white"
         style={{ backgroundImage: 'url(/nosotros/parallax.jpg)' }}
         aria-label="Parallax"
       >
@@ -43,8 +43,8 @@ export default function NosotrosPage(){
       </section>
 
       {/* Servicios + proceso juntos en una pantalla */}
-      <div className="min-h-screen flex flex-col">
-        <section className="bg-white text-black flex-1 flex items-center">
+      <div className="h-screen flex flex-col">
+        <section className="bg-white text-black flex-1 flex items-center min-h-[50vh]">
           <div className="mx-auto max-w-7xl px-6 py-10 w-full">
             <h3 className="text-center text-2xl md:text-3xl font-bold">
               <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> servicios
@@ -55,7 +55,7 @@ export default function NosotrosPage(){
           </div>
         </section>
 
-        <section className="bg-black text-white flex-1 flex items-center">
+        <section className="bg-black text-white flex-1 flex items-center min-h-[50vh]">
           <div className="mx-auto max-w-7xl px-6 py-10 w-full">
             <h3 className="text-center text-2xl md:text-3xl font-bold"><span className="italic mr-1 text-[#1F00FF]">Nuestro</span> proceso</h3>
             <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

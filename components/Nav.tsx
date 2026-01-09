@@ -29,8 +29,8 @@ export function Nav() {
   }, [pathname])
 
   const headerCls = onHero
-    ? 'bg-transparent text-white border-transparent'
-    : 'bg-white text-neutral-900 border-b border-neutral-200'
+    ? 'bg-transparent text-white'
+    : 'bg-white text-neutral-900'
   const linkBase = 'transition'
   const linkCls = onHero ? 'text-white hover:text-[#1F00FF]' : 'text-neutral-800 hover:text-black'
   const ctaCls = 'bg-[#1F00FF] text-white hover:bg-black rounded-full px-4 py-2 transition'
