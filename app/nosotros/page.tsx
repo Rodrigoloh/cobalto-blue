@@ -21,10 +21,10 @@ const PROCESS_STEPS: Step[] = [
 
 export default function NosotrosPage(){
   return (
-    <main className="pt-24">
+    <main>
       {/* Parallax con texto sobre la imagen */}
       <section
-        className="relative h-[55vh] md:h-[70vh] bg-fixed bg-cover bg-center text-white"
+        className="relative h-[45vh] md:h-[60vh] bg-fixed bg-cover bg-center text-white"
         style={{ backgroundImage: 'url(/nosotros/parallax.jpg)' }}
         aria-label="Parallax"
       >
@@ -42,33 +42,34 @@ export default function NosotrosPage(){
         </div>
       </section>
 
-      {/* Nuestros servicios */}
-      <section className="bg-white text-black">
-        <div className="mx-auto max-w-7xl px-6 py-16">
-          <h3 className="text-center text-2xl md:text-3xl font-bold">
-            <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> servicios
-          </h3>
-          <div className="mt-8">
-            <ServicesCarousel items={SERVICES} />
+      {/* Servicios + proceso juntos en una pantalla */}
+      <div className="min-h-screen flex flex-col">
+        <section className="bg-white text-black flex-1 flex items-center">
+          <div className="mx-auto max-w-7xl px-6 py-10 w-full">
+            <h3 className="text-center text-2xl md:text-3xl font-bold">
+              <span className="italic mr-1 text-[#1F00FF]">Nuestros</span> servicios
+            </h3>
+            <div className="mt-6">
+              <ServicesCarousel items={SERVICES} />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Nuestro proceso */}
-      <section className="bg-black text-white">
-        <div className="mx-auto max-w-7xl px-6 py-16">
-          <h3 className="text-center text-2xl md:text-3xl font-bold"><span className="italic mr-1 text-[#1F00FF]">Nuestro</span> proceso</h3>
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-            {PROCESS_STEPS.map((st, idx) => (
-              <div key={st.title}>
-                <div className="text-[#1F00FF] text-sm mb-2">{String(idx + 1).padStart(2, '0')}</div>
-                <div className="text-xl font-bold">{st.title}</div>
-                <p className="mt-2 text-neutral-400 text-sm leading-relaxed">{st.desc}</p>
-              </div>
-            ))}
+        <section className="bg-black text-white flex-1 flex items-center">
+          <div className="mx-auto max-w-7xl px-6 py-10 w-full">
+            <h3 className="text-center text-2xl md:text-3xl font-bold"><span className="italic mr-1 text-[#1F00FF]">Nuestro</span> proceso</h3>
+            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {PROCESS_STEPS.map((st, idx) => (
+                <div key={st.title}>
+                  <div className="text-[#1F00FF] text-sm mb-2">{String(idx + 1).padStart(2, '0')}</div>
+                  <div className="text-xl font-bold">{st.title}</div>
+                  <p className="mt-2 text-neutral-400 text-sm leading-relaxed">{st.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* Footer negro */}
       <FooterClean />
