@@ -11,20 +11,27 @@ export default function NosotrosParallaxSection() {
     const text = textRef.current
     if (!section || !text) return
 
-    let maxShift = 0
     let raf = 0
     const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v))
 
-    const computeMax = () => {
-      const rect = text.getBoundingClientRect()
-      maxShift = rect.width + 64
+    const getNavHeight = () => {
+      const raw = getComputedStyle(document.documentElement).getPropertyValue('--nav-h')
+      const parsed = Number.parseFloat(raw)
+      return Number.isFinite(parsed) ? parsed : 64
     }
 
     const update = () => {
       const rect = section.getBoundingClientRect()
+      const textRect = text.getBoundingClientRect()
       const progress = clamp(-rect.top / rect.height, 0, 1)
-      const x = -maxShift * progress
-      text.style.transform = `translate3d(${x}px, 0, 0)`
+      const y = progress * 80
+      text.style.transform = `translate3d(0, ${y}px, 0)`
+
+      const navH = getNavHeight()
+      const fadeRange = 140
+      const distance = textRect.top - navH
+      const opacity = clamp(distance / fadeRange, 0, 1)
+      text.style.opacity = String(opacity)
       raf = 0
     }
 
@@ -33,11 +40,9 @@ export default function NosotrosParallaxSection() {
       raf = window.requestAnimationFrame(update)
     }
     const onResize = () => {
-      computeMax()
       update()
     }
 
-    computeMax()
     update()
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onResize)
