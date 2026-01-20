@@ -1,43 +1,17 @@
 "use client"
-import { useMemo, useState } from 'react'
 import FooterClean from '@/components/FooterClean'
-import { projects as allProjects, RUBROS } from '@/data/projects'
+import { projects as allProjects } from '@/data/projects'
 
 export default function WorkPage(){
-  const [active, setActive] = useState<(typeof RUBROS)[number]>('Ver todos')
-  const filtered = useMemo(
-    () => (active === 'Ver todos' ? allProjects : allProjects.filter((p) => p.rubro === active)),
-    [active]
-  )
-
   return (
     <main id="top" className="relative pt-[var(--nav-h)]">
       {/* Fondo fijo negro para que no se vea blanco al estirar el scroll */}
       <div className="fixed inset-0 -z-10 bg-black" aria-hidden />
 
-      {/* 3.a Barra superior de filtros (justo debajo de la navbar) */}
-      <div className="bg-black">
-        <div className="mx-auto max-w-7xl px-6 py-3 flex flex-wrap gap-3 items-center justify-center">
-          {RUBROS.map((r) => (
-            <button
-              key={r}
-              onClick={() => setActive(r)}
-              className={`text-sm px-4 py-2 rounded-full transition ${
-                active === r
-                  ? 'bg-white text-black'
-                  : 'text-white hover:bg-cobaltBase'
-              }`}
-            >
-              {r}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* 3.b Galería */}
+      {/* 3.a Galería */}
       <section className="bg-black">
         <div className="grid grid-cols-2 md:grid-cols-3 portrait-grid-1 gap-px bg-black">
-          {filtered.map((p) => (
+          {allProjects.map((p) => (
             <div key={p.id} className="group relative block bg-white">
               <div className="aspect-4-3">
                 <img src={p.image} alt={p.title} className="h-full w-full object-cover" loading="lazy" />
@@ -53,14 +27,14 @@ export default function WorkPage(){
         </div>
       </section>
 
-      {/* 3.c Banner inferior con Volver arriba */}
+      {/* 3.b Banner inferior con Volver arriba */}
       <div className="bg-black">
         <div className="mx-auto max-w-7xl px-6 py-8 flex items-center justify-center">
           <a href="#top" className="rounded-full bg-cobaltBase text-white hover:bg-white hover:text-black transition px-5 py-2.5 text-sm">Volver arriba</a>
         </div>
       </div>
 
-      {/* 3.d Logos de clientes (placeholders) */}
+      {/* 3.c Logos de clientes (placeholders) */}
       <section className="bg-black text-white">
         <div className="mx-auto max-w-7xl px-6 py-14">
           <h3 className="text-center text-2xl md:text-3xl font-bold mb-8">
@@ -79,7 +53,7 @@ export default function WorkPage(){
         </div>
       </section>
 
-      {/* 3.e Footer */}
+      {/* 3.d Footer */}
       <FooterClean />
     </main>
   )
