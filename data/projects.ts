@@ -34,7 +34,7 @@ export const TITLE_OVERRIDES: Record<number, string> = {
   9: 'eBious',
   10: 'Carolina',
   11: 'L’Antica Wine',
-  12: 'Doctores',
+  12: 'Momentum Medical Center',
   13: 'Glow Science',
   14: 'Motofábrica',
   15: 'Le Mascotte',
