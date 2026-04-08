@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { createProspectReport } from '@/lib/performance-report'
 import { AUTH_COOKIE_NAME, createPrivateSessionToken } from '@/lib/private-auth'
-import { storeReport } from '@/lib/report-storage'
 
 function normalizeWebsiteUrl(value: string) {
   const raw = value.trim()
@@ -53,15 +52,13 @@ export async function POST(request: NextRequest) {
       notes: String(formData.get('notes') ?? '')
     })
 
-    await storeReport(report)
-
-    return NextResponse.redirect(new URL(`/cb-lab/reporting/${report.id}`, request.url))
+    return NextResponse.json({ report })
   } catch (error) {
-    const redirectUrl = new URL('/cb-lab/reporting', request.url)
-    redirectUrl.searchParams.set(
-      'error',
-      error instanceof Error ? error.message : 'No fue posible generar el reporte.'
+    return NextResponse.json(
+      {
+        error: error instanceof Error ? error.message : 'No fue posible generar el reporte.'
+      },
+      { status: 400 }
     )
-    return NextResponse.redirect(redirectUrl)
   }
 }
