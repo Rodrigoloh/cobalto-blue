@@ -58,6 +58,23 @@ export default async function HookReportPage({ params }: HookPageProps) {
               </div>
             </div>
 
+            {(report.input.contactName || report.input.contactPhone || report.input.contactEmail) ? (
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="rounded-[1.75rem] border border-black/10 bg-white/75 p-5">
+                  <p className="text-xs uppercase tracking-[0.2em] text-black/45">Contacto</p>
+                  <p className="mt-3 text-xl">{report.input.contactName || 'N/D'}</p>
+                </div>
+                <div className="rounded-[1.75rem] border border-black/10 bg-white/75 p-5">
+                  <p className="text-xs uppercase tracking-[0.2em] text-black/45">Teléfono</p>
+                  <p className="mt-3 text-xl">{report.input.contactPhone || 'N/D'}</p>
+                </div>
+                <div className="rounded-[1.75rem] border border-black/10 bg-white/75 p-5">
+                  <p className="text-xs uppercase tracking-[0.2em] text-black/45">Correo</p>
+                  <p className="mt-3 text-xl break-all">{report.input.contactEmail || 'N/D'}</p>
+                </div>
+              </div>
+            ) : null}
+
             <div className="grid gap-4 md:grid-cols-3">
               <div className="rounded-[1.75rem] border border-black/10 bg-white/75 p-5">
                 <p className="text-xs uppercase tracking-[0.2em] text-black/45">PSI Mobile</p>

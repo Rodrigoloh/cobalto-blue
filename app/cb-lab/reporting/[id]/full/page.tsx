@@ -76,6 +76,14 @@ export default async function FullReportPage({ params }: FullPageProps) {
                   <p className="mt-3 font-['NeueMachina'] text-5xl leading-none">{report.overallScore}</p>
                   <p className="mt-3 text-sm text-black/60">{report.healthStatus}</p>
                 </div>
+                {(report.input.contactName || report.input.contactPhone || report.input.contactEmail) ? (
+                  <div className="rounded-[2rem] border border-black/10 bg-white/75 p-6">
+                    <p className="text-xs uppercase tracking-[0.2em] text-black/45">contacto</p>
+                    <p className="mt-3 text-base text-black">{report.input.contactName || 'N/D'}</p>
+                    <p className="mt-1 text-sm text-black/60">{report.input.contactPhone || 'N/D'}</p>
+                    <p className="mt-1 text-sm break-all text-black/60">{report.input.contactEmail || 'N/D'}</p>
+                  </div>
+                ) : null}
               </div>
             </div>
 
@@ -210,7 +218,10 @@ export default async function FullReportPage({ params }: FullPageProps) {
                 <p className="text-xs uppercase tracking-[0.25em] text-black/45">fuentes utilizadas</p>
                 <div className="mt-5 space-y-4 text-sm text-black/68">
                   <p>
-                    PageSpeed Insights: {report.sourceStatus.pagespeed ? 'Activo' : 'Sin datos'}
+                    PageSpeed Insights:{' '}
+                    {report.sourceStatus.pagespeed
+                      ? 'Activo'
+                      : report.sourceStatus.pagespeedMessage || 'Sin datos'}
                   </p>
                   <p>
                     GTmetrix: {report.sourceStatus.gtmetrix ? 'Activo' : report.sourceStatus.gtmetrixMessage}

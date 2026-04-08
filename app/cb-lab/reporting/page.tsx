@@ -110,6 +110,36 @@ export default async function ReportingDashboardPage({ searchParams }: Reporting
                 </label>
               </div>
 
+              <div className="grid gap-4 md:grid-cols-3">
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Nombre de contacto</span>
+                  <input
+                    type="text"
+                    name="contactName"
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                    placeholder="Juan Pérez"
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Teléfono</span>
+                  <input
+                    type="text"
+                    name="contactPhone"
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                    placeholder="+52 81 5555 5555"
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Correo</span>
+                  <input
+                    type="email"
+                    name="contactEmail"
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                    placeholder="contacto@empresa.com"
+                  />
+                </label>
+              </div>
+
               <label className="block space-y-2">
                 <span className="text-sm font-semibold text-black/70">CTA principal</span>
                 <input
@@ -149,7 +179,8 @@ export default async function ReportingDashboardPage({ searchParams }: Reporting
                   <p className="text-sm font-semibold text-black/60">PageSpeed Insights</p>
                   <p className="mt-2 text-lg text-black">Activo</p>
                   <p className="mt-2 text-sm text-black/65">
-                    Base del reporte. Se consulta en móvil y desktop.
+                    Base del reporte. Se consulta en móvil y desktop. Si vas a usarlo en producción,
+                    conviene definir `PAGESPEED_API_KEY` en Vercel.
                   </p>
                 </div>
                 <div className="rounded-3xl border border-black/10 bg-white/60 p-4">

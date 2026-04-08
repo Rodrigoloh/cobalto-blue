@@ -49,6 +49,9 @@ export type ProspectInput = {
   websiteUrl: string
   industry: string
   city: string
+  contactName: string
+  contactPhone: string
+  contactEmail: string
   primaryCta: string
   notes: string
 }
@@ -73,6 +76,7 @@ export type ProspectReport = {
   proposals: string[]
   sourceStatus: {
     pagespeed: boolean
+    pagespeedMessage: string | null
     gtmetrix: boolean
     gtmetrixMessage: string | null
   }
@@ -130,10 +134,10 @@ function normalizePageSpeed(strategy: 'mobile' | 'desktop', payload: any): Audit
 }
 
 async function runPageSpeedAudit(url: string, strategy: 'mobile' | 'desktop') {
-  const endpoint = new URL('https://www.googleapis.com/pagespeedonline/v5/runPagespeed')
+  const endpoint = new URL('https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed')
   endpoint.searchParams.set('url', url)
   endpoint.searchParams.set('strategy', strategy)
-  endpoint.searchParams.set('category', 'performance')
+  endpoint.searchParams.append('category', 'performance')
   endpoint.searchParams.append('category', 'accessibility')
   endpoint.searchParams.append('category', 'best-practices')
   endpoint.searchParams.append('category', 'seo')
@@ -145,10 +149,22 @@ async function runPageSpeedAudit(url: string, strategy: 'mobile' | 'desktop') {
   const response = await fetch(endpoint, { cache: 'no-store' })
 
   if (!response.ok) {
-    throw new Error(`PageSpeed ${strategy} failed with ${response.status}`)
+    const payload = await response.json().catch(() => null)
+    const message =
+      payload?.error?.message ||
+      payload?.error?.details?.[0]?.message ||
+      `PageSpeed ${strategy} respondió con ${response.status}.`
+
+    throw new Error(`PageSpeed ${strategy}: ${message}`)
   }
 
-  return normalizePageSpeed(strategy, await response.json())
+  const payload = await response.json()
+
+  if (!payload?.lighthouseResult) {
+    throw new Error(`PageSpeed ${strategy}: la API no devolvió resultados Lighthouse.`)
+  }
+
+  return normalizePageSpeed(strategy, payload)
 }
 
 function getGtmetrixHeaders() {
@@ -538,6 +554,9 @@ export async function createProspectReport(input: ProspectInput) {
     websiteUrl: input.websiteUrl.trim(),
     industry: input.industry.trim(),
     city: input.city.trim(),
+    contactName: input.contactName.trim(),
+    contactPhone: input.contactPhone.trim(),
+    contactEmail: input.contactEmail.trim(),
     primaryCta: input.primaryCta.trim() || 'WhatsApp',
     notes: input.notes.trim()
   }
@@ -549,9 +568,18 @@ export async function createProspectReport(input: ProspectInput) {
 
   const mobile = mobileResult.status === 'fulfilled' ? mobileResult.value : null
   const desktop = desktopResult.status === 'fulfilled' ? desktopResult.value : null
+  const pageSpeedErrors = [
+    mobileResult.status === 'rejected' ? mobileResult.reason : null,
+    desktopResult.status === 'rejected' ? desktopResult.reason : null
+  ]
+    .filter(Boolean)
+    .map((reason) => (reason instanceof Error ? reason.message : String(reason)))
 
   if (!mobile && !desktop) {
-    throw new Error('No fue posible obtener métricas desde PageSpeed Insights para esta URL.')
+    throw new Error(
+      pageSpeedErrors[0] ??
+        'No fue posible obtener métricas desde PageSpeed Insights para esta URL.'
+    )
   }
 
   const gtmetrixResult = await runGtmetrixAudit(normalizedInput.websiteUrl)
@@ -584,6 +612,7 @@ export async function createProspectReport(input: ProspectInput) {
     proposals: buildProposals(normalizedInput, mobile, gtmetrix),
     sourceStatus: {
       pagespeed: Boolean(mobile || desktop),
+      pagespeedMessage: pageSpeedErrors[0] ?? null,
       gtmetrix: gtmetrixResult.enabled,
       gtmetrixMessage: gtmetrixResult.enabled ? null : gtmetrixResult.message
     }

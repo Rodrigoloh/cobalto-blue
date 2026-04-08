@@ -8,8 +8,18 @@ import { storeReport } from '@/lib/report-storage'
 function normalizeWebsiteUrl(value: string) {
   const raw = value.trim()
   if (!raw) return ''
-  if (/^https?:\/\//i.test(raw)) return raw
-  return `https://${raw}`
+  const candidate = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`
+
+  try {
+    const parsed = new URL(candidate)
+    if (!parsed.hostname) {
+      return ''
+    }
+
+    return parsed.toString()
+  } catch {
+    return ''
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -36,6 +46,9 @@ export async function POST(request: NextRequest) {
       websiteUrl,
       industry: String(formData.get('industry') ?? ''),
       city: String(formData.get('city') ?? ''),
+      contactName: String(formData.get('contactName') ?? ''),
+      contactPhone: String(formData.get('contactPhone') ?? ''),
+      contactEmail: String(formData.get('contactEmail') ?? ''),
       primaryCta: String(formData.get('primaryCta') ?? ''),
       notes: String(formData.get('notes') ?? '')
     })

@@ -141,6 +141,28 @@ export default async function ReportDetailPage({ params }: ReportPageProps) {
               </div>
             </div>
 
+            {(report.input.contactName || report.input.contactPhone || report.input.contactEmail) ? (
+              <div className="report-card rounded-[2rem] p-6 lg:p-8">
+                <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.35em] text-[#1F00FF]">
+                  contacto del prospecto
+                </p>
+                <div className="mt-5 grid gap-4 md:grid-cols-3">
+                  <div className="rounded-3xl border border-black/10 bg-white/60 p-4">
+                    <p className="text-xs uppercase tracking-[0.2em] text-black/45">Nombre</p>
+                    <p className="mt-2 text-lg">{report.input.contactName || 'N/D'}</p>
+                  </div>
+                  <div className="rounded-3xl border border-black/10 bg-white/60 p-4">
+                    <p className="text-xs uppercase tracking-[0.2em] text-black/45">Teléfono</p>
+                    <p className="mt-2 text-lg">{report.input.contactPhone || 'N/D'}</p>
+                  </div>
+                  <div className="rounded-3xl border border-black/10 bg-white/60 p-4">
+                    <p className="text-xs uppercase tracking-[0.2em] text-black/45">Correo</p>
+                    <p className="mt-2 text-lg break-all">{report.input.contactEmail || 'N/D'}</p>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
             <div className="report-card rounded-[2rem] p-6 lg:p-8">
               <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.35em] text-[#1F00FF]">
                 estado de salud
@@ -168,7 +190,9 @@ export default async function ReportDetailPage({ params }: ReportPageProps) {
                 <div className="rounded-3xl border border-black/10 bg-white/60 p-4 text-sm text-black/65">
                   <p className="font-semibold text-black">PageSpeed Insights</p>
                   <p className="mt-2">
-                    {report.sourceStatus.pagespeed ? 'Activo y usado en el reporte.' : 'Sin datos.'}
+                    {report.sourceStatus.pagespeed
+                      ? 'Activo y usado en el reporte.'
+                      : report.sourceStatus.pagespeedMessage || 'Sin datos.'}
                   </p>
                 </div>
                 <div className="rounded-3xl border border-black/10 bg-white/60 p-4 text-sm text-black/65">
