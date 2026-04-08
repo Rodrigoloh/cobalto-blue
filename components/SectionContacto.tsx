@@ -92,7 +92,7 @@ ${formData.mensaje}
                 <span className="text-lg">hey@cobalto.blue</span>
               </a>
               <a
-                href="https://wa.me/524422009964?text=Hola! Me interesa conocer más sobre los servicios de Cobalto.blue"
+                href="https://wa.me/528125910798?text=Hola! Me interesa conocer más sobre los servicios de Cobalto.blue"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex w-fit items-center rounded-full border border-white px-4 py-2 text-white hover:bg-black hover:text-white transition"
