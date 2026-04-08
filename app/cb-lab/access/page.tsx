@@ -17,61 +17,24 @@ export default function PrivateAccessPage({ searchParams }: AccessPageProps) {
       : '/cb-lab/reporting'
 
   return (
-    <main className="report-shell min-h-screen px-6 py-10 text-[#111111]">
-      <div className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-6xl gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <section className="flex flex-col justify-between rounded-[2rem] bg-[#111111] p-8 text-white shadow-2xl lg:p-12">
-          <div className="space-y-6">
-            <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.35em] text-white/60">
-              cobalto.blue private lab
-            </p>
-            <div className="space-y-4">
-              <h1 className="max-w-xl font-['NeueMachina'] text-4xl leading-none md:text-6xl">
-                Reportes privados para diagnóstico y cierre comercial.
-              </h1>
-              <p className="max-w-xl text-base text-white/74 md:text-lg">
-                Genera un hook report de una página o un reporte ejecutivo completo con datos de
-                PageSpeed Insights y GTmetrix, listo para guardar como PDF.
-              </p>
-            </div>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
-              <p className="text-xs uppercase tracking-[0.25em] text-white/55">Modo 01</p>
-              <p className="mt-2 text-xl">Hook report</p>
-              <p className="mt-2 text-sm text-white/65">
-                Una lectura breve para abrir conversación sin revelar toda la cocina.
-              </p>
-            </div>
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
-              <p className="text-xs uppercase tracking-[0.25em] text-white/55">Modo 02</p>
-              <p className="mt-2 text-xl">Reporte ejecutivo</p>
-              <p className="mt-2 text-sm text-white/65">
-                Cuatro páginas con métricas, hallazgos, costo de no actuar y propuesta rápida.
-              </p>
-            </div>
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
-              <p className="text-xs uppercase tracking-[0.25em] text-white/55">Modo 03</p>
-              <p className="mt-2 text-xl">Privado</p>
-              <p className="mt-2 text-sm text-white/65">
-                Ruta oculta, acceso con contraseña y sin navegación pública.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section className="report-card flex items-center rounded-[2rem] p-8 lg:p-12">
-          <div className="w-full space-y-5">
-            <div>
-              <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.35em] text-[#1F00FF]">
-                acceso
-              </p>
-              <h2 className="mt-3 font-['NeueMachina'] text-3xl leading-none">
-                Entrar al dashboard oculto
-              </h2>
-              <p className="mt-3 text-sm text-black/65">
-                Usa la contraseña definida en `REPORT_ACCESS_PASSWORD`.
-              </p>
+    <main className="report-shell min-h-screen px-6 py-8 text-[#111111]">
+      <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-xl items-center justify-center">
+        <section className="report-card w-full rounded-[2rem] p-8 shadow-2xl lg:p-10">
+          <div className="space-y-8">
+            <div className="space-y-5 text-center">
+              <img
+                src="/brand/logo-main-blue.png"
+                alt="cobalto.blue"
+                className="mx-auto h-8 w-auto"
+              />
+              <div className="space-y-3">
+                <p className="font-['PPRightGroteskMono'] text-[11px] uppercase tracking-[0.38em] text-[#1F00FF]">
+                  WEB TRACKING REPORTING
+                </p>
+                <p className="text-sm text-black/58">
+                  Acceso privado al dashboard de reportes.
+                </p>
+              </div>
             </div>
 
             {searchParams?.error === '1' ? (
@@ -110,7 +73,7 @@ export default function PrivateAccessPage({ searchParams }: AccessPageProps) {
                 type="submit"
                 className="w-full rounded-full bg-[#1F00FF] px-5 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-black"
               >
-                Entrar
+                Iniciar sesión
               </button>
             </form>
           </div>
