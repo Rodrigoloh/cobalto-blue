@@ -1,7 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Nav } from '@/components/Nav'
 import LangProvider from '@/components/LangProvider'
+import { ConditionalNav } from '@/components/ConditionalNav'
 
 export const metadata: Metadata = {
   title: 'cobalto.blue — Branding & Digital',
@@ -13,7 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es" className="scroll-smooth">
       <body>
         <LangProvider />
-        <Nav />
+        <ConditionalNav />
         {children}
       </body>
     </html>

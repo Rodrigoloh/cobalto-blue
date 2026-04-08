@@ -98,3 +98,57 @@ body {
 /* Flecha flotante del hero */
 @keyframes float-y { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
 .animate-float-y { animation: float-y 2.4s ease-in-out infinite; }
+
+.report-page {
+  width: 100%;
+  max-width: 960px;
+  min-height: 1120px;
+  margin: 0 auto;
+}
+
+.report-shell {
+  background:
+    radial-gradient(circle at top left, rgba(31, 0, 255, 0.12), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(17, 17, 17, 0.12), transparent 28%),
+    #f4f7fb;
+}
+
+.report-card {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(14px);
+}
+
+.report-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media print {
+  html, body {
+    background: #ffffff;
+  }
+
+  body {
+    overflow: visible;
+  }
+
+  .print-hidden {
+    display: none !important;
+  }
+
+  .report-shell {
+    background: #ffffff;
+  }
+
+  .report-page {
+    min-height: auto;
+    max-width: none;
+    page-break-after: always;
+  }
+
+  .report-page:last-child {
+    page-break-after: auto;
+  }
+}
