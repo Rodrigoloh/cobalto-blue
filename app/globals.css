@@ -159,7 +159,9 @@ body {
 
   .hook-onepage {
     page: hook-report;
-    min-height: auto !important;
+    min-height: 10.55in !important;
+    height: 10.55in !important;
+    max-height: 10.55in !important;
     max-width: 7.9in !important;
     width: 7.9in !important;
     margin: 0 auto !important;
@@ -175,8 +177,9 @@ body {
 
   .hook-onepage-inner {
     gap: 0.55rem !important;
-    zoom: 0.76;
+    zoom: 0.72;
     transform-origin: top left !important;
+    height: 100% !important;
   }
 
   .hook-stack {
@@ -216,6 +219,28 @@ body {
   .hook-three-up,
   .hook-vitals-grid {
     gap: 0.4rem !important;
+  }
+
+  .hook-two-up {
+    grid-template-columns: 1.15fr 0.85fr !important;
+  }
+
+  .hook-three-up {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .hook-vitals-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  }
+
+  .hook-header,
+  .hook-two-up,
+  .hook-three-up,
+  .hook-vitals,
+  .hook-vitals-grid,
+  .hook-footer {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 
   .hook-dark-card,
