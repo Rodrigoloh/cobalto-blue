@@ -159,11 +159,12 @@ body {
 
   .hook-onepage {
     page: hook-report;
-    min-height: 10.55in !important;
-    height: 10.55in !important;
-    max-height: 10.55in !important;
-    max-width: 7.9in !important;
-    width: 7.9in !important;
+    --hook-print-scale: 0.79;
+    min-height: calc(1120px * var(--hook-print-scale)) !important;
+    height: calc(1120px * var(--hook-print-scale)) !important;
+    max-height: calc(1120px * var(--hook-print-scale)) !important;
+    max-width: calc(960px * var(--hook-print-scale)) !important;
+    width: calc(960px * var(--hook-print-scale)) !important;
     margin: 0 auto !important;
     page-break-after: auto !important;
     break-after: auto !important;
@@ -171,54 +172,59 @@ body {
     backdrop-filter: none !important;
     border: 1px solid rgba(17, 17, 17, 0.1) !important;
     border-radius: 0.28in !important;
-    padding: 0.18in !important;
+    padding: 0 !important;
     overflow: hidden !important;
   }
 
   .hook-onepage-inner {
-    gap: 0.55rem !important;
-    zoom: 0.72;
+    width: 960px !important;
+    min-height: 1120px !important;
+    height: 1120px !important;
+    max-height: 1120px !important;
+    padding: 2rem 2.5rem !important;
+    gap: 2rem !important;
+    transform: scale(var(--hook-print-scale)) !important;
     transform-origin: top left !important;
-    height: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .hook-stack {
-    gap: 0.55rem !important;
+    gap: 1.5rem !important;
   }
 
   .hook-header {
-    gap: 0.8rem !important;
-    padding-bottom: 0.55rem !important;
+    gap: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
   }
 
   .hook-logo {
-    height: 22px !important;
+    height: 36px !important;
   }
 
   .hook-company {
-    font-size: 1.55rem !important;
+    font-size: 2.25rem !important;
     line-height: 0.95 !important;
   }
 
   .hook-meta {
-    margin-top: 0.35rem !important;
-    gap: 0.22rem 0.5rem !important;
-    font-size: 0.54rem !important;
+    margin-top: 1rem !important;
+    gap: 0.5rem 1rem !important;
+    font-size: 0.75rem !important;
   }
 
   .hook-overall {
-    min-width: 112px !important;
+    min-width: 180px !important;
   }
 
   .hook-score-ring {
-    height: 78px !important;
-    width: 78px !important;
+    height: 124px !important;
+    width: 124px !important;
   }
 
   .hook-two-up,
   .hook-three-up,
   .hook-vitals-grid {
-    gap: 0.4rem !important;
+    gap: 1rem !important;
   }
 
   .hook-two-up {
@@ -248,16 +254,16 @@ body {
   .hook-blue-card,
   .hook-score-card,
   .hook-vital-card {
-    padding: 0.58rem !important;
-    border-radius: 0.16in !important;
+    padding: 1.25rem !important;
+    border-radius: 1.35rem !important;
   }
 
   .hook-vital-card p {
-    line-height: 1.15 !important;
+    line-height: inherit !important;
   }
 
   .hook-footer {
-    padding-top: 0.38rem !important;
-    margin-top: 0.12rem !important;
+    padding-top: 1.25rem !important;
+    margin-top: 0 !important;
   }
 }

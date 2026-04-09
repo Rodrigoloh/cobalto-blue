@@ -204,9 +204,13 @@ export default function HookReportPage({ params }: HookPageProps) {
 
         return (
           <main className="report-shell min-h-screen px-6 py-6 text-[#111111]">
-            <ReportPrintActions dashboardHref={`/cb-lab/reporting/${report.id}`} />
+            <ReportPrintActions
+              dashboardHref={`/cb-lab/reporting/${report.id}`}
+              pdfTargetId="hook-report-canvas"
+              pdfFileName={`${report.input.companyName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-hook.pdf`}
+            />
 
-            <section className="hook-onepage report-page report-card mt-6 rounded-[2.25rem] p-8 md:p-10">
+            <section id="hook-report-canvas" className="hook-onepage report-page report-card mt-6 rounded-[2.25rem] p-8 md:p-10">
               <div className="hook-onepage-inner flex h-full flex-col justify-between gap-8">
                 <div className="hook-stack space-y-6">
                   <div className="hook-header flex items-start justify-between gap-6 border-b border-black/10 pb-6">
