@@ -230,11 +230,14 @@ export function ReportingDashboardClient({
             <div className="flex items-end justify-between gap-4">
               <div>
                 <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.35em] text-[#1F00FF]">
-                  historial
+                  guardados
                 </p>
                 <h2 className="mt-3 font-['NeueMachina'] text-2xl leading-none">
-                  Reportes recientes
+                  Dashboards guardados
                 </h2>
+                <p className="mt-2 text-sm text-black/60">
+                  Se conservan en este navegador para que puedas revisarlos después.
+                </p>
               </div>
               <span className="rounded-full border border-black/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-black/55">
                 {reportCountLabel}

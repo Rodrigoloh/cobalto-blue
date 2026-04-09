@@ -6,7 +6,9 @@ import {
   formatBytes,
   formatCLS,
   formatMilliseconds,
-  formatScore
+  formatScore,
+  getScoreStateLabel,
+  getScoreTone
 } from '@/lib/performance-report'
 
 type FullPageProps = {
@@ -15,7 +17,66 @@ type FullPageProps = {
   }
 }
 
-function InfoCard({
+function getToneClasses(tone: 'green' | 'amber' | 'red' | 'neutral') {
+  switch (tone) {
+    case 'green':
+      return {
+        bg: 'bg-emerald-500',
+        soft: 'bg-emerald-50',
+        text: 'text-emerald-700',
+        border: 'border-emerald-200'
+      }
+    case 'amber':
+      return {
+        bg: 'bg-amber-400',
+        soft: 'bg-amber-50',
+        text: 'text-amber-800',
+        border: 'border-amber-200'
+      }
+    case 'red':
+      return {
+        bg: 'bg-red-500',
+        soft: 'bg-red-50',
+        text: 'text-red-700',
+        border: 'border-red-200'
+      }
+    default:
+      return {
+        bg: 'bg-neutral-300',
+        soft: 'bg-neutral-50',
+        text: 'text-neutral-700',
+        border: 'border-neutral-200'
+      }
+  }
+}
+
+function ScoreCard({
+  label,
+  score,
+  helper
+}: {
+  label: string
+  score: number | null
+  helper: string
+}) {
+  const tone = getScoreTone(score)
+  const classes = getToneClasses(tone)
+  return (
+    <div className={`rounded-[1.5rem] border ${classes.border} ${classes.soft} p-5`}>
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-xs uppercase tracking-[0.2em] text-black/45">{label}</p>
+        <span className={`h-3 w-3 rounded-full ${classes.bg}`} />
+      </div>
+      <p className={`mt-3 text-4xl ${classes.text}`}>{formatScore(score)}</p>
+      <p className={`mt-2 text-xs uppercase tracking-[0.18em] ${classes.text}`}>
+        {getScoreStateLabel(score)}
+      </p>
+      <p className="mt-3 text-sm text-black/60">{helper}</p>
+    </div>
+  )
+}
+
+function ValueCard({
   label,
   value,
   helper
@@ -27,7 +88,7 @@ function InfoCard({
   return (
     <div className="rounded-[1.5rem] border border-black/10 bg-white/75 p-5">
       <p className="text-xs uppercase tracking-[0.2em] text-black/45">{label}</p>
-      <p className="mt-3 text-4xl">{value}</p>
+      <p className="mt-3 text-4xl text-black">{value}</p>
       <p className="mt-3 text-sm text-black/60">{helper}</p>
     </div>
   )
@@ -40,47 +101,61 @@ export default function FullReportPage({ params }: FullPageProps) {
         const mobile = report.pagespeed.mobile
         const desktop = report.pagespeed.desktop
         const gtmetrix = report.gtmetrix
+        const overallTone = getScoreTone(report.overallScore)
+        const overallClasses = getToneClasses(overallTone)
 
         return (
           <main className="report-shell min-h-screen px-6 py-6 text-[#111111]">
-            <ReportPrintActions />
+            <ReportPrintActions dashboardHref={`/cb-lab/reporting/${report.id}`} />
 
             <section className="report-page report-card mt-6 rounded-[2.25rem] p-8 md:p-12">
               <div className="flex h-full flex-col justify-between">
                 <div className="space-y-10">
-                  <div className="space-y-4">
-                    <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.35em] text-[#1F00FF]">
-                      cobalto.blue executive performance report
-                    </p>
-                    <h1 className="max-w-4xl font-['NeueMachina'] text-5xl leading-none md:text-7xl">
-                      {report.input.companyName}
-                    </h1>
-                    <p className="max-w-3xl text-base text-black/70 md:text-lg">
-                      {report.hookSummary}
-                    </p>
+                  <div className="space-y-5">
+                    <img
+                      src="/brand/logo-main-blue.png"
+                      alt="cobalto.blue"
+                      className="h-10 w-auto"
+                    />
+                    <div className="space-y-3">
+                      <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.35em] text-[#1F00FF]">
+                        Cobalto Blue Reporte de rendimiento completo
+                      </p>
+                      <h1 className="max-w-4xl font-['NeueMachina'] text-4xl leading-none md:text-6xl">
+                        {report.input.companyName}
+                      </h1>
+                      <p className="max-w-3xl text-base text-black/70 md:text-lg">
+                        {report.hookSummary}
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="grid gap-4 md:grid-cols-[1.1fr_0.9fr]">
+                  <div className="grid gap-4 md:grid-cols-[1.04fr_0.96fr]">
                     <div className="rounded-[2rem] bg-[#111111] p-7 text-white">
                       <p className="text-xs uppercase tracking-[0.25em] text-white/55">
                         resumen ejecutivo
                       </p>
                       <p className="mt-4 text-2xl leading-tight">{report.executiveSummary}</p>
                     </div>
+
                     <div className="grid gap-4">
                       <div className="rounded-[2rem] border border-black/10 bg-white/75 p-6">
                         <p className="text-xs uppercase tracking-[0.2em] text-black/45">URL</p>
                         <p className="mt-3 text-lg text-black">{report.input.websiteUrl}</p>
                       </div>
-                      <div className="rounded-[2rem] border border-black/10 bg-white/75 p-6">
+
+                      <div className={`rounded-[2rem] border ${overallClasses.border} ${overallClasses.soft} p-6`}>
                         <p className="text-xs uppercase tracking-[0.2em] text-black/45">
                           salud actual
                         </p>
-                        <p className="mt-3 font-['NeueMachina'] text-5xl leading-none">
+                        <p className={`mt-3 font-['NeueMachina'] text-6xl leading-none ${overallClasses.text}`}>
                           {report.overallScore}
                         </p>
-                        <p className="mt-3 text-sm text-black/60">{report.healthStatus}</p>
+                        <p className={`mt-3 text-sm uppercase tracking-[0.18em] ${overallClasses.text}`}>
+                          {getScoreStateLabel(report.overallScore)}
+                        </p>
                       </div>
+
                       {report.input.contactName ||
                       report.input.contactPhone ||
                       report.input.contactEmail ? (
@@ -103,22 +178,22 @@ export default function FullReportPage({ params }: FullPageProps) {
                   </div>
 
                   <div className="grid gap-4 md:grid-cols-4">
-                    <InfoCard
+                    <ScoreCard
                       label="PSI Mobile"
-                      value={formatScore(mobile?.performanceScore ?? null)}
+                      score={mobile?.performanceScore ?? null}
                       helper={`LCP ${formatMilliseconds(mobile?.largestContentfulPaint ?? null)}`}
                     />
-                    <InfoCard
+                    <ScoreCard
                       label="PSI Desktop"
-                      value={formatScore(desktop?.performanceScore ?? null)}
+                      score={desktop?.performanceScore ?? null}
                       helper={`SEO ${formatScore(desktop?.seoScore ?? null)}`}
                     />
-                    <InfoCard
+                    <ScoreCard
                       label="GTmetrix"
-                      value={formatScore(gtmetrix?.performanceScore ?? null)}
+                      score={gtmetrix?.performanceScore ?? null}
                       helper={`Fully loaded ${formatMilliseconds(gtmetrix?.fullyLoadedTime ?? null)}`}
                     />
-                    <InfoCard
+                    <ValueCard
                       label="Estabilidad"
                       value={formatCLS(
                         mobile?.cumulativeLayoutShift ?? gtmetrix?.cumulativeLayoutShift ?? null
@@ -164,21 +239,21 @@ export default function FullReportPage({ params }: FullPageProps) {
                   </div>
 
                   <div className="mt-6 grid gap-4 md:grid-cols-3">
-                    <InfoCard
+                    <ValueCard
                       label="LCP"
                       value={formatMilliseconds(
                         mobile?.largestContentfulPaint ?? gtmetrix?.largestContentfulPaint ?? null
                       )}
                       helper="Tiempo hasta el contenido principal"
                     />
-                    <InfoCard
+                    <ValueCard
                       label="TBT"
                       value={formatMilliseconds(
                         mobile?.totalBlockingTime ?? gtmetrix?.totalBlockingTime ?? null
                       )}
                       helper="Bloqueo del hilo principal"
                     />
-                    <InfoCard
+                    <ValueCard
                       label="Peso"
                       value={formatBytes(gtmetrix?.pageBytes ?? null)}
                       helper="Referencia del tamaño total"

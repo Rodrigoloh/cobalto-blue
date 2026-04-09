@@ -7,7 +7,9 @@ import {
   formatBytes,
   formatCLS,
   formatMilliseconds,
-  formatScore
+  formatScore,
+  getScoreStateLabel,
+  getScoreTone
 } from '@/lib/performance-report'
 
 type ReportPageProps = {
@@ -17,8 +19,8 @@ type ReportPageProps = {
 }
 
 function scoreTone(score: number) {
-  if (score < 40) return 'text-red-600'
-  if (score < 70) return 'text-amber-600'
+  if (getScoreTone(score) === 'red') return 'text-red-600'
+  if (getScoreTone(score) === 'amber') return 'text-amber-600'
   return 'text-emerald-600'
 }
 
@@ -74,7 +76,7 @@ export default function ReportDetailPage({ params }: ReportPageProps) {
                           {report.overallScore}
                         </p>
                         <p className="mt-3 text-sm uppercase tracking-[0.2em] text-black/45">
-                          Estado: {report.healthStatus}
+                          Estado: {getScoreStateLabel(report.overallScore)}
                         </p>
                       </div>
                       <div className="max-w-xs rounded-3xl border border-black/10 bg-white/60 p-4 text-sm text-black/65">

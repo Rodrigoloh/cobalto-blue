@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto'
 
 export type MetricStatus = 'good' | 'warning' | 'critical' | 'unknown'
+export type ScoreTone = 'green' | 'amber' | 'red' | 'neutral'
 
 export type AuditSummary = {
   strategy: 'mobile' | 'desktop'
@@ -388,12 +389,12 @@ function buildHookSummary(input: ProspectInput, mobile: AuditSummary | null, des
   const city = input.city || 'su mercado local'
   const score = mobile?.performanceScore ?? desktop?.performanceScore ?? null
 
-  if (score !== null && score < 40) {
+  if (score !== null && score < 50) {
     return `${company} hoy proyecta una primera impresión lenta en ${city}. Antes de evaluar servicios o portafolio, el usuario percibe fricción y eso reduce confianza comercial.`
   }
 
-  if (score !== null && score < 70) {
-    return `${company} tiene una base funcional, pero todavía deja margen comercial sobre la mesa en ${city}. El sitio necesita afinar velocidad y claridad para convertir mejor.`
+  if (score !== null && score < 90) {
+    return `${company} comunica, pero todavía opera en una zona de atención en ${city}. La experiencia necesita más velocidad y claridad para que un posible cliente permanezca, entienda y contacte.`
   }
 
   return `${company} tiene una base digital sana, pero aún puede usar rendimiento y claridad visual como ventaja competitiva frente a competidores más lentos.`
@@ -427,19 +428,19 @@ function buildFindings(input: ProspectInput, mobile: AuditSummary | null, gtmetr
   const findings: string[] = []
 
   if (lcp !== null && lcp > 4000) {
-    findings.push(`Pérdida de prospectos: el contenido principal tarda ${Math.round(lcp / 1000)}s o más en estabilizarse, así que ${company} pierde atención antes de mostrar propuesta de valor en ${city}.`)
+    findings.push(`La página tarda en mostrar lo importante en móvil. Si el contenido principal aparece hasta después de ${Math.round(lcp / 1000)} segundos, una parte del tráfico abandona antes de entender qué ofrece ${company} en ${city}.`)
   }
 
   if (tbt !== null && tbt > 300) {
-    findings.push(`Barrera de contacto: durante la carga hay bloqueo del navegador, lo que retrasa la interacción con ${cta} y hace que el sitio se sienta menos confiable.`)
+    findings.push(`Aunque ${cta} existe, el sitio pasa demasiado tiempo ocupado mientras carga. Eso retrasa la interacción y hace que el usuario sienta el sitio pesado o poco confiable.`)
   }
 
   if (cls !== null && cls > 0.25) {
-    findings.push('Falla de retención: la interfaz se mueve más de lo deseable mientras carga, y eso hace que el sitio se perciba inestable o desactualizado.')
+    findings.push('Mientras la página termina de cargar, algunos elementos se mueven más de lo esperado. Esa inestabilidad visual da una sensación de descuido y reduce confianza.')
   }
 
   if (!findings.length) {
-    findings.push(`${company} no está en crisis técnica, pero todavía tiene margen para convertir más rápido con una experiencia más estable y una carga inicial más clara.`)
+    findings.push(`${company} no está en crisis técnica, pero todavía puede convertir mejor con una experiencia más rápida, más clara y más estable desde el primer vistazo.`)
   }
 
   return findings.slice(0, 3)
@@ -450,7 +451,7 @@ function buildCostOfInaction(input: ProspectInput, mobile: AuditSummary | null) 
   const city = input.city || 'su región'
   const score = mobile?.performanceScore ?? null
 
-  if (score !== null && score < 40) {
+  if (score !== null && score < 50) {
     return `En ${industry}, velocidad también es confianza. Cada mes con este rendimiento, ${input.companyName || 'la marca'} pierde visibilidad y credibilidad frente a competidores mejor optimizados en ${city}.`
   }
 
@@ -459,25 +460,25 @@ function buildCostOfInaction(input: ProspectInput, mobile: AuditSummary | null) 
 
 function buildProposals(input: ProspectInput, mobile: AuditSummary | null, gtmetrix: GTmetrixSummary | null) {
   const proposals = [
-    'Optimización de activos: reducción y entrega eficiente de imágenes para que la carga inicial sea inmediata.',
-    'Aceleración del contenido principal: priorizar el render del hero, textos y CTA para que aparezcan en menos de 2.5 segundos.',
-    `Mejora de conversión: afinar la experiencia alrededor de ${input.primaryCta || 'los puntos de contacto'} para que el usuario pueda actuar desde el primer vistazo.`
+    'Un rediseño más ligero con una construcción eficiente para que el sitio se sienta rápido desde el primer segundo.',
+    'Priorizar los mensajes clave, servicios y llamados a la acción para que la propuesta de valor aparezca antes y con más claridad.',
+    `Reducir la fricción alrededor de ${input.primaryCta || 'los puntos de contacto'} para que la decisión de escribir o llamar ocurra más rápido.`
   ]
 
   const pageBytes = gtmetrix?.pageBytes ?? null
   if (pageBytes !== null && pageBytes > 4_000_000) {
-    proposals[0] = 'Optimización de activos: hay peso suficiente en la página para recuperar una mejora perceptible inmediata al comprimir imágenes y recursos críticos.'
+    proposals[0] = 'Aligerar imágenes, videos y recursos pesados para que la experiencia sea mucho más ágil sin sacrificar percepción de marca.'
   }
 
   if ((mobile?.seoScore ?? null) !== null && (mobile?.seoScore ?? 0) < 75) {
-    proposals.push(`SEO local enfocado: reforzar estructura y señales técnicas para capturar búsquedas relevantes de ${input.industry || 'la categoría'} en ${input.city || 'su mercado'}.`)
+    proposals.push(`Reforzar el SEO local para capturar búsquedas relevantes de ${input.industry || 'la categoría'} en ${input.city || 'su mercado'} con una base técnica más sólida.`)
   }
 
   return proposals.slice(0, 4)
 }
 
 function buildHealthRows(input: ProspectInput, mobile: AuditSummary | null, desktop: AuditSummary | null) {
-  const performanceStatus = getMetricStatus(mobile?.performanceScore ?? null, { good: 70, warning: 40 }, true)
+  const performanceStatus = getMetricStatus(mobile?.performanceScore ?? null, { good: 90, warning: 50 }, true)
   const uxReference = average(
     [mobile?.accessibilityScore ?? null, desktop?.accessibilityScore ?? null],
     [0.7, 0.3]
@@ -498,7 +499,7 @@ function buildHealthRows(input: ProspectInput, mobile: AuditSummary | null, desk
         performanceStatus === 'critical'
           ? 'El sitio tarda demasiado en mostrar información clave y una parte relevante del tráfico abandona antes de entender la oferta.'
           : performanceStatus === 'warning'
-            ? 'La experiencia es aceptable, pero todavía hay fricción antes de que el usuario vea el valor de la marca.'
+            ? 'La experiencia comunica, pero todavía hay suficiente fricción como para frenar atención, confianza y clics al contacto.'
             : 'La carga inicial acompaña bien la percepción de marca y no castiga tanto la intención del usuario.'
     },
     {
@@ -543,8 +544,8 @@ function buildTechnicalSummary(mobile: AuditSummary | null, gtmetrix: GTmetrixSu
 }
 
 function buildHealthStatus(score: number) {
-  if (score < 40) return 'Crítico'
-  if (score < 70) return 'Regular'
+  if (score < 50) return 'Crítico'
+  if (score < 90) return 'Atención'
   return 'Sano'
 }
 
@@ -640,4 +641,37 @@ export function formatBytes(value: number | null) {
   if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)} MB`
   if (value >= 1000) return `${(value / 1000).toFixed(0)} KB`
   return `${Math.round(value)} B`
+}
+
+export function getScoreTone(score: number | null): ScoreTone {
+  if (score === null) return 'neutral'
+  if (score >= 90) return 'green'
+  if (score >= 50) return 'amber'
+  return 'red'
+}
+
+export function getScoreStateLabel(score: number | null) {
+  const tone = getScoreTone(score)
+
+  if (tone === 'green') return 'Sano'
+  if (tone === 'amber') return 'Atención'
+  if (tone === 'red') return 'Crítico'
+  return 'Sin datos'
+}
+
+export function getWebVitalStatus(metric: 'FCP' | 'LCP' | 'TBT' | 'CLS' | 'SI', value: number | null): MetricStatus {
+  switch (metric) {
+    case 'FCP':
+      return getMetricStatus(value, { good: 1800, warning: 3000 })
+    case 'LCP':
+      return getMetricStatus(value, { good: 2500, warning: 4000 })
+    case 'TBT':
+      return getMetricStatus(value, { good: 200, warning: 600 })
+    case 'CLS':
+      return getMetricStatus(value, { good: 0.1, warning: 0.25 })
+    case 'SI':
+      return getMetricStatus(value, { good: 3400, warning: 5800 })
+    default:
+      return 'unknown'
+  }
 }
