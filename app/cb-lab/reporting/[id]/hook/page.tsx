@@ -174,8 +174,6 @@ export default function HookReportPage({ params }: HookPageProps) {
       {(report) => {
         const mobile = report.pagespeed.mobile
         const desktop = report.pagespeed.desktop
-        const overallTone = getScoreTone(report.overallScore)
-        const overallClasses = getToneClasses(overallTone)
         const vitalRows = [
           {
             metric: 'FCP' as const,
@@ -236,7 +234,7 @@ export default function HookReportPage({ params }: HookPageProps) {
                       </div>
                     </div>
 
-                    <div className={`min-w-[180px] rounded-[1.75rem] border ${overallClasses.border} ${overallClasses.soft} p-5`}>
+                    <div className="min-w-[180px] p-1">
                       <p className="text-[11px] uppercase tracking-[0.22em] text-black/45 text-right">
                         Overall score
                       </p>

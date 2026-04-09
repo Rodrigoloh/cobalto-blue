@@ -1,6 +1,8 @@
 import { ReportingDashboardClient } from '@/components/private/ReportingDashboardClient'
 
 export default function ReportingDashboardPage() {
+  const geminiConfigured = Boolean(process.env.GEMINI_API_KEY)
+
   return (
     <main className="report-shell min-h-screen px-6 py-8 text-[#111111]">
       <div className="mx-auto max-w-7xl space-y-8">
@@ -30,7 +32,7 @@ export default function ReportingDashboardPage() {
           </form>
         </div>
 
-        <ReportingDashboardClient />
+        <ReportingDashboardClient geminiConfigured={geminiConfigured} />
       </div>
     </main>
   )

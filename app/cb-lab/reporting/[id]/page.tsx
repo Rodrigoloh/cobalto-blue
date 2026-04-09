@@ -28,6 +28,14 @@ function scoreTone(score: number) {
 
 function ReportDetailContent({ initialReport }: { initialReport: ProspectReport }) {
   const [report, setReport] = useState(initialReport)
+  const [assistState, setAssistState] = useState<{
+    hookSummary: 'idle' | 'loading'
+    costOfInaction: 'idle' | 'loading'
+  }>({
+    hookSummary: 'idle',
+    costOfInaction: 'idle'
+  })
+  const [assistError, setAssistError] = useState<string | null>(null)
   const mobile = report.pagespeed.mobile
   const desktop = report.pagespeed.desktop
 
@@ -39,6 +47,40 @@ function ReportDetailContent({ initialReport }: { initialReport: ProspectReport 
 
     if (updated) {
       setReport(updated)
+    }
+  }
+
+  async function handleAssist(field: 'hookSummary' | 'costOfInaction') {
+    setAssistError(null)
+    setAssistState((current) => ({ ...current, [field]: 'loading' }))
+
+    try {
+      const response = await fetch('/api/reports/assist-text', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          field,
+          companyName: report.input.companyName,
+          websiteUrl: report.input.websiteUrl,
+          currentText: report[field]
+        })
+      })
+
+      const payload = await response.json().catch(() => null)
+
+      if (!response.ok || !payload?.text) {
+        throw new Error(payload?.error || 'No fue posible obtener sugerencia de Gemini.')
+      }
+
+      handleNarrativeSave(field, String(payload.text))
+    } catch (error) {
+      setAssistError(
+        error instanceof Error ? error.message : 'No fue posible obtener sugerencia de Gemini.'
+      )
+    } finally {
+      setAssistState((current) => ({ ...current, [field]: 'idle' }))
     }
   }
 
@@ -115,8 +157,23 @@ function ReportDetailContent({ initialReport }: { initialReport: ProspectReport 
                 narrativa editable
               </p>
               <div className="mt-5 space-y-5">
+                {assistError ? (
+                  <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    {assistError}
+                  </p>
+                ) : null}
                 <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Lectura comercial</span>
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-sm font-semibold text-black/70">Lectura comercial</span>
+                    <button
+                      type="button"
+                      onClick={() => handleAssist('hookSummary')}
+                      disabled={assistState.hookSummary === 'loading'}
+                      className="rounded-full border border-black px-3 py-2 text-[11px] uppercase tracking-[0.18em] transition hover:bg-black hover:text-white disabled:cursor-wait disabled:opacity-60"
+                    >
+                      {assistState.hookSummary === 'loading' ? 'Gemini...' : 'Sugerir con Gemini'}
+                    </button>
+                  </div>
                   <textarea
                     rows={5}
                     value={report.hookSummary}
@@ -125,7 +182,17 @@ function ReportDetailContent({ initialReport }: { initialReport: ProspectReport 
                   />
                 </label>
                 <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Señal de negocio</span>
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-sm font-semibold text-black/70">Señal de negocio</span>
+                    <button
+                      type="button"
+                      onClick={() => handleAssist('costOfInaction')}
+                      disabled={assistState.costOfInaction === 'loading'}
+                      className="rounded-full border border-black px-3 py-2 text-[11px] uppercase tracking-[0.18em] transition hover:bg-black hover:text-white disabled:cursor-wait disabled:opacity-60"
+                    >
+                      {assistState.costOfInaction === 'loading' ? 'Gemini...' : 'Sugerir con Gemini'}
+                    </button>
+                  </div>
                   <textarea
                     rows={5}
                     value={report.costOfInaction}

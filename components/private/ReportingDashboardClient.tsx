@@ -7,6 +7,10 @@ import { FormEvent, useEffect, useMemo, useState } from 'react'
 import type { ProspectReport } from '@/lib/performance-report'
 import { getStoredReports, saveStoredReport } from '@/lib/report-browser-storage'
 
+type ReportingDashboardClientProps = {
+  geminiConfigured: boolean
+}
+
 function formatDate(value: string) {
   return new Intl.DateTimeFormat('es-MX', {
     dateStyle: 'medium',
@@ -14,7 +18,7 @@ function formatDate(value: string) {
   }).format(new Date(value))
 }
 
-export function ReportingDashboardClient() {
+export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboardClientProps) {
   const router = useRouter()
   const [reports, setReports] = useState<ProspectReport[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -77,7 +81,7 @@ export function ReportingDashboardClient() {
             </p>
             <h2 className="font-['NeueMachina'] text-3xl leading-none">Cargar prospecto</h2>
             <p className="text-sm text-black/65">
-              El análisis puede tardar entre 20 y 60 segundos si GTmetrix está activo.
+              El análisis puede tardar unos segundos mientras consultamos Google PageSpeed.
             </p>
           </div>
 
@@ -211,6 +215,15 @@ export function ReportingDashboardClient() {
                 <p className="mt-2 text-lg text-black">Google PageSpeed</p>
                 <p className="mt-2 text-sm text-black/65">
                   El score principal y las métricas del reporte se basan solo en datos de Google.
+                </p>
+              </div>
+              <div className="rounded-3xl border border-black/10 bg-white/60 p-4">
+                <p className="text-sm font-semibold text-black/60">Asistencia de copy</p>
+                <p className="mt-2 text-lg text-black">{geminiConfigured ? 'Gemini listo' : 'Opcional'}</p>
+                <p className="mt-2 text-sm text-black/65">
+                  {geminiConfigured
+                    ? 'Puedes pedir sugerencias para lectura comercial y señal de negocio antes del PDF.'
+                    : 'Actívalo con GEMINI_API_KEY para sugerir versiones de los textos editables.'}
                 </p>
               </div>
             </div>
