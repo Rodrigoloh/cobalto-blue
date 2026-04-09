@@ -125,6 +125,11 @@ body {
   gap: 1rem;
 }
 
+@page hook-report {
+  size: A4 landscape;
+  margin: 8mm;
+}
+
 @media print {
   html, body {
     background: #ffffff;
@@ -150,5 +155,79 @@ body {
 
   .report-page:last-child {
     page-break-after: auto;
+  }
+
+  .hook-onepage {
+    page: hook-report;
+    min-height: auto !important;
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    page-break-after: auto !important;
+    break-after: auto !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    border: 1px solid rgba(17, 17, 17, 0.1) !important;
+    padding: 5mm !important;
+  }
+
+  .hook-onepage-inner {
+    gap: 0.75rem !important;
+  }
+
+  .hook-stack {
+    gap: 0.75rem !important;
+  }
+
+  .hook-header {
+    gap: 1rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+
+  .hook-logo {
+    height: 28px !important;
+  }
+
+  .hook-company {
+    font-size: 1.8rem !important;
+    line-height: 0.95 !important;
+  }
+
+  .hook-meta {
+    margin-top: 0.5rem !important;
+    gap: 0.35rem 0.75rem !important;
+    font-size: 0.64rem !important;
+  }
+
+  .hook-overall {
+    min-width: 142px !important;
+  }
+
+  .hook-score-ring {
+    height: 92px !important;
+    width: 92px !important;
+  }
+
+  .hook-two-up,
+  .hook-three-up,
+  .hook-vitals-grid {
+    gap: 0.55rem !important;
+  }
+
+  .hook-dark-card,
+  .hook-light-card,
+  .hook-blue-card,
+  .hook-score-card,
+  .hook-vital-card {
+    padding: 0.8rem !important;
+  }
+
+  .hook-vital-card p {
+    line-height: 1.15 !important;
+  }
+
+  .hook-footer {
+    padding-top: 0.55rem !important;
+    margin-top: 0.25rem !important;
   }
 }
