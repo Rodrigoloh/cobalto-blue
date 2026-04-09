@@ -34,9 +34,10 @@ export async function POST(request: NextRequest) {
   const websiteUrl = normalizeWebsiteUrl(String(formData.get('websiteUrl') ?? ''))
 
   if (!websiteUrl) {
-    const redirectUrl = new URL('/cb-lab/reporting', request.url)
-    redirectUrl.searchParams.set('error', 'Agrega una URL válida para generar el reporte.')
-    return NextResponse.redirect(redirectUrl)
+    return NextResponse.json(
+      { error: 'Agrega una URL válida para generar el reporte.' },
+      { status: 400 }
+    )
   }
 
   try {

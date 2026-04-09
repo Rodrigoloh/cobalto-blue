@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
   if (!isPrivateAuthConfigured()) {
     const setupUrl = new URL('/cb-lab/access', request.url)
     setupUrl.searchParams.set('setup', '1')
-    return NextResponse.redirect(setupUrl)
+    return NextResponse.redirect(setupUrl, 303)
   }
 
   if (!validatePrivatePassword(password)) {
@@ -30,11 +30,11 @@ export async function POST(request: NextRequest) {
     if (nextPath) {
       deniedUrl.searchParams.set('next', nextPath)
     }
-    return NextResponse.redirect(deniedUrl)
+    return NextResponse.redirect(deniedUrl, 303)
   }
 
   const token = await createPrivateSessionToken()
-  const response = NextResponse.redirect(redirectUrl)
+  const response = NextResponse.redirect(redirectUrl, 303)
 
   response.cookies.set({
     name: AUTH_COOKIE_NAME,
