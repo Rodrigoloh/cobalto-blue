@@ -30,13 +30,52 @@ export function ReportPrintActions({
       return
     }
 
+    let exportWrapper: HTMLDivElement | null = null
+
     try {
       setIsExporting(true)
 
-      const dataUrl = await toPng(target, {
+      const rect = target.getBoundingClientRect()
+      const exportWidth = Math.ceil(rect.width)
+      const exportHeight = Math.ceil(rect.height)
+      const wrapper = document.createElement('div')
+      const clone = target.cloneNode(true) as HTMLElement
+      exportWrapper = wrapper
+
+      wrapper.setAttribute('aria-hidden', 'true')
+      wrapper.dataset.hookPdfExport = 'true'
+      wrapper.style.position = 'fixed'
+      wrapper.style.left = '-20000px'
+      wrapper.style.top = '0'
+      wrapper.style.margin = '0'
+      wrapper.style.padding = '0'
+      wrapper.style.background = '#ffffff'
+      wrapper.style.zIndex = '-1'
+      wrapper.style.overflow = 'hidden'
+      wrapper.style.width = `${exportWidth}px`
+      wrapper.style.height = `${exportHeight}px`
+
+      clone.removeAttribute('id')
+      clone.style.margin = '0'
+      clone.style.width = `${exportWidth}px`
+      clone.style.maxWidth = `${exportWidth}px`
+      clone.style.minHeight = `${exportHeight}px`
+      clone.style.height = `${exportHeight}px`
+      clone.style.maxHeight = `${exportHeight}px`
+      clone.style.transform = 'none'
+      clone.style.boxSizing = 'border-box'
+
+      wrapper.appendChild(clone)
+      document.body.appendChild(wrapper)
+
+      const dataUrl = await toPng(clone, {
         cacheBust: true,
         backgroundColor: '#ffffff',
-        pixelRatio: Math.min(window.devicePixelRatio || 2, 2.5)
+        width: exportWidth,
+        height: exportHeight,
+        canvasWidth: exportWidth,
+        canvasHeight: exportHeight,
+        pixelRatio: Math.min(window.devicePixelRatio || 2, 2)
       })
 
       const pdf = new jsPDF({
@@ -49,13 +88,12 @@ export function ReportPrintActions({
       const pageHeight = pdf.internal.pageSize.getHeight()
       const margin = 18
 
-      const canvasWidth = target.offsetWidth
-      const canvasHeight = target.offsetHeight
-      const widthRatio = (pageWidth - margin * 2) / canvasWidth
-      const heightRatio = (pageHeight - margin * 2) / canvasHeight
+      const imageProps = pdf.getImageProperties(dataUrl)
+      const widthRatio = (pageWidth - margin * 2) / imageProps.width
+      const heightRatio = (pageHeight - margin * 2) / imageProps.height
       const scale = Math.min(widthRatio, heightRatio)
-      const renderWidth = canvasWidth * scale
-      const renderHeight = canvasHeight * scale
+      const renderWidth = imageProps.width * scale
+      const renderHeight = imageProps.height * scale
       const x = (pageWidth - renderWidth) / 2
       const y = (pageHeight - renderHeight) / 2
 
@@ -65,6 +103,7 @@ export function ReportPrintActions({
       console.error('No fue posible exportar el PDF del Hook.', error)
       window.print()
     } finally {
+      exportWrapper?.parentElement?.removeChild(exportWrapper)
       setIsExporting(false)
     }
   }
