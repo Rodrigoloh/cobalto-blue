@@ -528,9 +528,9 @@ function buildHealthRows(input: ProspectInput, mobile: AuditSummary | null, desk
 }
 
 function buildTechnicalSummary(mobile: AuditSummary | null, gtmetrix: GTmetrixSummary | null) {
-  const lcp = mobile?.largestContentfulPaint ?? gtmetrix?.largestContentfulPaint ?? null
-  const tbt = mobile?.totalBlockingTime ?? gtmetrix?.totalBlockingTime ?? null
-  const cls = mobile?.cumulativeLayoutShift ?? gtmetrix?.cumulativeLayoutShift ?? null
+  const lcp = mobile?.largestContentfulPaint ?? null
+  const tbt = mobile?.totalBlockingTime ?? null
+  const cls = mobile?.cumulativeLayoutShift ?? null
 
   const parts = [
     lcp !== null ? `LCP ${Math.round(lcp / 100) / 10}s` : null,
@@ -583,18 +583,8 @@ export async function createProspectReport(input: ProspectInput) {
     )
   }
 
-  const gtmetrixResult = await runGtmetrixAudit(normalizedInput.websiteUrl)
-  const gtmetrix = gtmetrixResult.enabled ? gtmetrixResult.summary : null
-
-  const overallScore = average(
-    [
-      mobile?.performanceScore ?? desktop?.performanceScore ?? null,
-      desktop?.performanceScore ?? null,
-      mobile?.accessibilityScore ?? desktop?.accessibilityScore ?? null,
-      mobile?.seoScore ?? desktop?.seoScore ?? null
-    ],
-    [0.5, 0.2, 0.15, 0.15]
-  )
+  const gtmetrix: GTmetrixSummary | null = null
+  const overallScore = mobile?.performanceScore ?? desktop?.performanceScore ?? 0
 
   const report: ProspectReport = {
     id: randomUUID(),
@@ -614,8 +604,8 @@ export async function createProspectReport(input: ProspectInput) {
     sourceStatus: {
       pagespeed: Boolean(mobile || desktop),
       pagespeedMessage: pageSpeedErrors[0] ?? null,
-      gtmetrix: gtmetrixResult.enabled,
-      gtmetrixMessage: gtmetrixResult.enabled ? null : gtmetrixResult.message
+      gtmetrix: false,
+      gtmetrixMessage: null
     }
   }
 

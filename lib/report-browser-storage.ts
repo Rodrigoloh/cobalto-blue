@@ -60,3 +60,23 @@ export function saveStoredReport(report: ProspectReport) {
 
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
 }
+
+export function updateStoredReport(
+  id: string,
+  updater: (report: ProspectReport) => ProspectReport
+) {
+  if (!isBrowser()) {
+    return null
+  }
+
+  const current = getStoredReports()
+  const target = current.find((report) => report.id === id)
+
+  if (!target) {
+    return null
+  }
+
+  const updated = updater(target)
+  saveStoredReport(updated)
+  return updated
+}

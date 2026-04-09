@@ -82,13 +82,15 @@ function getVitalHelp(metric: 'FCP' | 'LCP' | 'TBT' | 'CLS' | 'SI') {
 function VitalCard({
   metric,
   value,
-  helper
+  helper,
+  raw
 }: {
   metric: 'FCP' | 'LCP' | 'TBT' | 'CLS' | 'SI'
   value: string
   helper: string
+  raw: number | null
 }) {
-  const status = getWebVitalStatus(metric, metric === 'CLS' ? Number(value) : null)
+  const status = getWebVitalStatus(metric, raw)
   const classes = getStatusClasses(status)
   return (
     <div className={`rounded-[1.35rem] border ${classes.border} ${classes.soft} p-4`}>
@@ -98,6 +100,44 @@ function VitalCard({
       </div>
       <p className={`mt-3 text-2xl ${classes.text}`}>{value}</p>
       <p className="mt-2 text-[11px] leading-snug text-black/58">{helper}</p>
+    </div>
+  )
+}
+
+function ScoreRing({ score }: { score: number }) {
+  const tone = getScoreTone(score)
+  const classes = getToneClasses(tone)
+  const radius = 44
+  const circumference = 2 * Math.PI * radius
+  const progress = Math.max(0, Math.min(100, score))
+  const dashOffset = circumference - (progress / 100) * circumference
+
+  return (
+    <div className="relative h-[124px] w-[124px]">
+      <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90">
+        <circle cx="60" cy="60" r={radius} strokeWidth="12" className="fill-none stroke-black/8" />
+        <circle
+          cx="60"
+          cy="60"
+          r={radius}
+          strokeWidth="12"
+          strokeLinecap="round"
+          className={`fill-none ${tone === 'green' ? 'stroke-emerald-500' : tone === 'amber' ? 'stroke-amber-400' : 'stroke-red-500'}`}
+          strokeDasharray={circumference}
+          strokeDashoffset={dashOffset}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span
+          className={`${classes.text} text-4xl leading-none`}
+          style={{ fontFamily: 'Arial Black, Arial, sans-serif' }}
+        >
+          {score}
+        </span>
+        <span className="mt-1 text-[10px] uppercase tracking-[0.18em] text-black/45">
+          {getScoreStateLabel(score)}
+        </span>
+      </div>
     </div>
   )
 }
@@ -196,16 +236,13 @@ export default function HookReportPage({ params }: HookPageProps) {
                       </div>
                     </div>
 
-                    <div className={`min-w-[180px] rounded-[1.75rem] border ${overallClasses.border} ${overallClasses.soft} p-5 text-right`}>
-                      <p className="text-[11px] uppercase tracking-[0.22em] text-black/45">
+                    <div className={`min-w-[180px] rounded-[1.75rem] border ${overallClasses.border} ${overallClasses.soft} p-5`}>
+                      <p className="text-[11px] uppercase tracking-[0.22em] text-black/45 text-right">
                         Overall score
                       </p>
-                      <p className={`mt-2 font-['NeueMachina'] text-6xl leading-none ${overallClasses.text}`}>
-                        {report.overallScore}
-                      </p>
-                      <p className={`mt-2 text-xs uppercase tracking-[0.18em] ${overallClasses.text}`}>
-                        {getScoreStateLabel(report.overallScore)}
-                      </p>
+                      <div className="mt-2 flex justify-end">
+                        <ScoreRing score={report.overallScore} />
+                      </div>
                     </div>
                   </div>
 
@@ -231,12 +268,12 @@ export default function HookReportPage({ params }: HookPageProps) {
                     <ScoreCard
                       label="PSI Mobile"
                       score={mobile?.performanceScore ?? null}
-                      helper="Si este score cae en amarillo o rojo, el sitio necesita atención."
+                      helper="El score principal sale de aquí: si cae en amarillo o rojo, el sitio necesita atención."
                     />
                     <ScoreCard
                       label="PSI Desktop"
                       score={desktop?.performanceScore ?? null}
-                      helper="Una buena lectura desktop no compensa una mala experiencia móvil."
+                      helper="Una buena lectura desktop no compensa una experiencia móvil lenta."
                     />
                     <ScoreCard
                       label="Estado actual"
@@ -256,24 +293,14 @@ export default function HookReportPage({ params }: HookPageProps) {
                     </div>
                     <div className="grid gap-3 md:grid-cols-5">
                       {vitalRows.map((item) => {
-                        const status = getWebVitalStatus(item.metric, item.raw)
-                        const classes = getStatusClasses(status)
                         return (
-                          <div
+                          <VitalCard
                             key={item.metric}
-                            className={`rounded-[1.35rem] border ${classes.border} ${classes.soft} p-4`}
-                          >
-                            <div className="flex items-center justify-between gap-2">
-                              <p className="text-xs uppercase tracking-[0.22em] text-black/45">
-                                {item.metric}
-                              </p>
-                              <span className={`h-3 w-3 rounded-full ${classes.bg}`} />
-                            </div>
-                            <p className={`mt-3 text-2xl ${classes.text}`}>{item.value}</p>
-                            <p className="mt-2 text-[11px] leading-snug text-black/58">
-                              {getVitalHelp(item.metric)}
-                            </p>
-                          </div>
+                            metric={item.metric}
+                            value={item.value}
+                            helper={getVitalHelp(item.metric)}
+                            raw={item.raw}
+                          />
                         )
                       })}
                     </div>

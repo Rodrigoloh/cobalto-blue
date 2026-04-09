@@ -3,7 +3,6 @@
 import { ReportBrowserState } from '@/components/private/ReportBrowserState'
 import { ReportPrintActions } from '@/components/private/ReportPrintActions'
 import {
-  formatBytes,
   formatCLS,
   formatMilliseconds,
   formatScore,
@@ -100,7 +99,6 @@ export default function FullReportPage({ params }: FullPageProps) {
       {(report) => {
         const mobile = report.pagespeed.mobile
         const desktop = report.pagespeed.desktop
-        const gtmetrix = report.gtmetrix
         const overallTone = getScoreTone(report.overallScore)
         const overallClasses = getToneClasses(overallTone)
 
@@ -189,16 +187,14 @@ export default function FullReportPage({ params }: FullPageProps) {
                       helper={`SEO ${formatScore(desktop?.seoScore ?? null)}`}
                     />
                     <ScoreCard
-                      label="GTmetrix"
-                      score={gtmetrix?.performanceScore ?? null}
-                      helper={`Fully loaded ${formatMilliseconds(gtmetrix?.fullyLoadedTime ?? null)}`}
+                      label="SEO"
+                      score={desktop?.seoScore ?? mobile?.seoScore ?? null}
+                      helper="Visibilidad técnica según Google."
                     />
                     <ValueCard
-                      label="Estabilidad"
-                      value={formatCLS(
-                        mobile?.cumulativeLayoutShift ?? gtmetrix?.cumulativeLayoutShift ?? null
-                      )}
-                      helper="CLS de referencia"
+                      label="Accesibilidad"
+                      value={formatScore(desktop?.accessibilityScore ?? mobile?.accessibilityScore ?? null)}
+                      helper="Claridad y uso general de la interfaz"
                     />
                   </div>
                 </div>
@@ -241,22 +237,18 @@ export default function FullReportPage({ params }: FullPageProps) {
                   <div className="mt-6 grid gap-4 md:grid-cols-3">
                     <ValueCard
                       label="LCP"
-                      value={formatMilliseconds(
-                        mobile?.largestContentfulPaint ?? gtmetrix?.largestContentfulPaint ?? null
-                      )}
+                      value={formatMilliseconds(mobile?.largestContentfulPaint ?? null)}
                       helper="Tiempo hasta el contenido principal"
                     />
                     <ValueCard
                       label="TBT"
-                      value={formatMilliseconds(
-                        mobile?.totalBlockingTime ?? gtmetrix?.totalBlockingTime ?? null
-                      )}
+                      value={formatMilliseconds(mobile?.totalBlockingTime ?? null)}
                       helper="Bloqueo del hilo principal"
                     />
                     <ValueCard
-                      label="Peso"
-                      value={formatBytes(gtmetrix?.pageBytes ?? null)}
-                      helper="Referencia del tamaño total"
+                      label="CLS"
+                      value={formatCLS(mobile?.cumulativeLayoutShift ?? null)}
+                      helper="Estabilidad visual durante la carga"
                     />
                   </div>
                 </div>
@@ -341,12 +333,6 @@ export default function FullReportPage({ params }: FullPageProps) {
                           {report.sourceStatus.pagespeed
                             ? 'Activo'
                             : report.sourceStatus.pagespeedMessage || 'Sin datos'}
-                        </p>
-                        <p>
-                          GTmetrix:{' '}
-                          {report.sourceStatus.gtmetrix
-                            ? 'Activo'
-                            : report.sourceStatus.gtmetrixMessage}
                         </p>
                       </div>
                     </div>

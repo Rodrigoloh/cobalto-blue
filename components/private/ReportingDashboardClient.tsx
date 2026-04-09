@@ -7,10 +7,6 @@ import { FormEvent, useEffect, useMemo, useState } from 'react'
 import type { ProspectReport } from '@/lib/performance-report'
 import { getStoredReports, saveStoredReport } from '@/lib/report-browser-storage'
 
-type ReportingDashboardClientProps = {
-  gtmetrixConfigured: boolean
-}
-
 function formatDate(value: string) {
   return new Intl.DateTimeFormat('es-MX', {
     dateStyle: 'medium',
@@ -18,9 +14,7 @@ function formatDate(value: string) {
   }).format(new Date(value))
 }
 
-export function ReportingDashboardClient({
-  gtmetrixConfigured
-}: ReportingDashboardClientProps) {
+export function ReportingDashboardClient() {
   const router = useRouter()
   const [reports, setReports] = useState<ProspectReport[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -206,21 +200,17 @@ export function ReportingDashboardClient({
                 </p>
               </div>
               <div className="rounded-3xl border border-black/10 bg-white/60 p-4">
-                <p className="text-sm font-semibold text-black/60">GTmetrix</p>
-                <p className="mt-2 text-lg text-black">
-                  {gtmetrixConfigured ? 'Configurado' : 'Opcional'}
-                </p>
-                <p className="mt-2 text-sm text-black/65">
-                  {gtmetrixConfigured
-                    ? 'Enriquece la lectura con métricas adicionales y enlaces al reporte externo.'
-                    : 'Actívalo con GTMETRIX_API_KEY para sumar métricas, timings y enlaces al reporte.'}
-                </p>
-              </div>
-              <div className="rounded-3xl border border-black/10 bg-white/60 p-4">
                 <p className="text-sm font-semibold text-black/60">Salida</p>
                 <p className="mt-2 text-lg text-black">Dashboard + 2 PDFs</p>
                 <p className="mt-2 text-sm text-black/65">
                   Hook report de 1 página y reporte ejecutivo de 4 páginas en modo print.
+                </p>
+              </div>
+              <div className="rounded-3xl border border-black/10 bg-white/60 p-4">
+                <p className="text-sm font-semibold text-black/60">Fuente</p>
+                <p className="mt-2 text-lg text-black">Google PageSpeed</p>
+                <p className="mt-2 text-sm text-black/65">
+                  El score principal y las métricas del reporte se basan solo en datos de Google.
                 </p>
               </div>
             </div>
