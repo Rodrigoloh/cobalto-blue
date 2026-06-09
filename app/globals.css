@@ -95,9 +95,31 @@ body {
   overflow: hidden;
 }
 
+body.nosotros-page > header,
+body.nosotros-page > nav,
+body.nosotros-page > .fixed:not(.nosotros-menu),
+body.nosotros-page > .sticky:not(.nosotros-menu) {
+  display: none !important;
+}
+
 /* Flecha flotante del hero */
 @keyframes float-y { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
 .animate-float-y { animation: float-y 2.4s ease-in-out infinite; }
+
+@keyframes process-scene-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-process-scene {
+  animation: process-scene-in 280ms ease-out both;
+}
 
 .report-page {
   width: 100%;
