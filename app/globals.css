@@ -106,6 +106,17 @@ body.nosotros-page > .sticky:not(.nosotros-menu) {
 @keyframes float-y { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
 .animate-float-y { animation: float-y 2.4s ease-in-out infinite; }
 
+@keyframes home-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.home-marquee-track {
+  animation: home-marquee 34s linear infinite;
+  will-change: transform;
+}
+
 @keyframes process-scene-in {
   from {
     opacity: 0;
