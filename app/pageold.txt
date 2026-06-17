@@ -1,0 +1,258 @@
+'use client'
+
+import { useRef, useState, useEffect, type CSSProperties } from 'react'
+import Link from 'next/link'
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
+import { 
+  MousePointer2, 
+  Activity, 
+  Database, 
+  FileCode, 
+  Globe, 
+  Layers,
+  ArrowRight
+} from 'lucide-react'
+import NosotrosBodyClass from '@/components/NosotrosBodyClass'
+import NosotrosMenu from '@/components/NosotrosMenu'
+import NosotrosTopOffset from '@/components/NosotrosTopOffset'
+import { projects } from '@/data/projects'
+
+const PAIN_POINTS = [
+  {
+    title: 'Operación invisible',
+    desc: 'Tu equipo pierde horas en tareas manuales que un sistema debería resolver en segundos.',
+    icon: <MousePointer2 className="text-[#1F00FF]" size={28} />
+  },
+  {
+    title: 'Ventas con fricción',
+    desc: 'Tu sitio actual no proyecta la calidad de tu servicio. El cliente duda antes de contactar.',
+    icon: <Activity className="text-[#1F00FF]" size={28} />
+  },
+  {
+    title: 'Datos dispersos',
+    desc: 'Información en excels, chats y correos. No hay claridad para tomar decisiones de escala.',
+    icon: <Database className="text-[#1F00FF]" size={28} />
+  }
+]
+
+const PATHS = [
+  {
+    title: 'Onepager site',
+    weeks: '2-3 semanas',
+    desc: 'Presencia de alto impacto para validar y aterrizar tu propuesta de valor rápido.',
+    icon: <FileCode size={32} />
+  },
+  {
+    title: 'Full website',
+    weeks: '3-6 semanas',
+    desc: 'Arquitectura completa, SEO y múltiples secciones para empresas con oferta compleja.',
+    icon: <Globe size={32} />
+  },
+  {
+    title: 'Website growth',
+    weeks: '4-6 semanas',
+    desc: 'Automatización, CRM, flujos de Email y onboarding para escalar tu operación.',
+    icon: <Layers size={32} />
+  }
+]
+
+const SPECIALTIES = ['Website Sprint', 'SaaS MVP', 'Brand + Web System', 'Internal Ops Tool']
+
+const FEATURED = [projects[3], projects[4], projects[1], projects[8]].filter(Boolean)
+
+export default function Page() {
+  const mainRef = useRef<HTMLElement>(null)
+  const gifRef = useRef<HTMLElement>(null)
+  const truthRef = useRef<HTMLElement>(null)
+  const sidebarBlockRef = useRef<HTMLDivElement>(null)
+  const [logoVariant, setLogoVariant] = useState<'white' | 'blue'>('white')
+
+  const { scrollY } = useScroll()
+
+  // 1. Sincronizador de Navegación (0 a 56px de scroll)
+  const topOffset = useTransform(scrollY, [0, 56], [56, 0])
+
+  useMotionValueEvent(topOffset, "change", (latest) => {
+    if (mainRef.current) {
+      mainRef.current.style.setProperty('--nosotros-top-offset', `${latest}px`)
+    }
+  })
+
+  // 2. Parallax y Reveals
+  const { scrollYProgress: gifProgress } = useScroll({ target: gifRef, offset: ["start end", "end start"] })
+  const { scrollYProgress: truthProgress } = useScroll({ target: truthRef, offset: ["start end", "end start"] })
+  const { scrollYProgress: sidebarProgress } = useScroll({ target: sidebarBlockRef, offset: ["start start", "end end"] })
+
+  const yTitle = useTransform(scrollY, [0, 1000], [0, -250])
+  const yDesc = useTransform(scrollY, [0, 1000], [0, -150])
+  const yGifText = useTransform(gifProgress, [0, 1], [300, -300])
+  const opacityTruth = useTransform(truthProgress, [0.1, 0.3, 0.8, 1], [0, 1, 1, 0])
+  const sidebarBg = useTransform(sidebarProgress, [0, 0.2, 0.45, 0.55, 0.7, 0.8], ["#0d0d0d", "#1F00FF", "#1F00FF", "#f7f5ef", "#f7f5ef", "#0d0d0d"])
+
+  useMotionValueEvent(sidebarProgress, "change", (latest) => {
+    setLogoVariant(latest > 0.5 && latest < 0.75 ? 'blue' : 'white')
+  })
+
+  return (
+    <main 
+      ref={mainRef}
+      className="relative bg-[#f7f5ef] text-[#0d0d0d] md:pr-[var(--nosotros-rail)]"
+      style={{
+        '--nosotros-rail': 'clamp(18px, 2vw, 32px)',
+        '--nosotros-side': 'clamp(260px, 22.5vw, 420px)',
+        '--nosotros-menu-line': 'calc(var(--nosotros-side) + ((100vw - var(--nosotros-rail) - var(--nosotros-side)) / 2))',
+        '--nosotros-top-offset': '56px'
+      } as CSSProperties}
+    >
+      <NosotrosBodyClass />
+
+      {/* Menú y Rail sincronizados con topOffset */}
+      <motion.div style={{ top: topOffset }} className="fixed right-0 z-[100]">
+        <NosotrosTopOffset />
+        <NosotrosMenu />
+      </motion.div>
+
+      <motion.div 
+        style={{ top: topOffset }}
+        className="pointer-events-none fixed bottom-0 right-0 z-30 hidden w-[var(--nosotros-rail)] border-l border-[#0d0d0d] bg-[#f7f5ef] md:block"
+        aria-hidden="true" 
+      />
+
+      {/* HERO SECTION: Barra negra integrada que sube con el scroll */}
+      <section className="grid min-h-[100svh] grid-rows-[56px_1fr] border-b border-[#0d0d0d] bg-[#1F00FF] text-white">
+        <div className="relative z-[60] flex h-14 w-full items-center justify-center bg-[#0d0d0d] px-5 text-center text-sm font-bold uppercase tracking-[0.08em] text-white md:text-base">
+          Construyamos algo juntos
+        </div>
+        <div className="relative grid content-center px-5 py-16 text-center sm:px-8 lg:px-12">
+          <div className="relative z-10 flex flex-col items-center">
+            <img src="https://www.cobalto.blue/brand/logo-main-fullwhite.png" alt="Cobalto Blue" className="mb-10 w-[min(78vw,440px)] lg:mb-12 lg:w-[min(34vw,560px)]" />
+            <motion.h1 style={{ y: yTitle }} className="max-w-5xl text-[clamp(2.8rem,9vw,7.5rem)] font-bold leading-[0.86] tracking-tight">Digital systems for real operations.</motion.h1>
+            <motion.p style={{ y: yDesc }} className="mt-8 max-w-2xl text-xl font-bold leading-tight text-white/90 md:text-3xl">Construimos SaaS, plataformas web y herramientas internas para empresas que necesitan operar, vender y escalar con claridad.</motion.p>
+          </div>
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-1/2 bg-[linear-gradient(0deg,rgba(13,13,13,0.18),transparent)]" aria-hidden="true" />
+        </div>
+      </section>
+
+      {/* GIF SECTION */}
+      <section ref={gifRef} className="relative h-[100svh] overflow-hidden border-b border-[#0d0d0d] bg-[#0d0d0d]">
+        <img src="/projects/project06.gif" alt="Cobalto Works" className="h-[100svh] w-full object-cover" />
+        <motion.div style={{ y: yGifText }} className="absolute inset-0 z-10 flex items-center justify-center bg-black/30 px-5 text-center">
+          <h2 className="max-w-4xl text-5xl font-bold text-white md:text-8xl">Sistemas que se mueven a la velocidad de tu ambición.</h2>
+        </motion.div>
+      </section>
+
+      {/* TRUTH SECTION */}
+      <section ref={truthRef} className="relative z-20 grid border-b border-[#0d0d0d] bg-[#f7f5ef] py-40 text-center lg:py-60">
+        <motion.div style={{ opacity: opacityTruth }} className="mx-auto max-w-6xl px-5">
+          <h2 className="text-[clamp(2.5rem,8vw,6rem)] font-bold leading-none tracking-tight text-[#1F00FF]">La claridad no es estética, es una ventaja operativa.</h2>
+          <p className="mt-8 text-xl font-bold md:text-3xl text-neutral-800">Si tu sistema digital es confuso, tu operación también lo es.</p>
+        </motion.div>
+      </section>
+
+      {/* SIDEBAR BLOCK: Desde Problemas hasta CTA */}
+      <div ref={sidebarBlockRef} className="relative lg:grid lg:grid-cols-[var(--nosotros-side)_1fr]">
+        <motion.aside style={{ backgroundColor: sidebarBg }} className="hidden border-r border-[#0d0d0d] lg:block sticky top-0 h-screen z-40 transition-colors duration-500">
+          <div className="p-5">
+            <Link href="/" className="block">
+              <img 
+                src={logoVariant === 'blue' ? 'https://www.cobalto.blue/brand/logo-main-blue.png' : 'https://www.cobalto.blue/brand/logo-main-fullwhite.png'} 
+                alt="Cobalto Blue" 
+                className="sticky top-[var(--nosotros-top-offset)] w-full max-w-[200px] transition-all duration-300"
+              />
+            </Link>
+          </div>
+        </motion.aside>
+
+        <div className="relative">
+          {/* PROBLEMAS */}
+          <section className="grid border-b border-[#0d0d0d] bg-white">
+            <div className="grid gap-8 px-5 py-16 sm:px-8 md:py-24 lg:grid-cols-[0.9fr_1.1fr] lg:px-12">
+              <h2 className="text-4xl font-bold leading-none text-[#1F00FF] md:text-7xl">Problemas que resolvemos.</h2>
+              <div className="space-y-10">
+                {PAIN_POINTS.map((pain) => (
+                  <div key={pain.title} className="group border-l-4 border-[#1F00FF] pl-6 py-2">
+                    <div className="mb-4">{pain.icon}</div>
+                    <h4 className="text-2xl font-bold text-[#0d0d0d]">{pain.title}</h4>
+                    <p className="mt-2 text-lg text-neutral-600">{pain.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* OFERTAS */}
+          <section className="grid border-b border-[#0d0d0d] bg-[#f7f5ef]">
+            <div className="border-b border-[#0d0d0d] px-5 py-12 sm:px-8 lg:px-12 text-center lg:text-left">
+              <h2 className="text-4xl font-bold leading-none md:text-7xl">Ofertas de entrada</h2>
+              <p className="mt-6 max-w-2xl text-lg font-medium text-neutral-600 md:text-xl">Diseñamos tres rutas de ejecución basadas en el nivel de madurez de tu operación y los objetivos de negocio.</p>
+            </div>
+            <div className="grid md:grid-cols-3">
+              {PATHS.map((path) => (
+                <article key={path.title} className="group border-b border-r border-[#0d0d0d] p-5 sm:min-h-[360px] sm:p-8 hover:bg-white transition-colors">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-bold text-[#1F00FF]">{path.weeks}</p>
+                    <div className="text-neutral-300 group-hover:text-[#1F00FF] transition-colors">{path.icon}</div>
+                  </div>
+                  <h3 className="mt-10 text-4xl font-bold leading-none">{path.title}</h3>
+                  <p className="mt-6 text-lg leading-relaxed text-neutral-600">{path.desc}</p>
+                </article>
+              ))}
+            </div>
+            <div className="bg-white p-5 sm:p-8 lg:p-12">
+              <p className="text-sm font-bold uppercase tracking-widest text-neutral-400">Especialidades</p>
+              <div className="mt-6 flex flex-wrap gap-4">
+                {SPECIALTIES.map((spec) => (
+                  <span key={spec} className="border border-[#0d0d0d] px-4 py-2 text-sm font-bold uppercase">{spec}</span>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* TRABAJO */}
+          <section className="grid border-b border-[#0d0d0d] bg-white">
+            <div className="grid gap-8 border-b border-[#0d0d0d] px-5 py-12 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-end lg:px-12">
+              <h2 className="text-4xl font-bold leading-none md:text-7xl">Evidencia visual</h2>
+              <Link href="/work" className="w-max border border-[#0d0d0d] px-5 py-3 text-sm font-bold uppercase hover:bg-[#0d0d0d] hover:text-white transition-colors">Ver todo</Link>
+            </div>
+            <div className="grid md:grid-cols-2">
+              {FEATURED.map((project) => (
+                <Link key={project.id} href={`/work/${project.slug}`} className="group border-b border-r border-[#0d0d0d]">
+                  <div className="aspect-[4/3] overflow-hidden"><img src={project.image} alt={project.title} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" /></div>
+                  <div className="p-5 sm:p-8">
+                    <h3 className="text-3xl font-bold">{project.title}</h3>
+                    <p className="mt-3 text-sm font-bold uppercase text-[#1F00FF]">{project.desc}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          {/* CTA */}
+          <section className="grid min-h-[100svh] bg-[#1F00FF] text-white">
+            <div className="grid min-h-[100svh] content-end px-5 pb-10 pt-32 sm:px-8 md:pb-14 lg:px-12 lg:pb-20">
+              <h2 className="max-w-6xl text-[clamp(3.5rem,10vw,10rem)] font-bold leading-[0.84]">Cuéntanos qué quieres mejorar.</h2>
+              <div className="mt-10 grid gap-6 border-t border-white/40 pt-6 md:grid-cols-[1fr_auto] md:items-center">
+                <p className="max-w-2xl text-xl font-bold leading-snug">Cuéntanos qué necesitas para operar, vender o escalar. Te ayudaremos a convertirlo en un sistema digital claro.</p>
+                <Link href="/contacto" className="group flex items-center gap-3 w-max border border-white px-5 py-3 text-sm font-bold uppercase hover:bg-white hover:text-[#1F00FF] transition-all">
+                  Iniciar conversación <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <footer className="grid border-t border-[#0d0d0d] bg-[#0d0d0d] px-5 pb-28 pt-10 text-white sm:px-8 lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:px-12 lg:py-8">
+        <div><img src="https://www.cobalto.blue/brand/logo-main-fullwhite.png" alt="Cobalto Blue" className="mb-7 w-48 lg:hidden" /><p className="text-sm text-white/70">© 2026 Cobalto.blue<br />Todos los derechos reservados</p></div>
+        <nav className="mt-6 flex flex-wrap gap-5 text-xs text-white/70 lg:mt-0">
+          <Link href="/privacidad">Politicas de privacidad</Link>
+          <Link href="/terminos">Terminos y condiciones</Link>
+          <a href="mailto:hey@cobalto.blue">Hey@cobalto.blue</a>
+        </nav>
+        <div className="mt-8 hidden lg:flex lg:justify-end"><img src="https://www.cobalto.blue/brand/logo-main-fullwhite.png" alt="Cobalto Blue" className="w-44" /></div>
+      </footer>
+    </main>
+  )
+}
+

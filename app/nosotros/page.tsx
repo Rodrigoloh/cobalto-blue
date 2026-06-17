@@ -245,7 +245,7 @@ export default function NosotrosPage() {
               </h1>
               <div className="mt-5 border-t border-[#0d0d0d] pt-4 md:mt-8 md:pt-6">
                 <p className="max-w-[92vw] text-lg font-bold leading-tight md:text-3xl lg:max-w-4xl">
-                  Construimos SaaS, plataformas web y herramientas internas para empresas que necesitan operar, vender y escalar con claridad.
+                  Construimos desarrollos y plataformas digitales para empresas que necesitan operar, vender y escalar con claridad. Más de una decada de experiencia nos respalda.
                 </p>
               </div>
             </div>

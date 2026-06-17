@@ -52,7 +52,7 @@ export default function NosotrosMenu() {
         </button>
       </div>
 
-      <div className="nosotros-menu pointer-events-none fixed left-0 right-[var(--nosotros-rail)] top-[var(--nosotros-top-offset,0px)] z-50 hidden grid-cols-[var(--nosotros-side)_1fr] transition-[top] duration-200 lg:grid">
+      <div className="nosotros-menu pointer-events-none fixed left-0 right-[var(--nosotros-rail)] top-[var(--nosotros-top-offset,56px)] z-50 hidden grid-cols-[var(--nosotros-side)_1fr] transition-[top] duration-200 lg:grid">
         <div />
         <div className="grid grid-cols-2">
           <div />
@@ -89,7 +89,7 @@ export default function NosotrosMenu() {
       ) : null}
 
       <aside
-        className={`nosotros-menu fixed bottom-[76px] left-3 right-3 z-50 max-h-[calc(100svh-96px)] overflow-y-auto border border-[#0d0d0d] bg-white text-[#111322] shadow-2xl transition duration-300 lg:bottom-auto lg:left-[var(--nosotros-menu-line)] lg:right-[var(--nosotros-rail)] lg:top-[calc(var(--nosotros-top-offset,0px)+56px)] lg:max-h-[calc(100svh-72px)] lg:w-auto ${
+        className={`nosotros-menu fixed bottom-[76px] left-3 right-3 z-50 max-h-[calc(100svh-96px)] overflow-y-auto border border-[#0d0d0d] bg-white text-[#111322] shadow-2xl transition duration-300 lg:bottom-auto lg:left-[var(--nosotros-menu-line)] lg:right-[var(--nosotros-rail)] lg:top-[calc(var(--nosotros-top-offset,56px)+56px)] lg:max-h-[calc(100svh-72px)] lg:w-auto ${
           open ? 'translate-y-0 opacity-100 md:translate-x-0' : 'pointer-events-none translate-y-4 opacity-0 md:translate-x-5 md:translate-y-0'
         }`}
         aria-label="Menu expandido de Cobalto Blue"

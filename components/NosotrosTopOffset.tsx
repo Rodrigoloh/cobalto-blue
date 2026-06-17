@@ -5,7 +5,8 @@ import { useEffect } from 'react'
 export default function NosotrosTopOffset() {
   useEffect(() => {
     const setOffset = () => {
-      document.body.style.setProperty('--nosotros-top-offset', window.scrollY > 4 ? '0px' : '56px')
+      const offset = Math.max(0, 56 - window.scrollY)
+      document.documentElement.style.setProperty('--nosotros-top-offset', `${offset}px`)
     }
 
     setOffset()
@@ -14,7 +15,7 @@ export default function NosotrosTopOffset() {
     return () => {
       window.removeEventListener('scroll', setOffset)
       window.removeEventListener('resize', setOffset)
-      document.body.style.removeProperty('--nosotros-top-offset')
+      document.documentElement.style.removeProperty('--nosotros-top-offset')
     }
   }, [])
 

@@ -45,8 +45,8 @@ const nosotrosLinks = [
 ]
 
 const directMenuLinks = [
-  { href: '#work-carousel', label: 'Work' },
-  { href: '#contacto', label: 'Contacto' }
+  { href: '/work', label: 'Work' },
+  { href: '/contacto', label: 'Contacto' }
 ]
 
 const marqueeItems = [
@@ -156,14 +156,12 @@ function useContentRailY(targetRef: RefObject<HTMLElement>, thumbHeight = 88) {
 
 function HomeFloatingMenu({ targetRef }: { targetRef: RefObject<HTMLElement> }) {
   const [open, setOpen] = useState(false)
-  const [homeOpen, setHomeOpen] = useState(true)
-  const [aboutOpen, setAboutOpen] = useState(false)
+  const [activeDropdown, setActiveDropdown] = useState<'home' | 'nosotros' | null>('home')
   const y = useContentRailY(targetRef, 64)
 
   const closeMenu = () => {
     setOpen(false)
-    setHomeOpen(true)
-    setAboutOpen(false)
+    setActiveDropdown('home')
   }
 
   return (
@@ -193,16 +191,16 @@ function HomeFloatingMenu({ targetRef }: { targetRef: RefObject<HTMLElement> }) 
               Cobalto Blue
             </div>
             <nav>
-              <div className="border-b border-[#0d0d0d]/15">
-                <button
-                  type="button"
-                  onClick={() => setHomeOpen((value) => !value)}
+              <div className="border-b border-[#0d0d0d]/15" onMouseEnter={() => setActiveDropdown('home')}>
+                <Link
+                  href="/"
+                  onClick={closeMenu}
                   className="flex min-h-[88px] w-full items-center justify-between gap-4 px-6 text-left text-4xl font-bold leading-none transition hover:bg-[#ccff3f] md:text-5xl"
                 >
                   <span>Home</span>
-                  <span className={`text-xl transition ${homeOpen ? 'rotate-180' : ''}`}>v</span>
-                </button>
-                {homeOpen ? (
+                  <span className={`text-xl transition ${activeDropdown === 'home' ? 'rotate-180' : ''}`}>v</span>
+                </Link>
+                {activeDropdown === 'home' ? (
                   <div className="grid gap-0 bg-[#f7f5ef] px-6 py-4">
                     {menuLinks.map((link) => (
                       <Link
@@ -218,16 +216,16 @@ function HomeFloatingMenu({ targetRef }: { targetRef: RefObject<HTMLElement> }) 
                 ) : null}
               </div>
 
-              <div className="border-b border-[#0d0d0d]/15">
-                <button
-                  type="button"
-                  onClick={() => setAboutOpen((value) => !value)}
+              <div className="border-b border-[#0d0d0d]/15" onMouseEnter={() => setActiveDropdown('nosotros')}>
+                <Link
+                  href="/nosotros"
+                  onClick={closeMenu}
                   className="flex min-h-[88px] w-full items-center justify-between gap-4 px-6 text-left text-4xl font-bold leading-none transition hover:bg-[#ccff3f] md:text-5xl"
                 >
                   <span>Nosotros</span>
-                  <span className={`text-xl transition ${aboutOpen ? 'rotate-180' : ''}`}>v</span>
-                </button>
-                {aboutOpen ? (
+                  <span className={`text-xl transition ${activeDropdown === 'nosotros' ? 'rotate-180' : ''}`}>v</span>
+                </Link>
+                {activeDropdown === 'nosotros' ? (
                   <div className="grid gap-0 bg-[#f7f5ef] px-6 py-4">
                     {nosotrosLinks.map((link) => (
                       <Link
