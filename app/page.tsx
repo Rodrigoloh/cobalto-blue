@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react'
-import { motion, useAnimationFrame, useMotionValue, useScroll, useTransform } from 'framer-motion'
+import { motion, useAnimationFrame, useMotionValue, useScroll, useTransform, type MotionStyle } from 'framer-motion'
 import {
   Activity,
   Database,
@@ -430,7 +430,7 @@ function WorkCarouselSection() {
           style={{
             rotate: combinedRotate,
             '--carousel-radius': 'clamp(210px, 32vw, 430px)'
-          } as CSSProperties}
+          } as MotionStyle & Record<'--carousel-radius', string>}
         >
           {carouselProjects.map((project, index) => {
             const angle = (index / count) * 360
