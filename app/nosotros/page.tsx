@@ -28,11 +28,13 @@ type Faq = {
 
 function SectionLogo({ variant = 'white' }: { variant?: 'white' | 'blue' }) {
   return (
-    <img
-      src={variant === 'blue' ? 'https://www.cobalto.blue/brand/logo-main-blue.png' : 'https://www.cobalto.blue/brand/logo-main-fullwhite.png'}
-      alt="Cobalto Blue"
-      className="sticky top-[calc(var(--nosotros-top-offset,0px)+20px)] w-full max-w-[220px] transition-[top] duration-200"
-    />
+    <Link href="/" className="sticky top-[calc(var(--nosotros-top-offset,0px)+20px)] block w-full max-w-[220px] transition-[top] duration-200" aria-label="Ir al home">
+      <img
+        src={variant === 'blue' ? 'https://www.cobalto.blue/brand/logo-main-blue.png' : 'https://www.cobalto.blue/brand/logo-main-fullwhite.png'}
+        alt="Cobalto Blue"
+        className="w-full"
+      />
+    </Link>
   )
 }
 
@@ -225,11 +227,13 @@ export default function NosotrosPage() {
             <SectionLogo />
           </aside>
           <div className="grid px-5 pb-24 pt-6 text-left sm:px-8 md:pb-20 lg:content-end lg:px-12 lg:pb-14 lg:pt-24">
-            <img
-              src="/brand/logo-mobile-cobalto-blue.svg"
-              alt="Cobalto Blue"
-              className="mx-auto mb-10 w-[min(88vw,380px)] lg:hidden"
-            />
+            <Link href="/" className="mx-auto mb-10 block w-[min(88vw,380px)] lg:hidden" aria-label="Ir al home">
+              <img
+                src="/brand/logo-mobile-cobalto-blue.svg"
+                alt="Cobalto Blue"
+                className="w-full"
+              />
+            </Link>
             <div className="mt-auto">
               <h1 className="max-w-full text-[clamp(3rem,15vw,5.25rem)] font-bold leading-[0.88] tracking-normal md:text-[clamp(3.2rem,9vw,9rem)] md:leading-[0.86] lg:max-w-5xl">
                 <span className="block md:hidden">
@@ -391,12 +395,14 @@ export default function NosotrosPage() {
 
       <footer className="grid border-t border-[#0d0d0d] bg-[#0d0d0d] px-5 pb-28 pt-10 text-white sm:px-8 lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:px-12 lg:py-8">
         <div>
-          <img
-            src="https://www.cobalto.blue/brand/logo-main-fullwhite.png"
-            alt="Cobalto Blue"
-            className="mb-7 w-48 lg:hidden"
-            loading="lazy"
-          />
+          <Link href="/" className="mb-7 block w-48 lg:hidden" aria-label="Ir al home">
+            <img
+              src="https://www.cobalto.blue/brand/logo-main-fullwhite.png"
+              alt="Cobalto Blue"
+              className="w-full"
+              loading="lazy"
+            />
+          </Link>
           <p className="text-sm leading-relaxed text-white/70">
             © 2026 Cobalto.blue
             <br />
@@ -409,12 +415,14 @@ export default function NosotrosPage() {
           <a href="mailto:hey@cobalto.blue" className="hover:text-white">Hey@cobalto.blue</a>
         </nav>
         <div className="mt-8 hidden justify-start lg:mt-0 lg:flex lg:justify-end">
-          <img
-            src="https://www.cobalto.blue/brand/logo-main-fullwhite.png"
-            alt="Cobalto Blue"
-            className="w-44"
-            loading="lazy"
-          />
+          <Link href="/" className="block w-44" aria-label="Ir al home">
+            <img
+              src="https://www.cobalto.blue/brand/logo-main-fullwhite.png"
+              alt="Cobalto Blue"
+              className="w-full"
+              loading="lazy"
+            />
+          </Link>
         </div>
       </footer>
     </main>

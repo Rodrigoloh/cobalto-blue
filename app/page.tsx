@@ -605,8 +605,6 @@ export default function Page() {
           <PainPointsSection />
         </div>
 
-        <div className="h-16 bg-white md:mr-[var(--nosotros-rail)]" aria-hidden="true" />
-
         <ServicesMarquee />
 
         <PathsSection />
