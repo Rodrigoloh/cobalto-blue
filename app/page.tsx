@@ -418,6 +418,14 @@ function WorkCarouselSection() {
     >
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="absolute inset-x-0 top-[14vh] z-10 px-5 sm:px-8 lg:px-12">
+          <Image
+            src="/brand/logo-main-fullwhite.png"
+            alt="Cobalto Blue"
+            width={150}
+            height={44}
+            className="mb-7 h-auto w-[clamp(110px,11vw,150px)] object-contain"
+            aria-hidden="true"
+          />
           <p className="text-sm font-bold uppercase tracking-[0.12em] text-white/60">Work</p>
           <h2 className="mt-3 max-w-5xl text-[clamp(3rem,8vw,7.5rem)] font-bold leading-[0.86]">
             Nuestro
