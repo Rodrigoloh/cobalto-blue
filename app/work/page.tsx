@@ -59,9 +59,9 @@ function WorkTopBar() {
             <Link href="/nosotros" className="grid place-items-center px-3 hover:bg-[#1F00FF]">
               About
             </Link>
-            <Link href="/cb-lab/reporting" className="grid place-items-center px-3 hover:bg-[#1F00FF]">
+            <span aria-disabled="true" className="grid cursor-not-allowed place-items-center px-3 text-white/40">
               Impact
-            </Link>
+            </span>
           </nav>
           <Link href="/contacto" className="m-2 grid place-items-center rounded-full bg-white px-5 text-[#0d0d0d] transition hover:bg-[#1F00FF] hover:text-white">
             Contact

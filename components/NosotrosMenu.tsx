@@ -6,7 +6,7 @@ import { useState } from 'react'
 const MENU_LINKS = [
   { href: '/work', label: 'Work', badge: 'New projects added' },
   { href: '/nosotros', label: 'About' },
-  { href: '/cb-lab/reporting', label: 'Impact' },
+  { href: '/cb-lab/reporting', label: 'Impact', disabled: true },
   { href: '#expertise', label: 'Services', expandable: true },
   { href: '#process', label: 'Process' },
   { href: '#faq', label: 'FAQ', badge: 'AI ready' }
@@ -73,9 +73,9 @@ export default function NosotrosMenu() {
               <Link href="/nosotros" className="grid place-items-center px-3 hover:bg-[#1F00FF]">
                 About
               </Link>
-              <Link href="/cb-lab/reporting" className="grid place-items-center px-3 hover:bg-[#1F00FF]">
+              <span aria-disabled="true" className="grid cursor-not-allowed place-items-center px-3 text-white/40">
                 Impact
-              </Link>
+              </span>
             </nav>
             <Link href="/contacto" className="m-2 grid place-items-center rounded-full bg-white px-5 text-[#0d0d0d] transition hover:bg-[#1F00FF] hover:text-white">
               Contact
@@ -109,13 +109,18 @@ export default function NosotrosMenu() {
                   <span>{link.label}</span>
                   <span className={`text-xl transition ${servicesOpen ? 'rotate-180' : ''}`}>v</span>
                 </button>
+              ) : link.disabled ? (
+                <span
+                  aria-disabled="true"
+                  className="flex min-h-[88px] cursor-not-allowed items-center justify-between gap-4 px-6 text-4xl font-bold leading-none text-[#111322]/35 md:text-5xl"
+                >
+                  <span>{link.label}</span>
+                </span>
               ) : (
                 <Link
                   href={link.href}
                   onClick={closeMenu}
-                  className={`flex min-h-[88px] items-center justify-between gap-4 px-6 text-4xl font-bold leading-none transition hover:bg-[#ccff3f] md:text-5xl ${
-                    link.label === 'Impact' ? 'bg-[#ccff3f]' : ''
-                  }`}
+                  className="flex min-h-[88px] items-center justify-between gap-4 px-6 text-4xl font-bold leading-none transition hover:bg-[#ccff3f] md:text-5xl"
                 >
                   <span>{link.label}</span>
                   {link.badge ? (
