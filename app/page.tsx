@@ -154,10 +154,11 @@ function useContentRailY(targetRef: RefObject<HTMLElement>, thumbHeight = 88) {
   return y
 }
 
-function HomeFloatingMenu({ targetRef }: { targetRef: RefObject<HTMLElement> }) {
+function HomeFloatingMenu({ targetRef, variant = 'desktop' }: { targetRef: RefObject<HTMLElement>, variant?: 'desktop' | 'mobile' }) {
   const [open, setOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<'home' | 'nosotros' | null>('home')
   const y = useContentRailY(targetRef, 64)
+  const isMobile = variant === 'mobile'
 
   const closeMenu = () => {
     setOpen(false)
@@ -166,17 +167,17 @@ function HomeFloatingMenu({ targetRef }: { targetRef: RefObject<HTMLElement> }) 
 
   return (
     <>
-      <div className="pointer-events-none sticky top-0 z-[80] h-screen w-16">
+      <div className={isMobile ? 'fixed bottom-3 left-3 z-[100] grid h-14 w-14 overflow-hidden border border-[#0d0d0d] bg-[#171717] text-sm font-bold text-white md:hidden' : 'pointer-events-none sticky top-0 z-[80] h-screen w-16'}>
         <motion.div
-          className="pointer-events-auto absolute left-0 top-0 grid h-16 w-full overflow-hidden border border-[#0d0d0d] bg-[#171717] text-sm font-bold text-white"
-          style={{ y }}
+          className={isMobile ? 'pointer-events-auto grid h-14 w-14 place-items-center' : 'pointer-events-auto absolute left-0 top-0 grid h-16 w-full overflow-hidden border border-[#0d0d0d] bg-[#171717] text-sm font-bold text-white'}
+          style={isMobile ? undefined : { y }}
         >
           <button
             type="button"
             aria-label={open ? 'Cerrar menu' : 'Abrir menu'}
             aria-expanded={open}
             onClick={() => setOpen((value) => !value)}
-            className="grid h-16 w-16 place-items-center transition hover:bg-[#1F00FF]"
+            className={isMobile ? 'grid h-14 w-14 place-items-center transition hover:bg-[#1F00FF]' : 'grid h-16 w-16 place-items-center transition hover:bg-[#1F00FF]'}
           >
             <MenuIcon open={open} />
           </button>
@@ -527,6 +528,8 @@ export default function Page() {
       <div className="relative z-20 flex h-14 w-full items-center justify-center bg-black px-5 text-center font-['PPRightGroteskMono',system-ui,sans-serif] text-sm font-bold uppercase tracking-[0.08em] text-white md:h-16 md:text-base">
         Construyamos algo juntos
       </div>
+
+      <HomeFloatingMenu targetRef={contentRef} variant="mobile" />
 
       <section ref={heroRef} className="relative h-[340vh] overflow-clip bg-[#080019]">
         <div className="sticky top-0 h-screen overflow-hidden bg-[#080019]">
