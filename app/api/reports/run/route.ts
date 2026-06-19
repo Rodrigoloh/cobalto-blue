@@ -53,6 +53,18 @@ export async function POST(request: NextRequest) {
       monthlyVisits: String(formData.get('monthlyVisits') ?? ''),
       averageTicket: String(formData.get('averageTicket') ?? ''),
       closeRate: String(formData.get('closeRate') ?? ''),
+      contentSourceUrl: String(formData.get('contentSourceUrl') ?? ''),
+      visionImpactText: String(formData.get('visionImpactText') ?? ''),
+      visionImpactTextSecondary: String(formData.get('visionImpactTextSecondary') ?? ''),
+      visionConversionText: String(formData.get('visionConversionText') ?? ''),
+      visionConversionTextSecondary: String(formData.get('visionConversionTextSecondary') ?? ''),
+      nextStepNapText: String(formData.get('nextStepNapText') ?? ''),
+      nextStepDataText: String(formData.get('nextStepDataText') ?? ''),
+      nextStepIndexText: String(formData.get('nextStepIndexText') ?? ''),
+      phaseOneText: String(formData.get('phaseOneText') ?? ''),
+      phaseTwoText: String(formData.get('phaseTwoText') ?? ''),
+      phaseThreeText: String(formData.get('phaseThreeText') ?? ''),
+      phaseFourText: String(formData.get('phaseFourText') ?? ''),
       notes: String(formData.get('notes') ?? '')
     })
 

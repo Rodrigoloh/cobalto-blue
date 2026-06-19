@@ -203,6 +203,128 @@ export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboar
               </label>
             </div>
 
+            <div className="rounded-3xl border border-black/10 bg-white/55 p-5">
+              <div className="mb-4 space-y-1">
+                <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.3em] text-[#1F00FF]">
+                  contenido editable del deck
+                </p>
+                <p className="text-sm text-black/60">
+                  Estos textos alimentan Visión General, Pasos a seguir y Plan de Trabajo.
+                </p>
+              </div>
+
+              <label className="mb-4 block space-y-2">
+                <span className="text-sm font-semibold text-black/70">Link fuente / Google Docs</span>
+                <input
+                  type="url"
+                  name="contentSourceUrl"
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  placeholder="https://docs.google.com/document/..."
+                />
+              </label>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Visión - Huella párrafo 1</span>
+                  <textarea
+                    name="visionImpactText"
+                    rows={4}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                    placeholder="Diagnóstico de huella digital..."
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Visión - Huella párrafo 2</span>
+                  <textarea
+                    name="visionImpactTextSecondary"
+                    rows={4}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                    placeholder="Impacto comercial actual..."
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Visión - Conversión párrafo 1</span>
+                  <textarea
+                    name="visionConversionText"
+                    rows={4}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                    placeholder="Fricción UX crítica..."
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Visión - Conversión párrafo 2</span>
+                  <textarea
+                    name="visionConversionTextSecondary"
+                    rows={4}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                    placeholder="Ausencia de CTAs o cotizadores..."
+                  />
+                </label>
+              </div>
+
+              <div className="mt-4 grid gap-4 md:grid-cols-3">
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Paso 1 - Consolidación NAP</span>
+                  <textarea
+                    name="nextStepNapText"
+                    rows={4}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Paso 2 - Estructuración</span>
+                  <textarea
+                    name="nextStepDataText"
+                    rows={4}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Paso 3 - Limpieza indexable</span>
+                  <textarea
+                    name="nextStepIndexText"
+                    rows={4}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                </label>
+              </div>
+
+              <div className="mt-4 grid gap-4 md:grid-cols-2">
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Fase 1</span>
+                  <textarea
+                    name="phaseOneText"
+                    rows={3}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Fase 2</span>
+                  <textarea
+                    name="phaseTwoText"
+                    rows={3}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Fase 3</span>
+                  <textarea
+                    name="phaseThreeText"
+                    rows={3}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Fase 4</span>
+                  <textarea
+                    name="phaseFourText"
+                    rows={3}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                </label>
+              </div>
+            </div>
+
             <label className="block space-y-2">
               <span className="text-sm font-semibold text-black/70">Notas opcionales</span>
               <textarea
@@ -241,7 +363,7 @@ export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboar
                 <p className="text-sm font-semibold text-black/60">Salida</p>
                 <p className="mt-2 text-lg text-black">Dashboard + 2 PDFs</p>
                 <p className="mt-2 text-sm text-black/65">
-                  Hook report de 1 página y reporte ejecutivo de 6 páginas exportable a PDF.
+                  Hook report de 1 página y reporte ejecutivo de 7 láminas exportable a PDF.
                 </p>
               </div>
               <div className="rounded-3xl border border-black/10 bg-white/60 p-4">

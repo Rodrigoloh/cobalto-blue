@@ -9,6 +9,7 @@ import type { FinancialImpact } from '@/lib/performance-report'
 import {
   formatCLS,
   formatMilliseconds,
+  getScoreTone,
   getScoreStateLabel
 } from '@/lib/performance-report'
 
@@ -77,10 +78,10 @@ function DeckPage({
   )
 }
 
-function FooterLogo({ light = false }: { light?: boolean }) {
+function FooterLogo() {
   return (
     <img
-      src={light ? '/brand/logo-main-fullwhite.png' : '/brand/logo-main-blue.png'}
+      src="/brand/logo-main-fullwhite.png"
       alt="cobalto.blue"
       className="absolute bottom-[30px] right-[50px] h-[38px] w-auto"
     />
@@ -162,38 +163,97 @@ function MetricRow({
   )
 }
 
-function PageSpeedMock({
-  score,
-  fcp,
-  lcp,
-  tbt,
-  cls,
-  speedIndex
+function scoreColor(score: number | null) {
+  const tone = getScoreTone(score)
+  if (tone === 'green') return '#14a44d'
+  if (tone === 'amber') return '#f59e0b'
+  if (tone === 'red') return '#e10600'
+  return '#9ca3af'
+}
+
+function scoreSoftColor(score: number | null) {
+  const tone = getScoreTone(score)
+  if (tone === 'green') return '#e8f5ee'
+  if (tone === 'amber') return '#fff1d6'
+  if (tone === 'red') return '#fde8e8'
+  return '#eeeeee'
+}
+
+function ScoreCircle({
+  label,
+  score
 }: {
-  score: number
-  fcp: string
-  lcp: string
-  tbt: string
-  cls: string
-  speedIndex: string
+  label: string
+  score: number | null
 }) {
-  const dash = Math.max(0, Math.min(100, score))
+  const value = score ?? 0
+  const color = scoreColor(score)
+  const soft = scoreSoftColor(score)
 
   return (
+    <div className="flex flex-col items-center">
+      <div
+        className="relative flex h-[86px] w-[86px] items-center justify-center rounded-full text-[21px]"
+        style={{
+          color,
+          background: `conic-gradient(${color} ${value * 3.6}deg, ${soft} 0deg)`
+        }}
+      >
+        <div className="absolute inset-[7px] rounded-full bg-white" />
+        <span className="relative">{score ?? 'N/D'}</span>
+      </div>
+      <p className="mt-3 text-center text-[13px] text-[#333333]">{label}</p>
+    </div>
+  )
+}
+
+function formatCaptureDate(value: string | null | undefined) {
+  if (!value) return 'Captured by PageSpeed'
+
+  return `Captured at ${new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZoneName: 'short'
+  }).format(new Date(value))}`
+}
+
+function metricTone(metric: 'FCP' | 'LCP' | 'TBT' | 'CLS' | 'SI', value: number | null) {
+  if (value === null) return 'ok'
+  if (metric === 'FCP') return value <= 1800 ? 'good' : value <= 3000 ? 'ok' : 'bad'
+  if (metric === 'LCP') return value <= 2500 ? 'good' : value <= 4000 ? 'ok' : 'bad'
+  if (metric === 'TBT') return value <= 200 ? 'good' : value <= 600 ? 'ok' : 'bad'
+  if (metric === 'CLS') return value <= 0.1 ? 'good' : value <= 0.25 ? 'ok' : 'bad'
+  return value <= 3400 ? 'good' : value <= 5800 ? 'ok' : 'bad'
+}
+
+function PageSpeedMock({
+  scores,
+  metrics,
+  details
+}: {
+  scores: Array<{ label: string; score: number | null }>
+  metrics: {
+    fcp: { value: string; raw: number | null }
+    lcp: { value: string; raw: number | null }
+    tbt: { value: string; raw: number | null }
+    cls: { value: string; raw: number | null }
+    speedIndex: { value: string; raw: number | null }
+  }
+  details: string[]
+}) {
+  return (
     <div className="mt-[22px] flex h-[322px] bg-white">
-      <div className="flex w-[300px] flex-col items-center justify-center border-r border-black/10">
-        <div
-          className="relative flex h-[92px] w-[92px] items-center justify-center rounded-full text-[22px] text-[#f59e0b]"
-          style={{
-            background: `conic-gradient(#f59e0b ${dash * 3.6}deg, #fff1d6 0deg)`
-          }}
-        >
-          <div className="absolute inset-[7px] rounded-full bg-white" />
-          <span className="relative">{score}</span>
+      <div className="flex w-[382px] flex-col items-center justify-center border-r border-black/10 px-7">
+        <div className="grid w-full grid-cols-2 gap-x-5 gap-y-5">
+          {scores.map((item) => (
+            <ScoreCircle key={item.label} label={item.label} score={item.score} />
+          ))}
         </div>
-        <p className="mt-4 text-[13px] text-[#333333]">Performance</p>
         <p className="mt-2 max-w-[190px] text-center text-[8px] leading-tight text-[#777777]">
-          Values are estimated and may vary. The performance score is calculated directly from these metrics.
+          Values are estimated and may vary. Scores are calculated by Lighthouse diagnostics.
         </p>
         <div className="mt-4 flex gap-5 text-[8px] text-[#555555]">
           <span><span className="text-red-500">▲</span> 0-49</span>
@@ -213,20 +273,19 @@ function PageSpeedMock({
         </div>
         <div className="grid grid-cols-2 gap-x-9 pt-1">
           <div>
-            <MetricRow label="First Contentful Paint" value={fcp} />
-            <MetricRow label="Total Blocking Time" value={tbt} tone="good" />
-            <MetricRow label="Speed Index" value={speedIndex} tone="ok" />
+            <MetricRow label="First Contentful Paint" value={metrics.fcp.value} tone={metricTone('FCP', metrics.fcp.raw)} />
+            <MetricRow label="Total Blocking Time" value={metrics.tbt.value} tone={metricTone('TBT', metrics.tbt.raw)} />
+            <MetricRow label="Speed Index" value={metrics.speedIndex.value} tone={metricTone('SI', metrics.speedIndex.raw)} />
           </div>
           <div>
-            <MetricRow label="Largest Contentful Paint" value={lcp} />
-            <MetricRow label="Cumulative Layout Shift" value={cls} tone="good" />
+            <MetricRow label="Largest Contentful Paint" value={metrics.lcp.value} tone={metricTone('LCP', metrics.lcp.raw)} />
+            <MetricRow label="Cumulative Layout Shift" value={metrics.cls.value} tone={metricTone('CLS', metrics.cls.raw)} />
           </div>
         </div>
-        <div className="mt-3 grid grid-cols-4 gap-3 bg-[#f5f5f5] px-4 py-3 text-[10px] text-[#666666]">
-          <span>Captured by PageSpeed</span>
-          <span>Emulated mobile device</span>
-          <span>Single page session</span>
-          <span>Initial page load</span>
+        <div className="mt-3 grid grid-cols-3 gap-x-5 gap-y-2 bg-[#f5f5f5] px-4 py-3 text-[9px] leading-tight text-[#666666]">
+          {details.map((detail) => (
+            <span key={detail}>{detail}</span>
+          ))}
         </div>
       </div>
     </div>
@@ -241,13 +300,52 @@ export default function FullReportPage({ params }: FullPageProps) {
         const impact = report.financialImpact ?? defaultImpact()
         const weeklyLoss = Math.round(impact.lostRevenueMonthly / 4)
         const weeklyVisitors = Math.max(10, Math.round(impact.monthlyVisits / 4))
-        const score = report.overallScore || mobile?.performanceScore || 65
         const firstFinding = report.findings[0] ?? report.hookSummary
         const secondFinding = report.findings[1] ?? report.costOfInaction
         const company = report.input.companyName || 'Empresa analizada'
         const city = report.input.city || 'su mercado'
         const industry = report.input.industry || 'su industria'
         const cta = report.input.primaryCta || 'contacto comercial'
+        const visionImpactText =
+          report.input.visionImpactText ||
+          `La experiencia de ${company} en ${industry} se ve limitada digitalmente por una estructura que no comunica con la velocidad que el mercado espera en ${city}.`
+        const visionImpactTextSecondary =
+          report.input.visionImpactTextSecondary ||
+          'El sitio web actua como un catalogo estatico, desaprovechando su potencial de conversion corporativa y limitando el flujo activo de adquisicion.'
+        const visionConversionText = report.input.visionConversionText || firstFinding
+        const visionConversionTextSecondary =
+          report.input.visionConversionTextSecondary ||
+          secondFinding ||
+          `La ausencia de rutas claras hacia ${cta} diluye la prospeccion y reduce la confianza de compradores que buscan respuesta inmediata.`
+        const nextStepNapText =
+          report.input.nextStepNapText ||
+          `Resolver discrepancias de nombre, ubicacion y servicio para unificar la huella digital de ${company} en buscadores locales.`
+        const nextStepDataText =
+          report.input.nextStepDataText ||
+          'Implementacion nativa de marcado JSON-LD para optimizar la indexacion por buscadores e inteligencias artificiales.'
+        const nextStepIndexText =
+          report.input.nextStepIndexText ||
+          'Eliminacion de rutas fantasma e inconsistencias de URL para maximizar crawling y fortalecer la confianza de entidad.'
+        const phaseOneText =
+          report.input.phaseOneText ||
+          'Transicion a una arquitectura agil para estructurar codigo limpio y semantico de manera nativa.'
+        const phaseTwoText =
+          report.input.phaseTwoText ||
+          'Integracion de marcado JSON-LD preciso unificando identidad corporativa, ubicacion y horarios extendidos.'
+        const phaseThreeText =
+          report.input.phaseThreeText ||
+          `Modulo y flujo de conversion enfocado en ${cta}, velocidad de respuesta y seguimiento comercial.`
+        const phaseFourText =
+          report.input.phaseFourText ||
+          'Conversion grafica moderna, cache, CDN y configuracion tecnica orientada a rendimiento.'
+        const pageSpeedDetails = [
+          formatCaptureDate(mobile?.capturedAt),
+          mobile?.emulatedDevice ?? 'Emulated Moto G Power with Lighthouse',
+          mobile?.sessionType ?? 'Single page session',
+          mobile?.loadType ?? 'Initial page load',
+          mobile?.throttling ?? 'Slow 4G throttling',
+          mobile?.browserEngine ?? 'Using HeadlessChromium with lr'
+        ]
 
         return (
           <main className="report-shell min-h-screen px-6 py-6 text-[#111827]">
@@ -275,18 +373,12 @@ export default function FullReportPage({ params }: FullPageProps) {
                 <Title>Vision General y UX</Title>
                 <div className="mt-[50px] grid grid-cols-2 gap-[62px]">
                   <TextBlock icon={<Monitor className="h-8 w-8" />} title="Huella Digital e Impacto">
-                    <p>
-                      La experiencia de {company} en {industry} se ve limitada digitalmente por una estructura que no comunica con la velocidad que el mercado espera en {city}.
-                    </p>
-                    <p>
-                      El sitio web actua como un catalogo estatico, desaprovechando su potencial de conversion corporativa y limitando el flujo activo de adquisicion.
-                    </p>
+                    <p>{visionImpactText}</p>
+                    <p>{visionImpactTextSecondary}</p>
                   </TextBlock>
                   <TextBlock icon={<Radio className="h-8 w-8" />} title="Inconsistencia en Conversion">
-                    <p>{firstFinding}</p>
-                    <p>
-                      La ausencia de rutas claras hacia {cta} diluye la prospeccion y reduce la confianza de compradores que buscan respuesta inmediata.
-                    </p>
+                    <p>{visionConversionText}</p>
+                    <p>{visionConversionTextSecondary}</p>
                   </TextBlock>
                 </div>
                 <FooterLogo />
@@ -297,12 +389,35 @@ export default function FullReportPage({ params }: FullPageProps) {
                   <Title>Rendimiento y Core Web Vitals</Title>
                 </div>
                 <PageSpeedMock
-                  score={score}
-                  fcp={formatMilliseconds(mobile?.firstContentfulPaint ?? null)}
-                  lcp={formatMilliseconds(mobile?.largestContentfulPaint ?? null)}
-                  tbt={formatMilliseconds(mobile?.totalBlockingTime ?? null)}
-                  cls={formatCLS(mobile?.cumulativeLayoutShift ?? null)}
-                  speedIndex={formatMilliseconds(mobile?.speedIndex ?? null)}
+                  scores={[
+                    { label: 'Performance', score: mobile?.performanceScore ?? report.overallScore },
+                    { label: 'Accessibility', score: mobile?.accessibilityScore ?? null },
+                    { label: 'Best Practices', score: mobile?.bestPracticesScore ?? null },
+                    { label: 'SEO', score: mobile?.seoScore ?? null }
+                  ]}
+                  metrics={{
+                    fcp: {
+                      value: formatMilliseconds(mobile?.firstContentfulPaint ?? null),
+                      raw: mobile?.firstContentfulPaint ?? null
+                    },
+                    lcp: {
+                      value: formatMilliseconds(mobile?.largestContentfulPaint ?? null),
+                      raw: mobile?.largestContentfulPaint ?? null
+                    },
+                    tbt: {
+                      value: formatMilliseconds(mobile?.totalBlockingTime ?? null),
+                      raw: mobile?.totalBlockingTime ?? null
+                    },
+                    cls: {
+                      value: formatCLS(mobile?.cumulativeLayoutShift ?? null),
+                      raw: mobile?.cumulativeLayoutShift ?? null
+                    },
+                    speedIndex: {
+                      value: formatMilliseconds(mobile?.speedIndex ?? null),
+                      raw: mobile?.speedIndex ?? null
+                    }
+                  }}
+                  details={pageSpeedDetails}
                 />
                 <p className="mx-[58px] mt-[14px] text-[14px] leading-[1.25] text-[#1f2937]">
                   El informe de <b>PageSpeed Insights</b> evidencia friccion en el rendimiento movil. El punto critico aparece en el <b>Largest Contentful Paint (LCP)</b>, la carga percibida y el tiempo que tarda el usuario en entender la oferta principal.
@@ -345,13 +460,13 @@ export default function FullReportPage({ params }: FullPageProps) {
                 <Lead>Consistencia de Datos &amp; SEO Semantico</Lead>
                 <div className="mt-[45px] grid grid-cols-3 gap-[58px]">
                   <StepCard icon={<MapPinned className="h-11 w-11" />} title="Consolidacion NAP">
-                    Resolver discrepancias de nombre, ubicacion y servicio para unificar la huella digital de {company} en buscadores locales.
+                    {nextStepNapText}
                   </StepCard>
                   <StepCard icon={<Code2 className="h-11 w-11" />} title="Estructuracion de Datos">
-                    Implementacion nativa de marcado JSON-LD para optimizar la indexacion por buscadores e inteligencias artificiales.
+                    {nextStepDataText}
                   </StepCard>
                   <StepCard icon={<LineChart className="h-12 w-12" />} title="Limpieza Indexable">
-                    Eliminacion de rutas fantasma e inconsistencias de URL para maximizar crawling y fortalecer la confianza de entidad.
+                    {nextStepIndexText}
                   </StepCard>
                 </div>
                 <FooterLogo />
@@ -362,10 +477,10 @@ export default function FullReportPage({ params }: FullPageProps) {
                 <Lead>Consistencia de Datos &amp; SEO Semantico</Lead>
                 <div className="absolute left-[98px] right-[112px] top-[336px] h-[3px] bg-[#2500ff]" />
                 {[
-                  ['Fase 1', 'Rediseno & Migracion', 'Transicion a una arquitectura agil para estructurar codigo limpio y semantico de manera nativa.', 205, 369],
-                  ['Fase 2', 'AI-Ready Metadata', 'Integracion de marcado JSON-LD preciso unificando identidad corporativa, ubicacion y horarios extendidos.', 405, 210],
-                  ['Fase 3', 'CRO & Captacion B2B', `Modulo y flujo de conversion enfocado en ${cta}, velocidad de respuesta y seguimiento comercial.`, 632, 369],
-                  ['Fase 4', 'Optimizacion WPO', 'Conversion grafica moderna, cache, CDN y configuracion tecnica orientada a rendimiento.', 864, 210]
+                  ['Fase 1', 'Rediseno & Migracion', phaseOneText, 205, 369],
+                  ['Fase 2', 'AI-Ready Metadata', phaseTwoText, 405, 210],
+                  ['Fase 3', 'CRO & Captacion B2B', phaseThreeText, 632, 369],
+                  ['Fase 4', 'Optimizacion WPO', phaseFourText, 864, 210]
                 ].map(([phase, name, text, left, top]) => (
                   <div key={phase} className="absolute w-[260px] text-center" style={{ left: Number(left) - 130, top: Number(top) }}>
                     <h3 className="text-[20px] font-bold text-[#2500ff]">{phase}</h3>

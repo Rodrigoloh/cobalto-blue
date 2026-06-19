@@ -17,6 +17,12 @@ export type AuditSummary = {
   interactionToNextPaint: number | null
   screenshot: string | null
   capturedAt: string | null
+  lighthouseVersion: string | null
+  emulatedDevice: string | null
+  sessionType: string | null
+  loadType: string | null
+  throttling: string | null
+  browserEngine: string | null
 }
 
 export type GTmetrixSummary = {
@@ -57,6 +63,18 @@ export type ProspectInput = {
   monthlyVisits: number | string | null
   averageTicket: number | string | null
   closeRate: number | string | null
+  contentSourceUrl: string
+  visionImpactText: string
+  visionImpactTextSecondary: string
+  visionConversionText: string
+  visionConversionTextSecondary: string
+  nextStepNapText: string
+  nextStepDataText: string
+  nextStepIndexText: string
+  phaseOneText: string
+  phaseTwoText: string
+  phaseThreeText: string
+  phaseFourText: string
   notes: string
 }
 
@@ -142,10 +160,22 @@ function toPositiveNumber(value: unknown) {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : null
 }
 
+function cleanText(value: unknown) {
+  return typeof value === 'string' ? value.trim() : ''
+}
+
 function normalizePageSpeed(strategy: 'mobile' | 'desktop', payload: any): AuditSummary {
   const lighthouse = payload?.lighthouseResult ?? {}
   const categories = lighthouse.categories ?? {}
   const audits = lighthouse.audits ?? {}
+  const config = lighthouse.configSettings ?? {}
+  const environment = lighthouse.environment ?? {}
+  const lighthouseVersion =
+    typeof lighthouse.lighthouseVersion === 'string' ? lighthouse.lighthouseVersion : null
+  const browserEngine =
+    typeof environment.networkUserAgent === 'string'
+      ? environment.networkUserAgent.match(/HeadlessChrome\/([^\s]+)/)?.[1] ?? environment.networkUserAgent
+      : null
 
   return {
     strategy,
@@ -160,7 +190,16 @@ function normalizePageSpeed(strategy: 'mobile' | 'desktop', payload: any): Audit
     speedIndex: toRoundedNumber(audits['speed-index']?.numericValue),
     interactionToNextPaint: toRoundedNumber(audits['interaction-to-next-paint']?.numericValue),
     screenshot: audits['final-screenshot']?.details?.data ?? null,
-    capturedAt: lighthouse.fetchTime ?? null
+    capturedAt: lighthouse.fetchTime ?? null,
+    lighthouseVersion,
+    emulatedDevice:
+      strategy === 'mobile'
+        ? `Emulated Moto G Power${lighthouseVersion ? ` with Lighthouse ${lighthouseVersion}` : ''}`
+        : `Emulated Desktop${lighthouseVersion ? ` with Lighthouse ${lighthouseVersion}` : ''}`,
+    sessionType: 'Single page session',
+    loadType: 'Initial page load',
+    throttling: strategy === 'mobile' ? 'Slow 4G throttling' : 'Desktop throttling',
+    browserEngine: browserEngine ? `Using HeadlessChromium ${browserEngine} with lr` : null
   }
 }
 
@@ -627,6 +666,18 @@ export async function createProspectReport(input: ProspectInput) {
       if (rate === null) return null
       return rate > 1 ? Math.min(rate / 100, 1) : Math.min(rate, 1)
     })(),
+    contentSourceUrl: cleanText(input.contentSourceUrl),
+    visionImpactText: cleanText(input.visionImpactText),
+    visionImpactTextSecondary: cleanText(input.visionImpactTextSecondary),
+    visionConversionText: cleanText(input.visionConversionText),
+    visionConversionTextSecondary: cleanText(input.visionConversionTextSecondary),
+    nextStepNapText: cleanText(input.nextStepNapText),
+    nextStepDataText: cleanText(input.nextStepDataText),
+    nextStepIndexText: cleanText(input.nextStepIndexText),
+    phaseOneText: cleanText(input.phaseOneText),
+    phaseTwoText: cleanText(input.phaseTwoText),
+    phaseThreeText: cleanText(input.phaseThreeText),
+    phaseFourText: cleanText(input.phaseFourText),
     notes: input.notes.trim()
   }
 
