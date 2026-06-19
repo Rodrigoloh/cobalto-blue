@@ -50,17 +50,19 @@ export function ReportPrintActions({
       wrapper.style.overflow = 'hidden'
       document.body.appendChild(wrapper)
 
+      const sourcePages = Array.from(target.querySelectorAll<HTMLElement>('.report-export-page'))
+      const pages = sourcePages.length ? sourcePages : [target]
+      const firstRect = pages[0].getBoundingClientRect()
+      const isDeckFormat = target.dataset.pdfFormat === 'deck' || firstRect.width > firstRect.height
       const pdf = new jsPDF({
-        orientation: 'portrait',
+        orientation: isDeckFormat ? 'landscape' : 'portrait',
         unit: 'pt',
-        format: 'letter'
+        format: isDeckFormat ? [720, 405] : 'letter'
       })
 
       const pageWidth = pdf.internal.pageSize.getWidth()
       const pageHeight = pdf.internal.pageSize.getHeight()
-      const margin = 18
-      const sourcePages = Array.from(target.querySelectorAll<HTMLElement>('.report-export-page'))
-      const pages = sourcePages.length ? sourcePages : [target]
+      const margin = isDeckFormat ? 0 : 18
 
       for (let index = 0; index < pages.length; index += 1) {
         const sourcePage = pages[index]
@@ -94,7 +96,7 @@ export function ReportPrintActions({
         })
 
         if (index > 0) {
-          pdf.addPage()
+          pdf.addPage(isDeckFormat ? [720, 405] : 'letter', isDeckFormat ? 'landscape' : 'portrait')
         }
 
         const imageProps = pdf.getImageProperties(dataUrl)

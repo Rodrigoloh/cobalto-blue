@@ -1,6 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
+import { Code2, LineChart, MapPinned, Monitor, Radio, Smartphone } from 'lucide-react'
 
 import { ReportBrowserState } from '@/components/private/ReportBrowserState'
 import { ReportPrintActions } from '@/components/private/ReportPrintActions'
@@ -8,9 +9,7 @@ import type { FinancialImpact } from '@/lib/performance-report'
 import {
   formatCLS,
   formatMilliseconds,
-  formatScore,
-  getScoreStateLabel,
-  getScoreTone
+  getScoreStateLabel
 } from '@/lib/performance-report'
 
 type FullPageProps = {
@@ -19,7 +18,9 @@ type FullPageProps = {
   }
 }
 
-type Tone = 'green' | 'amber' | 'red' | 'neutral'
+const BLUE = '#2500ff'
+const PINK = '#ff007a'
+const PAGE_BG = '#eeeeee'
 
 function currency(value: number) {
   return new Intl.NumberFormat('es-MX', {
@@ -29,124 +30,205 @@ function currency(value: number) {
   }).format(value)
 }
 
+function compactCurrency(value: number) {
+  return currency(value).replace('MXN', '').trim()
+}
+
 function percent(value: number) {
   return `${Math.round(value * 100)}%`
 }
 
-function toneClasses(tone: Tone) {
-  switch (tone) {
-    case 'green':
-      return 'bg-emerald-500 text-emerald-700 border-emerald-200'
-    case 'amber':
-      return 'bg-amber-400 text-amber-800 border-amber-200'
-    case 'red':
-      return 'bg-red-500 text-red-700 border-red-200'
-    default:
-      return 'bg-neutral-300 text-neutral-700 border-neutral-200'
+function defaultImpact(): FinancialImpact {
+  return {
+    monthlyVisits: 1500,
+    averageTicket: 15000,
+    closeRate: 0.2,
+    conversionRate: 0.025,
+    frictionRate: 0.22,
+    lostLeadsMonthly: 8.3,
+    lostRevenueMonthly: 24900,
+    lostRevenueAnnual: 298800,
+    assumption:
+      'Estimacion comercial: visitas mensuales x conversion base 2.5% x friccion tecnica x tasa de cierre x ticket promedio.'
   }
 }
 
-function scoreTextColor(score: number | null) {
-  const tone = getScoreTone(score)
-  if (tone === 'green') return 'text-emerald-600'
-  if (tone === 'amber') return 'text-amber-600'
-  if (tone === 'red') return 'text-red-600'
-  return 'text-neutral-600'
+function slugFileName(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 }
 
-function Page({
-  number,
-  label,
+function DeckPage({
   children,
-  dark = false
+  blue = false,
+  className = ''
 }: {
-  number: string
-  label: string
   children: ReactNode
-  dark?: boolean
+  blue?: boolean
+  className?: string
 }) {
   return (
     <section
-      className={`report-export-page report-page mt-6 flex flex-col justify-between overflow-hidden rounded-[2rem] p-8 md:p-10 ${
-        dark ? 'bg-[#111111] text-white' : 'bg-white text-[#111111]'
-      }`}
+      className={`report-export-page relative mx-auto mt-6 h-[608px] w-[1080px] overflow-hidden ${
+        blue ? 'bg-[#2500ff] text-white' : 'bg-[#eeeeee] text-[#111827]'
+      } ${className}`}
     >
-      <div>{children}</div>
-      <footer
-        className={`mt-8 flex items-center justify-between border-t pt-5 text-[11px] uppercase tracking-[0.22em] ${
-          dark ? 'border-white/15 text-white/50' : 'border-black/10 text-black/45'
-        }`}
-      >
-        <span>{number} - {label}</span>
-        <span>cobalto.blue</span>
-      </footer>
+      {children}
     </section>
   )
 }
 
-function Kpi({
+function FooterLogo({ light = false }: { light?: boolean }) {
+  return (
+    <img
+      src={light ? '/brand/logo-main-fullwhite.png' : '/brand/logo-main-blue.png'}
+      alt="cobalto.blue"
+      className="absolute bottom-[30px] right-[50px] h-[38px] w-auto"
+    />
+  )
+}
+
+function Title({ children }: { children: ReactNode }) {
+  return (
+    <h2 className="font-['NeueMachina'] text-[40px] leading-none text-[#2500ff]">
+      {children}
+    </h2>
+  )
+}
+
+function Lead({ children }: { children: ReactNode }) {
+  return <p className="text-[23px] font-bold leading-tight text-[#111827]">{children}</p>
+}
+
+function TextBlock({
+  icon,
+  title,
+  children
+}: {
+  icon: ReactNode
+  title: string
+  children: ReactNode
+}) {
+  return (
+    <div className="relative pl-[30px]">
+      <div className="absolute left-0 top-[44px] h-[230px] w-[2px] bg-[#2500ff]" />
+      <div className="mb-4 flex items-center gap-3 text-[#111827]">
+        <div className="text-[#2500ff]">{icon}</div>
+        <h3 className="text-[23px] font-bold leading-tight">{title}</h3>
+      </div>
+      <div className="space-y-7 text-[20px] leading-[1.14] text-[#444444]">{children}</div>
+    </div>
+  )
+}
+
+function StepCard({
+  icon,
+  title,
+  children
+}: {
+  icon: ReactNode
+  title: string
+  children: ReactNode
+}) {
+  return (
+    <div className="relative min-h-[230px] pl-[18px]">
+      <div className="absolute left-0 top-[28px] h-[230px] w-[2px] bg-[#2500ff]" />
+      <div className="mb-5 h-[44px] text-[#2500ff]">{icon}</div>
+      <h3 className="text-[20px] font-bold leading-tight text-[#2500ff]">{title}</h3>
+      <p className="mt-3 text-[20px] leading-[1.18] text-[#444444]">{children}</p>
+    </div>
+  )
+}
+
+function MetricRow({
   label,
   value,
-  helper,
-  dark = false
+  tone = 'bad'
 }: {
   label: string
   value: string
-  helper: string
-  dark?: boolean
+  tone?: 'bad' | 'good' | 'ok'
 }) {
+  const color = tone === 'good' ? '#14a44d' : tone === 'ok' ? '#f4a51c' : '#e10600'
+  const marker = tone === 'good' ? '●' : tone === 'ok' ? '■' : '▲'
   return (
-    <div className={`rounded-[1.25rem] border p-5 ${dark ? 'border-white/15 bg-white/5' : 'border-black/10 bg-black/[0.03]'}`}>
-      <p className={`text-[11px] uppercase tracking-[0.2em] ${dark ? 'text-white/48' : 'text-black/45'}`}>{label}</p>
-      <p className="mt-3 font-['NeueMachina'] text-3xl leading-none">{value}</p>
-      <p className={`mt-3 text-sm leading-relaxed ${dark ? 'text-white/64' : 'text-black/60'}`}>{helper}</p>
-    </div>
-  )
-}
-
-function ScoreBlock({
-  label,
-  score,
-  helper
-}: {
-  label: string
-  score: number | null
-  helper: string
-}) {
-  return (
-    <div className="rounded-[1.25rem] border border-black/10 bg-white p-5">
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-black/45">{label}</p>
-        <span className={`h-3 w-3 rounded-full ${toneClasses(getScoreTone(score)).split(' ')[0]}`} />
-      </div>
-      <p className={`mt-4 font-['NeueMachina'] text-4xl leading-none ${scoreTextColor(score)}`}>
-        {formatScore(score)}
+    <div className="border-b border-black/5 py-2">
+      <p className="text-[10px] font-bold text-[#555555]">
+        <span style={{ color }}>{marker}</span> <span className="ml-2">{label}</span>
       </p>
-      <p className="mt-3 text-sm text-black/60">{helper}</p>
+      <p className="ml-7 mt-1 text-[20px]" style={{ color }}>
+        {value}
+      </p>
     </div>
   )
 }
 
-function MoneyFlow({ impact }: { impact: FinancialImpact }) {
-  const rows = [
-    ['Visitas mensuales', impact.monthlyVisits.toLocaleString('es-MX')],
-    ['Conversion base', percent(impact.conversionRate)],
-    ['Friccion estimada', percent(impact.frictionRate)],
-    ['Leads perdidos al mes', impact.lostLeadsMonthly.toLocaleString('es-MX')]
-  ]
+function PageSpeedMock({
+  score,
+  fcp,
+  lcp,
+  tbt,
+  cls,
+  speedIndex
+}: {
+  score: number
+  fcp: string
+  lcp: string
+  tbt: string
+  cls: string
+  speedIndex: string
+}) {
+  const dash = Math.max(0, Math.min(100, score))
 
   return (
-    <div className="rounded-[1.5rem] bg-[#111111] p-6 text-white">
-      <p className="text-[11px] uppercase tracking-[0.24em] text-white/50">formula utilizada</p>
-      <div className="mt-5 grid gap-3">
-        {rows.map(([label, value]) => (
-          <div key={label} className="flex items-center justify-between border-b border-white/10 pb-3">
-            <span className="text-sm text-white/60">{label}</span>
-            <span className="font-['NeueMachina'] text-xl">{value}</span>
-          </div>
-        ))}
+    <div className="mt-[22px] flex h-[322px] bg-white">
+      <div className="flex w-[300px] flex-col items-center justify-center border-r border-black/10">
+        <div
+          className="relative flex h-[92px] w-[92px] items-center justify-center rounded-full text-[22px] text-[#f59e0b]"
+          style={{
+            background: `conic-gradient(#f59e0b ${dash * 3.6}deg, #fff1d6 0deg)`
+          }}
+        >
+          <div className="absolute inset-[7px] rounded-full bg-white" />
+          <span className="relative">{score}</span>
+        </div>
+        <p className="mt-4 text-[13px] text-[#333333]">Performance</p>
+        <p className="mt-2 max-w-[190px] text-center text-[8px] leading-tight text-[#777777]">
+          Values are estimated and may vary. The performance score is calculated directly from these metrics.
+        </p>
+        <div className="mt-4 flex gap-5 text-[8px] text-[#555555]">
+          <span><span className="text-red-500">▲</span> 0-49</span>
+          <span><span className="text-amber-500">■</span> 50-89</span>
+          <span><span className="text-green-500">●</span> 90-100</span>
+        </div>
       </div>
-      <p className="mt-5 text-xs leading-relaxed text-white/55">{impact.assumption}</p>
+
+      <div className="flex-1 px-6 py-5">
+        <div className="mb-2 flex items-center justify-center gap-8 text-[12px] font-bold text-[#666666]">
+          <span className="border-b-2 border-[#4285f4] pb-2 text-[#4285f4]"><Smartphone className="mr-1 inline h-4 w-4" /> Mobile</span>
+          <span><Monitor className="mr-1 inline h-4 w-4" /> Desktop</span>
+        </div>
+        <div className="flex items-center justify-between border-b border-black/8 pb-2 text-[10px] uppercase text-[#777777]">
+          <span>Metrics</span>
+          <span>Expand view</span>
+        </div>
+        <div className="grid grid-cols-2 gap-x-9 pt-1">
+          <div>
+            <MetricRow label="First Contentful Paint" value={fcp} />
+            <MetricRow label="Total Blocking Time" value={tbt} tone="good" />
+            <MetricRow label="Speed Index" value={speedIndex} tone="ok" />
+          </div>
+          <div>
+            <MetricRow label="Largest Contentful Paint" value={lcp} />
+            <MetricRow label="Cumulative Layout Shift" value={cls} tone="good" />
+          </div>
+        </div>
+        <div className="mt-3 grid grid-cols-4 gap-3 bg-[#f5f5f5] px-4 py-3 text-[10px] text-[#666666]">
+          <span>Captured by PageSpeed</span>
+          <span>Emulated mobile device</span>
+          <span>Single page session</span>
+          <span>Initial page load</span>
+        </div>
+      </div>
     </div>
   )
 }
@@ -156,212 +238,159 @@ export default function FullReportPage({ params }: FullPageProps) {
     <ReportBrowserState id={params.id}>
       {(report) => {
         const mobile = report.pagespeed.mobile
-        const desktop = report.pagespeed.desktop
-        const impact = report.financialImpact ?? {
-          monthlyVisits: 1500,
-          averageTicket: 15000,
-          closeRate: 0.2,
-          conversionRate: 0.025,
-          frictionRate: 0.22,
-          lostLeadsMonthly: 8.3,
-          lostRevenueMonthly: 24900,
-          lostRevenueAnnual: 298800,
-          assumption:
-            'Estimacion comercial: visitas mensuales x conversion base 2.5% x friccion tecnica x tasa de cierre x ticket promedio.'
-        }
+        const impact = report.financialImpact ?? defaultImpact()
+        const weeklyLoss = Math.round(impact.lostRevenueMonthly / 4)
+        const weeklyVisitors = Math.max(10, Math.round(impact.monthlyVisits / 4))
+        const score = report.overallScore || mobile?.performanceScore || 65
+        const firstFinding = report.findings[0] ?? report.hookSummary
+        const secondFinding = report.findings[1] ?? report.costOfInaction
+        const company = report.input.companyName || 'Empresa analizada'
+        const city = report.input.city || 'su mercado'
+        const industry = report.input.industry || 'su industria'
+        const cta = report.input.primaryCta || 'contacto comercial'
 
         return (
-          <main className="report-shell min-h-screen px-6 py-6 text-[#111111]">
+          <main className="report-shell min-h-screen px-6 py-6 text-[#111827]">
             <ReportPrintActions
               dashboardHref={`/cb-lab/reporting/${report.id}`}
               pdfTargetId="full-report-canvas"
-              pdfFileName={`${report.input.companyName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-reporte-completo.pdf`}
+              pdfFileName={`${slugFileName(company)}-reporte-completo.pdf`}
             />
 
-            <div id="full-report-canvas">
-              <Page number="01" label="diagnostico comercial" dark>
-                <div className="flex items-start justify-between gap-6">
-                  <img src="/brand/logo-main-fullwhite.png" alt="cobalto.blue" className="h-10 w-auto" />
-                  <p className="max-w-xs text-right text-xs uppercase tracking-[0.24em] text-white/45">
-                    Reporte de rendimiento web y dinero en riesgo
+            <div id="full-report-canvas" data-pdf-format="deck">
+              <DeckPage blue className="px-[88px] pt-[128px]">
+                <img src="/brand/logo-main-fullwhite.png" alt="cobalto.blue" className="h-[49px] w-auto" />
+                <div className="mt-[148px] max-w-[610px]">
+                  <p className="text-[20px] uppercase tracking-[0.02em] text-white/72">
+                    ANALISIS TECNICO DE RENDIMIENTO
+                  </p>
+                  <h1 className="mt-4 text-[39px] font-bold leading-none text-white">{company}</h1>
+                  <p className="mt-6 text-[24px] leading-[1.12] text-white/86">
+                    Auditoria web, diagnostico de Core Web Vitals e inyeccion estrategica de datos semanticos para la preparacion de motores de IA (AI-Ready).
                   </p>
                 </div>
-                <div className="mt-24 max-w-4xl">
-                  <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.35em] text-[#7f72ff]">
-                    analisis ejecutivo
-                  </p>
-                  <h1 className="mt-5 font-['NeueMachina'] text-6xl leading-[0.92]">
-                    {report.input.companyName}
-                  </h1>
-                  <p className="mt-6 max-w-3xl text-2xl leading-tight text-white/78">
-                    {report.hookSummary}
-                  </p>
-                </div>
-                <div className="mt-16 grid gap-4 md:grid-cols-3">
-                  <Kpi dark label="sitio analizado" value={report.input.websiteUrl.replace(/^https?:\/\//, '')} helper="URL consultada en Google PageSpeed Insights." />
-                  <Kpi dark label="estado actual" value={getScoreStateLabel(report.overallScore)} helper={`Score general: ${report.overallScore}/100.`} />
-                  <Kpi dark label="dinero en riesgo" value={currency(impact.lostRevenueMonthly)} helper="Perdida mensual estimada por friccion digital." />
-                </div>
-              </Page>
+              </DeckPage>
 
-              <Page number="02" label="pagespeed insights">
-                <div className="grid gap-8 md:grid-cols-[0.9fr_1.1fr]">
-                  <div>
-                    <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.35em] text-[#1F00FF]">
-                      rendimiento actual
+              <DeckPage className="px-[58px] pt-[68px]">
+                <Title>Vision General y UX</Title>
+                <div className="mt-[50px] grid grid-cols-2 gap-[62px]">
+                  <TextBlock icon={<Monitor className="h-8 w-8" />} title="Huella Digital e Impacto">
+                    <p>
+                      La experiencia de {company} en {industry} se ve limitada digitalmente por una estructura que no comunica con la velocidad que el mercado espera en {city}.
                     </p>
-                    <h2 className="mt-5 font-['NeueMachina'] text-5xl leading-none">
-                      Lo que Google ve antes que un cliente confie.
-                    </h2>
-                    <p className="mt-5 text-lg leading-relaxed text-black/64">
-                      {report.executiveSummary}
+                    <p>
+                      El sitio web actua como un catalogo estatico, desaprovechando su potencial de conversion corporativa y limitando el flujo activo de adquisicion.
                     </p>
-                  </div>
-                  <div className="grid gap-4">
-                    <ScoreBlock
-                      label="PageSpeed mobile"
-                      score={mobile?.performanceScore ?? null}
-                      helper={`LCP ${formatMilliseconds(mobile?.largestContentfulPaint ?? null)} - TBT ${formatMilliseconds(mobile?.totalBlockingTime ?? null)}`}
-                    />
-                    <ScoreBlock
-                      label="PageSpeed desktop"
-                      score={desktop?.performanceScore ?? null}
-                      helper={`SEO ${formatScore(desktop?.seoScore ?? null)} - Accesibilidad ${formatScore(desktop?.accessibilityScore ?? null)}`}
-                    />
-                  </div>
+                  </TextBlock>
+                  <TextBlock icon={<Radio className="h-8 w-8" />} title="Inconsistencia en Conversion">
+                    <p>{firstFinding}</p>
+                    <p>
+                      La ausencia de rutas claras hacia {cta} diluye la prospeccion y reduce la confianza de compradores que buscan respuesta inmediata.
+                    </p>
+                  </TextBlock>
                 </div>
-                <div className="mt-8 grid gap-4 md:grid-cols-4">
-                  <Kpi label="FCP" value={formatMilliseconds(mobile?.firstContentfulPaint ?? null)} helper="Primer contenido visible." />
-                  <Kpi label="LCP" value={formatMilliseconds(mobile?.largestContentfulPaint ?? null)} helper="Contenido principal visible." />
-                  <Kpi label="TBT" value={formatMilliseconds(mobile?.totalBlockingTime ?? null)} helper="Tiempo de bloqueo." />
-                  <Kpi label="CLS" value={formatCLS(mobile?.cumulativeLayoutShift ?? null)} helper="Estabilidad visual." />
-                </div>
-                <div className="mt-8 rounded-[1.5rem] border border-black/10 bg-black/[0.03] p-5">
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-black/45">fuente</p>
-                  <p className="mt-3 text-sm leading-relaxed text-black/62">
-                    PageSpeed Insights: {report.sourceStatus.pagespeed ? 'activo y usado en el reporte' : report.sourceStatus.pagespeedMessage || 'sin datos'}.
-                  </p>
-                </div>
-              </Page>
+                <FooterLogo />
+              </DeckPage>
 
-              <Page number="03" label="dinero en riesgo">
-                <div className="grid gap-8 md:grid-cols-[1.08fr_0.92fr]">
-                  <div>
-                    <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.35em] text-[#1F00FF]">
-                      costo de no actuar
-                    </p>
-                    <h2 className="mt-5 font-['NeueMachina'] text-5xl leading-none">
-                      {currency(impact.lostRevenueAnnual)} al ano puede escaparse por friccion digital.
-                    </h2>
-                    <p className="mt-5 text-xl leading-tight text-black/70">
-                      {report.costOfInaction}
-                    </p>
-                    <div className="mt-8 grid gap-4 md:grid-cols-2">
-                      <Kpi label="perdida mensual" value={currency(impact.lostRevenueMonthly)} helper="Oportunidad comercial que no llega a ventas." />
-                      <Kpi label="ticket promedio" value={currency(impact.averageTicket)} helper="Supuesto editable desde cb-lab." />
-                      <Kpi label="tasa de cierre" value={percent(impact.closeRate)} helper="Porcentaje estimado de leads que compran." />
-                      <Kpi label="leads perdidos" value={`${impact.lostLeadsMonthly}`} helper="Leads estimados que se pierden cada mes." />
-                    </div>
-                  </div>
-                  <MoneyFlow impact={impact} />
+              <DeckPage className="pt-[68px]">
+                <div className="px-[58px]">
+                  <Title>Rendimiento y Core Web Vitals</Title>
                 </div>
-                <div className="mt-8 rounded-[1.5rem] border border-[#1F00FF]/25 bg-[#1F00FF]/5 p-6">
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-[#1F00FF]">lectura para direccion</p>
-                  <p className="mt-3 text-lg leading-relaxed text-black/70">
-                    El monto no pretende sustituir analytics o CRM. Sirve para dimensionar el riesgo comercial mientras se valida con datos reales de trafico, ventas y origen de prospectos.
-                  </p>
-                </div>
-              </Page>
-
-              <Page number="04" label="hallazgos clave" dark>
-                <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.35em] text-[#7f72ff]">
-                  donde se rompe la conversion
+                <PageSpeedMock
+                  score={score}
+                  fcp={formatMilliseconds(mobile?.firstContentfulPaint ?? null)}
+                  lcp={formatMilliseconds(mobile?.largestContentfulPaint ?? null)}
+                  tbt={formatMilliseconds(mobile?.totalBlockingTime ?? null)}
+                  cls={formatCLS(mobile?.cumulativeLayoutShift ?? null)}
+                  speedIndex={formatMilliseconds(mobile?.speedIndex ?? null)}
+                />
+                <p className="mx-[58px] mt-[14px] text-[14px] leading-[1.25] text-[#1f2937]">
+                  El informe de <b>PageSpeed Insights</b> evidencia friccion en el rendimiento movil. El punto critico aparece en el <b>Largest Contentful Paint (LCP)</b>, la carga percibida y el tiempo que tarda el usuario en entender la oferta principal.
                 </p>
-                <h2 className="mt-5 font-['NeueMachina'] text-5xl leading-none">
-                  Tres fricciones que frenan confianza, lectura y contacto.
-                </h2>
-                <div className="mt-10 grid gap-5">
-                  {report.findings.map((finding, index) => (
-                    <div key={finding} className="grid gap-5 rounded-[1.5rem] border border-white/12 bg-white/[0.04] p-6 md:grid-cols-[90px_1fr]">
-                      <p className="font-['NeueMachina'] text-5xl text-[#7f72ff]">0{index + 1}</p>
-                      <p className="text-xl leading-relaxed text-white/78">{finding}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-10 grid gap-4 md:grid-cols-3">
-                  {report.healthRows.map((row) => (
-                    <div key={row.metric} className="rounded-[1.25rem] border border-white/12 bg-white/[0.04] p-5">
-                      <p className="text-[11px] uppercase tracking-[0.22em] text-white/42">{row.state}</p>
-                      <h3 className="mt-3 text-xl leading-tight">{row.metric}</h3>
-                      <p className="mt-3 text-sm leading-relaxed text-white/58">{row.impact}</p>
-                    </div>
-                  ))}
-                </div>
-              </Page>
+                <FooterLogo />
+              </DeckPage>
 
-              <Page number="05" label="nuevo diseno y estructura">
-                <div className="grid gap-8 md:grid-cols-[0.95fr_1.05fr]">
+              <DeckPage className="px-[58px] pt-[68px]">
+                <Title>Costo de Oportunidad Semanal</Title>
+                <div className="mt-[43px] grid grid-cols-[590px_1fr] gap-[70px]">
                   <div>
-                    <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.35em] text-[#1F00FF]">
-                      propuesta cobalto.blue
+                    <Lead>¿Como se escapa este capital?</Lead>
+                    <div className="mt-5 space-y-5 text-[18px] leading-[1.18] text-[#444444]">
+                      <p>
+                        <b>Trafico Frustrado:</b> De aproximadamente ~{weeklyVisitors.toLocaleString('es-MX')} visitantes que llegan semanalmente, una parte abandona la pagina por velocidad de carga movil, rutas poco claras o baja percepcion de confianza.
+                      </p>
+                      <p>
+                        <b>Friccion en la Cotizacion:</b> Al no contar con un flujo directo hacia {cta}, los clientes comparan contra competidores que ofrecen respuestas mas claras y agiles en linea.
+                      </p>
+                      <p>
+                        <b>El Impacto Real:</b> Una perdida estimada de {impact.lostLeadsMonthly.toLocaleString('es-MX')} leads al mes. Con un ticket promedio de <b>{currency(impact.averageTicket)}</b> y una tasa de cierre de <b>{percent(impact.closeRate)}</b>, el costo de inactividad supera <b>{currency(impact.lostRevenueMonthly)} mensuales</b>.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center justify-center pb-[40px] text-center">
+                    <p className="text-[60px] font-bold leading-none text-[#ff007a]">
+                      -{compactCurrency(weeklyLoss)}
                     </p>
-                    <h2 className="mt-5 font-['NeueMachina'] text-5xl leading-none">
-                      Redisenar para que el sitio venda antes de pedir paciencia.
-                    </h2>
-                    <p className="mt-5 text-lg leading-relaxed text-black/66">
-                      La mejora no debe ser solo estetica. La estructura tiene que ordenar oferta, prueba, claridad tecnica y contacto para que el usuario avance sin friccion.
+                    <p className="mt-4 text-[23px] font-bold text-[#ff007a]">MXN / SEMANA</p>
+                    <p className="mt-5 max-w-[320px] text-[11px] leading-tight text-[#64748b]">
+                      Perdida proyectada de flujo de capital no capturado por fugas en el embudo tecnico y de conversion digital.
                     </p>
                   </div>
-                  <div className="grid gap-4">
-                    {report.proposals.map((proposal, index) => (
-                      <div key={proposal} className="rounded-[1.25rem] border border-black/10 bg-black/[0.03] p-5">
-                        <p className="text-[11px] uppercase tracking-[0.22em] text-[#1F00FF]">accion 0{index + 1}</p>
-                        <p className="mt-3 text-lg leading-relaxed text-black/72">{proposal}</p>
-                      </div>
-                    ))}
-                  </div>
                 </div>
-                <div className="mt-8 grid gap-4 md:grid-cols-3">
-                  <Kpi label="estructura" value="Hero - Oferta - Prueba - CTA" helper="Orden pensado para comprender rapido y contactar." />
-                  <Kpi label="performance" value="Imagenes + codigo ligero" helper="Menos peso visual innecesario y mejor carga inicial." />
-                  <Kpi label="conversion" value={report.input.primaryCta || 'WhatsApp'} helper="CTA visible, directo y repetido en momentos clave." />
-                </div>
-              </Page>
+                <FooterLogo />
+              </DeckPage>
 
-              <Page number="06" label="roadmap">
-                <div className="grid gap-8 md:grid-cols-[1fr_1fr]">
-                  <div>
-                    <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.35em] text-[#1F00FF]">
-                      siguiente paso
-                    </p>
-                    <h2 className="mt-5 font-['NeueMachina'] text-5xl leading-none">
-                      Convertir el diagnostico en una implementacion medible.
-                    </h2>
-                    <p className="mt-5 text-lg leading-relaxed text-black/66">
-                      El objetivo es salir de una pagina que informa tarde a una experiencia que explica, carga rapido y convierte con menos dudas.
-                    </p>
-                  </div>
-                  <div className="rounded-[1.5rem] bg-[#1F00FF] p-6 text-white">
-                    <p className="text-[11px] uppercase tracking-[0.24em] text-white/55">prioridad comercial</p>
-                    <p className="mt-4 text-3xl leading-tight">
-                      Recuperar hasta {currency(impact.lostRevenueMonthly)} mensuales exige atacar velocidad, claridad y contacto en el mismo sprint.
-                    </p>
-                  </div>
+              <DeckPage className="px-[58px] pt-[68px]">
+                <Title>Pasos a seguir</Title>
+                <Lead>Consistencia de Datos &amp; SEO Semantico</Lead>
+                <div className="mt-[45px] grid grid-cols-3 gap-[58px]">
+                  <StepCard icon={<MapPinned className="h-11 w-11" />} title="Consolidacion NAP">
+                    Resolver discrepancias de nombre, ubicacion y servicio para unificar la huella digital de {company} en buscadores locales.
+                  </StepCard>
+                  <StepCard icon={<Code2 className="h-11 w-11" />} title="Estructuracion de Datos">
+                    Implementacion nativa de marcado JSON-LD para optimizar la indexacion por buscadores e inteligencias artificiales.
+                  </StepCard>
+                  <StepCard icon={<LineChart className="h-12 w-12" />} title="Limpieza Indexable">
+                    Eliminacion de rutas fantasma e inconsistencias de URL para maximizar crawling y fortalecer la confianza de entidad.
+                  </StepCard>
                 </div>
-                <div className="mt-10 grid gap-4 md:grid-cols-3">
-                  <Kpi label="01 auditoria" value="1 semana" helper="Validar contenido, performance, SEO base y mensajes comerciales." />
-                  <Kpi label="02 diseno" value="1-2 semanas" helper="Nueva arquitectura, wireframes y look aplicado a pantallas clave." />
-                  <Kpi label="03 build" value="2-4 semanas" helper="Implementacion, medicion, QA y publicacion con base escalable." />
-                </div>
-                <div className="mt-10 rounded-[1.5rem] border border-black/10 bg-black/[0.03] p-6">
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-black/45">contacto del prospecto</p>
-                  <div className="mt-4 grid gap-3 text-sm text-black/64 md:grid-cols-3">
-                    <p>{report.input.contactName || 'Sin nombre capturado'}</p>
-                    <p>{report.input.contactPhone || 'Sin telefono capturado'}</p>
-                    <p className="break-all">{report.input.contactEmail || 'Sin correo capturado'}</p>
+                <FooterLogo />
+              </DeckPage>
+
+              <DeckPage className="px-[58px] pt-[68px]">
+                <Title>Plan de Trabajo Estrategico</Title>
+                <Lead>Consistencia de Datos &amp; SEO Semantico</Lead>
+                <div className="absolute left-[98px] right-[112px] top-[336px] h-[3px] bg-[#2500ff]" />
+                {[
+                  ['Fase 1', 'Rediseno & Migracion', 'Transicion a una arquitectura agil para estructurar codigo limpio y semantico de manera nativa.', 205, 369],
+                  ['Fase 2', 'AI-Ready Metadata', 'Integracion de marcado JSON-LD preciso unificando identidad corporativa, ubicacion y horarios extendidos.', 405, 210],
+                  ['Fase 3', 'CRO & Captacion B2B', `Modulo y flujo de conversion enfocado en ${cta}, velocidad de respuesta y seguimiento comercial.`, 632, 369],
+                  ['Fase 4', 'Optimizacion WPO', 'Conversion grafica moderna, cache, CDN y configuracion tecnica orientada a rendimiento.', 864, 210]
+                ].map(([phase, name, text, left, top]) => (
+                  <div key={phase} className="absolute w-[260px] text-center" style={{ left: Number(left) - 130, top: Number(top) }}>
+                    <h3 className="text-[20px] font-bold text-[#2500ff]">{phase}</h3>
+                    <p className="mt-2 text-[13px] font-bold text-[#444444]">{name}</p>
+                    <p className="mt-2 text-[13px] leading-tight text-[#444444]">{text}</p>
                   </div>
+                ))}
+                {[205, 405, 632, 864].map((left) => (
+                  <div
+                    key={left}
+                    className="absolute top-[323px] h-[28px] w-[28px] rounded-full border-2 border-[#666666] bg-[#eeeeee]"
+                    style={{ left: left - 14 }}
+                  />
+                ))}
+                <FooterLogo />
+              </DeckPage>
+
+              <DeckPage blue>
+                <div className="flex h-full flex-col items-center justify-center pb-[34px]">
+                  <img src="/brand/logo-main-fullwhite.png" alt="cobalto.blue" className="h-[91px] w-auto" />
+                  <p className="-mt-1 text-[26px] font-bold text-white/62">Construyamos algo juntos</p>
                 </div>
-              </Page>
+                <p className="absolute bottom-[46px] left-[46px] text-[18px] text-white">hey@cobalto.blue</p>
+                <p className="absolute bottom-[46px] right-[50px] text-[16px] font-bold text-white">+52 1 81 8208 5411</p>
+              </DeckPage>
             </div>
           </main>
         )
