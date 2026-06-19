@@ -54,7 +54,22 @@ export type ProspectInput = {
   contactPhone: string
   contactEmail: string
   primaryCta: string
+  monthlyVisits: number | string | null
+  averageTicket: number | string | null
+  closeRate: number | string | null
   notes: string
+}
+
+export type FinancialImpact = {
+  monthlyVisits: number
+  averageTicket: number
+  closeRate: number
+  conversionRate: number
+  frictionRate: number
+  lostLeadsMonthly: number
+  lostRevenueMonthly: number
+  lostRevenueAnnual: number
+  assumption: string
 }
 
 export type ProspectReport = {
@@ -74,6 +89,7 @@ export type ProspectReport = {
   healthRows: HealthRow[]
   findings: string[]
   costOfInaction: string
+  financialImpact: FinancialImpact
   proposals: string[]
   sourceStatus: {
     pagespeed: boolean
@@ -110,6 +126,20 @@ function toRoundedNumber(value: unknown, digits = 0) {
 
   const factor = 10 ** digits
   return Math.round(value * factor) / factor
+}
+
+function toPositiveNumber(value: unknown) {
+  if (typeof value === 'number') {
+    return Number.isFinite(value) && value > 0 ? value : null
+  }
+
+  if (typeof value !== 'string') {
+    return null
+  }
+
+  const normalized = value.replace(/[$,\s]/g, '')
+  const parsed = Number(normalized)
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null
 }
 
 function normalizePageSpeed(strategy: 'mobile' | 'desktop', payload: any): AuditSummary {
@@ -458,6 +488,37 @@ function buildCostOfInaction(input: ProspectInput, mobile: AuditSummary | null) 
   return `Aunque el sitio ya comunica, todavía compite con desventaja. En ${industry}, una experiencia más rápida y más clara ayuda a ganar atención, confianza y consultas calificadas en ${city}.`
 }
 
+function buildFinancialImpact(input: ProspectInput, mobile: AuditSummary | null): FinancialImpact {
+  const score = mobile?.performanceScore ?? 65
+  const lcp = mobile?.largestContentfulPaint ?? 3200
+  const tbt = mobile?.totalBlockingTime ?? 250
+  const monthlyVisits = toPositiveNumber(input.monthlyVisits) ?? 1500
+  const averageTicket = toPositiveNumber(input.averageTicket) ?? 15000
+  const closeRateInput = toPositiveNumber(input.closeRate)
+  const closeRate = closeRateInput === null ? 0.2 : closeRateInput > 1 ? Math.min(closeRateInput / 100, 1) : Math.min(closeRateInput, 1)
+  const conversionRate = 0.025
+  const scoreFriction = score < 50 ? 0.34 : score < 70 ? 0.22 : score < 90 ? 0.12 : 0.06
+  const lcpFriction = lcp > 5000 ? 0.2 : lcp > 4000 ? 0.14 : lcp > 2500 ? 0.08 : 0.03
+  const tbtFriction = tbt > 600 ? 0.08 : tbt > 300 ? 0.05 : 0.02
+  const frictionRate = Math.min(0.48, Math.max(0.06, scoreFriction + lcpFriction + tbtFriction))
+  const expectedLeads = monthlyVisits * conversionRate
+  const lostLeadsMonthly = expectedLeads * frictionRate
+  const lostRevenueMonthly = lostLeadsMonthly * closeRate * averageTicket
+
+  return {
+    monthlyVisits,
+    averageTicket,
+    closeRate,
+    conversionRate,
+    frictionRate,
+    lostLeadsMonthly: Math.round(lostLeadsMonthly * 10) / 10,
+    lostRevenueMonthly: Math.round(lostRevenueMonthly),
+    lostRevenueAnnual: Math.round(lostRevenueMonthly * 12),
+    assumption:
+      'Estimacion comercial: visitas mensuales x conversion base 2.5% x friccion tecnica x tasa de cierre x ticket promedio.'
+  }
+}
+
 function buildProposals(input: ProspectInput, mobile: AuditSummary | null, gtmetrix: GTmetrixSummary | null) {
   const proposals = [
     'Un rediseño más ligero con una construcción eficiente para que el sitio se sienta rápido desde el primer segundo.',
@@ -559,6 +620,13 @@ export async function createProspectReport(input: ProspectInput) {
     contactPhone: input.contactPhone.trim(),
     contactEmail: input.contactEmail.trim(),
     primaryCta: input.primaryCta.trim() || 'WhatsApp',
+    monthlyVisits: toPositiveNumber(input.monthlyVisits),
+    averageTicket: toPositiveNumber(input.averageTicket),
+    closeRate: (() => {
+      const rate = toPositiveNumber(input.closeRate)
+      if (rate === null) return null
+      return rate > 1 ? Math.min(rate / 100, 1) : Math.min(rate, 1)
+    })(),
     notes: input.notes.trim()
   }
 
@@ -600,6 +668,7 @@ export async function createProspectReport(input: ProspectInput) {
     healthRows: buildHealthRows(normalizedInput, mobile, desktop),
     findings: buildFindings(normalizedInput, mobile, gtmetrix),
     costOfInaction: buildCostOfInaction(normalizedInput, mobile),
+    financialImpact: buildFinancialImpact(normalizedInput, mobile),
     proposals: buildProposals(normalizedInput, mobile, gtmetrix),
     sourceStatus: {
       pagespeed: Boolean(mobile || desktop),

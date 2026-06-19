@@ -169,6 +169,40 @@ export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboar
               />
             </label>
 
+            <div className="grid gap-4 md:grid-cols-3">
+              <label className="block space-y-2">
+                <span className="text-sm font-semibold text-black/70">Visitas mensuales</span>
+                <input
+                  type="number"
+                  min="1"
+                  name="monthlyVisits"
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  placeholder="1500"
+                />
+              </label>
+              <label className="block space-y-2">
+                <span className="text-sm font-semibold text-black/70">Ticket promedio MXN</span>
+                <input
+                  type="number"
+                  min="1"
+                  name="averageTicket"
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  placeholder="15000"
+                />
+              </label>
+              <label className="block space-y-2">
+                <span className="text-sm font-semibold text-black/70">Cierre de leads %</span>
+                <input
+                  type="number"
+                  min="1"
+                  max="100"
+                  name="closeRate"
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  placeholder="20"
+                />
+              </label>
+            </div>
+
             <label className="block space-y-2">
               <span className="text-sm font-semibold text-black/70">Notas opcionales</span>
               <textarea
@@ -207,14 +241,14 @@ export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboar
                 <p className="text-sm font-semibold text-black/60">Salida</p>
                 <p className="mt-2 text-lg text-black">Dashboard + 2 PDFs</p>
                 <p className="mt-2 text-sm text-black/65">
-                  Hook report de 1 página y reporte ejecutivo de 4 páginas en modo print.
+                  Hook report de 1 página y reporte ejecutivo de 6 páginas exportable a PDF.
                 </p>
               </div>
               <div className="rounded-3xl border border-black/10 bg-white/60 p-4">
                 <p className="text-sm font-semibold text-black/60">Fuente</p>
                 <p className="mt-2 text-lg text-black">Google PageSpeed</p>
                 <p className="mt-2 text-sm text-black/65">
-                  El score principal y las métricas del reporte se basan solo en datos de Google.
+                  El score principal sale de Google y el impacto financiero usa supuestos editables.
                 </p>
               </div>
               <div className="rounded-3xl border border-black/10 bg-white/60 p-4">

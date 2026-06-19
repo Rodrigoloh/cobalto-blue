@@ -50,6 +50,9 @@ export async function POST(request: NextRequest) {
       contactPhone: String(formData.get('contactPhone') ?? ''),
       contactEmail: String(formData.get('contactEmail') ?? ''),
       primaryCta: String(formData.get('primaryCta') ?? ''),
+      monthlyVisits: String(formData.get('monthlyVisits') ?? ''),
+      averageTicket: String(formData.get('averageTicket') ?? ''),
+      closeRate: String(formData.get('closeRate') ?? ''),
       notes: String(formData.get('notes') ?? '')
     })
 
