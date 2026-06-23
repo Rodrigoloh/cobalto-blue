@@ -209,7 +209,7 @@ export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboar
                   contenido editable del deck
                 </p>
                 <p className="text-sm text-black/60">
-                  Estos textos alimentan Visión General, Pasos a seguir y Plan de Trabajo.
+                  Puedes pegar textos manualmente o guardar un link fuente de Google Docs para integrarlo después.
                 </p>
               </div>
 
@@ -223,103 +223,203 @@ export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboar
                 />
               </label>
 
+              <p className="mb-3 mt-5 text-sm font-bold uppercase tracking-[0.18em] text-black/45">
+                Página 2 - Visión General y UX
+              </p>
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Visión - Huella párrafo 1</span>
+                  <span className="text-sm font-semibold text-black/70">Visión general - Párrafo 1</span>
                   <textarea
-                    name="visionImpactText"
-                    rows={4}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                    placeholder="Diagnóstico de huella digital..."
-                  />
-                </label>
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Visión - Huella párrafo 2</span>
-                  <textarea
-                    name="visionImpactTextSecondary"
-                    rows={4}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                    placeholder="Impacto comercial actual..."
-                  />
-                </label>
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Visión - Conversión párrafo 1</span>
-                  <textarea
-                    name="visionConversionText"
-                    rows={4}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                    placeholder="Fricción UX crítica..."
-                  />
-                </label>
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Visión - Conversión párrafo 2</span>
-                  <textarea
-                    name="visionConversionTextSecondary"
-                    rows={4}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                    placeholder="Ausencia de CTAs o cotizadores..."
-                  />
-                </label>
-              </div>
-
-              <div className="mt-4 grid gap-4 md:grid-cols-3">
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Paso 1 - Consolidación NAP</span>
-                  <textarea
-                    name="nextStepNapText"
+                    name="visionGeneralP1"
                     rows={4}
                     className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
                   />
                 </label>
                 <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Paso 2 - Estructuración</span>
+                  <span className="text-sm font-semibold text-black/70">Visión general - Párrafo 2</span>
                   <textarea
-                    name="nextStepDataText"
+                    name="visionGeneralP2"
                     rows={4}
                     className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
                   />
                 </label>
                 <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Paso 3 - Limpieza indexable</span>
+                  <span className="text-sm font-semibold text-black/70">UX - Párrafo 1</span>
                   <textarea
-                    name="nextStepIndexText"
+                    name="visionUxP1"
+                    rows={4}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">UX - Párrafo 2</span>
+                  <textarea
+                    name="visionUxP2"
                     rows={4}
                     className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
                   />
                 </label>
               </div>
 
-              <div className="mt-4 grid gap-4 md:grid-cols-2">
+              <p className="mb-3 mt-6 text-sm font-bold uppercase tracking-[0.18em] text-black/45">
+                Página 3 - Áreas de oportunidad
+              </p>
+              <div className="grid gap-4 md:grid-cols-2">
                 <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Fase 1</span>
+                  <span className="text-sm font-semibold text-black/70">Áreas de oportunidad - Párrafo 1</span>
+                  <textarea
+                    name="opportunityAreasP1"
+                    rows={4}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Áreas de oportunidad - Párrafo 2</span>
+                  <textarea
+                    name="opportunityAreasP2"
+                    rows={4}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Inconsistencias - Párrafo 1</span>
+                  <textarea
+                    name="opportunityInconsistenciesP1"
+                    rows={4}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Inconsistencias - Párrafo 2</span>
+                  <textarea
+                    name="opportunityInconsistenciesP2"
+                    rows={4}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                </label>
+              </div>
+
+              <p className="mb-3 mt-6 text-sm font-bold uppercase tracking-[0.18em] text-black/45">
+                Página 6 - Pasos a seguir
+              </p>
+              <label className="mb-4 block space-y-2">
+                <span className="text-sm font-semibold text-black/70">Subtítulo</span>
+                <input
+                  type="text"
+                  name="nextStepsSubtitle"
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  placeholder="Consistencia de Datos & SEO Semántico"
+                />
+              </label>
+              <div className="grid gap-4 md:grid-cols-3">
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Paso 1 - Título</span>
+                  <input
+                    type="text"
+                    name="nextStepOneTitle"
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                  <textarea
+                    name="nextStepOneText"
+                    rows={4}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Paso 2 - Título</span>
+                  <input
+                    type="text"
+                    name="nextStepTwoTitle"
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                  <textarea
+                    name="nextStepTwoText"
+                    rows={4}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Paso 3 - Título</span>
+                  <input
+                    type="text"
+                    name="nextStepThreeTitle"
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                  <textarea
+                    name="nextStepThreeText"
+                    rows={4}
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
+                </label>
+              </div>
+
+              <p className="mb-3 mt-6 text-sm font-bold uppercase tracking-[0.18em] text-black/45">
+                Página 7 - Plan de trabajo estratégico
+              </p>
+              <label className="mb-4 block space-y-2">
+                <span className="text-sm font-semibold text-black/70">Subtítulo</span>
+                <input
+                  type="text"
+                  name="workPlanSubtitle"
+                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  placeholder="Consistencia de Datos & SEO Semántico"
+                />
+              </label>
+              <div className="grid gap-4 md:grid-cols-2">
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-black/70">Fase 1 - Título y texto</span>
+                  <input
+                    type="text"
+                    name="phaseOneTitle"
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
                   <textarea
                     name="phaseOneText"
                     rows={3}
                     className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                    placeholder="12-15 palabras, máximo 3 renglones."
                   />
                 </label>
                 <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Fase 2</span>
+                  <span className="text-sm font-semibold text-black/70">Fase 2 - Título y texto</span>
+                  <input
+                    type="text"
+                    name="phaseTwoTitle"
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
                   <textarea
                     name="phaseTwoText"
                     rows={3}
                     className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                    placeholder="12-15 palabras, máximo 3 renglones."
                   />
                 </label>
                 <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Fase 3</span>
+                  <span className="text-sm font-semibold text-black/70">Fase 3 - Título y texto</span>
+                  <input
+                    type="text"
+                    name="phaseThreeTitle"
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
                   <textarea
                     name="phaseThreeText"
                     rows={3}
                     className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                    placeholder="12-15 palabras, máximo 3 renglones."
                   />
                 </label>
                 <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Fase 4</span>
+                  <span className="text-sm font-semibold text-black/70">Fase 4 - Título y texto</span>
+                  <input
+                    type="text"
+                    name="phaseFourTitle"
+                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                  />
                   <textarea
                     name="phaseFourText"
                     rows={3}
                     className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
+                    placeholder="12-15 palabras, máximo 3 renglones."
                   />
                 </label>
               </div>

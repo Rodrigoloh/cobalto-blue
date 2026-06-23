@@ -64,6 +64,26 @@ export type ProspectInput = {
   averageTicket: number | string | null
   closeRate: number | string | null
   contentSourceUrl: string
+  visionGeneralP1: string
+  visionGeneralP2: string
+  visionUxP1: string
+  visionUxP2: string
+  opportunityAreasP1: string
+  opportunityAreasP2: string
+  opportunityInconsistenciesP1: string
+  opportunityInconsistenciesP2: string
+  nextStepsSubtitle: string
+  nextStepOneTitle: string
+  nextStepOneText: string
+  nextStepTwoTitle: string
+  nextStepTwoText: string
+  nextStepThreeTitle: string
+  nextStepThreeText: string
+  workPlanSubtitle: string
+  phaseOneTitle: string
+  phaseTwoTitle: string
+  phaseThreeTitle: string
+  phaseFourTitle: string
   visionImpactText: string
   visionImpactTextSecondary: string
   visionConversionText: string
@@ -667,6 +687,26 @@ export async function createProspectReport(input: ProspectInput) {
       return rate > 1 ? Math.min(rate / 100, 1) : Math.min(rate, 1)
     })(),
     contentSourceUrl: cleanText(input.contentSourceUrl),
+    visionGeneralP1: cleanText(input.visionGeneralP1),
+    visionGeneralP2: cleanText(input.visionGeneralP2),
+    visionUxP1: cleanText(input.visionUxP1),
+    visionUxP2: cleanText(input.visionUxP2),
+    opportunityAreasP1: cleanText(input.opportunityAreasP1),
+    opportunityAreasP2: cleanText(input.opportunityAreasP2),
+    opportunityInconsistenciesP1: cleanText(input.opportunityInconsistenciesP1),
+    opportunityInconsistenciesP2: cleanText(input.opportunityInconsistenciesP2),
+    nextStepsSubtitle: cleanText(input.nextStepsSubtitle),
+    nextStepOneTitle: cleanText(input.nextStepOneTitle),
+    nextStepOneText: cleanText(input.nextStepOneText),
+    nextStepTwoTitle: cleanText(input.nextStepTwoTitle),
+    nextStepTwoText: cleanText(input.nextStepTwoText),
+    nextStepThreeTitle: cleanText(input.nextStepThreeTitle),
+    nextStepThreeText: cleanText(input.nextStepThreeText),
+    workPlanSubtitle: cleanText(input.workPlanSubtitle),
+    phaseOneTitle: cleanText(input.phaseOneTitle),
+    phaseTwoTitle: cleanText(input.phaseTwoTitle),
+    phaseThreeTitle: cleanText(input.phaseThreeTitle),
+    phaseFourTitle: cleanText(input.phaseFourTitle),
     visionImpactText: cleanText(input.visionImpactText),
     visionImpactTextSecondary: cleanText(input.visionImpactTextSecondary),
     visionConversionText: cleanText(input.visionConversionText),

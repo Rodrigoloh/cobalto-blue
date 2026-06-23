@@ -231,8 +231,7 @@ function metricTone(metric: 'FCP' | 'LCP' | 'TBT' | 'CLS' | 'SI', value: number 
 
 function PageSpeedMock({
   scores,
-  metrics,
-  details
+  metrics
 }: {
   scores: Array<{ label: string; score: number | null }>
   metrics: {
@@ -242,7 +241,6 @@ function PageSpeedMock({
     cls: { value: string; raw: number | null }
     speedIndex: { value: string; raw: number | null }
   }
-  details: string[]
 }) {
   return (
     <div className="mt-[22px] flex h-[322px] bg-white">
@@ -263,13 +261,11 @@ function PageSpeedMock({
       </div>
 
       <div className="flex-1 px-6 py-5">
-        <div className="mb-2 flex items-center justify-center gap-8 text-[12px] font-bold text-[#666666]">
+        <div className="mb-2 flex items-center justify-center text-[12px] font-bold text-[#666666]">
           <span className="border-b-2 border-[#4285f4] pb-2 text-[#4285f4]"><Smartphone className="mr-1 inline h-4 w-4" /> Mobile</span>
-          <span><Monitor className="mr-1 inline h-4 w-4" /> Desktop</span>
         </div>
         <div className="flex items-center justify-between border-b border-black/8 pb-2 text-[10px] uppercase text-[#777777]">
           <span>Metrics</span>
-          <span>Expand view</span>
         </div>
         <div className="grid grid-cols-2 gap-x-9 pt-1">
           <div>
@@ -281,11 +277,6 @@ function PageSpeedMock({
             <MetricRow label="Largest Contentful Paint" value={metrics.lcp.value} tone={metricTone('LCP', metrics.lcp.raw)} />
             <MetricRow label="Cumulative Layout Shift" value={metrics.cls.value} tone={metricTone('CLS', metrics.cls.raw)} />
           </div>
-        </div>
-        <div className="mt-3 grid grid-cols-3 gap-x-5 gap-y-2 bg-[#f5f5f5] px-4 py-3 text-[9px] leading-tight text-[#666666]">
-          {details.map((detail) => (
-            <span key={detail}>{detail}</span>
-          ))}
         </div>
       </div>
     </div>
@@ -302,30 +293,55 @@ export default function FullReportPage({ params }: FullPageProps) {
         const weeklyVisitors = Math.max(10, Math.round(impact.monthlyVisits / 4))
         const firstFinding = report.findings[0] ?? report.hookSummary
         const secondFinding = report.findings[1] ?? report.costOfInaction
+        const thirdFinding = report.findings[2] ?? report.technicalSummary
         const company = report.input.companyName || 'Empresa analizada'
         const city = report.input.city || 'su mercado'
         const industry = report.input.industry || 'su industria'
         const cta = report.input.primaryCta || 'contacto comercial'
-        const visionImpactText =
+        const visionGeneralP1 =
+          report.input.visionGeneralP1 ||
           report.input.visionImpactText ||
           `La experiencia de ${company} en ${industry} se ve limitada digitalmente por una estructura que no comunica con la velocidad que el mercado espera en ${city}.`
-        const visionImpactTextSecondary =
+        const visionGeneralP2 =
+          report.input.visionGeneralP2 ||
           report.input.visionImpactTextSecondary ||
           'El sitio web actua como un catalogo estatico, desaprovechando su potencial de conversion corporativa y limitando el flujo activo de adquisicion.'
-        const visionConversionText = report.input.visionConversionText || firstFinding
-        const visionConversionTextSecondary =
+        const visionUxP1 = report.input.visionUxP1 || report.input.visionConversionText || firstFinding
+        const visionUxP2 =
+          report.input.visionUxP2 ||
           report.input.visionConversionTextSecondary ||
           secondFinding ||
           `La ausencia de rutas claras hacia ${cta} diluye la prospeccion y reduce la confianza de compradores que buscan respuesta inmediata.`
-        const nextStepNapText =
+        const opportunityAreasP1 = report.input.opportunityAreasP1 || firstFinding
+        const opportunityAreasP2 =
+          report.input.opportunityAreasP2 ||
+          `La experiencia necesita conectar mejor el mensaje principal con ${cta} para reducir dudas y acelerar solicitudes calificadas.`
+        const opportunityInconsistenciesP1 = report.input.opportunityInconsistenciesP1 || secondFinding
+        const opportunityInconsistenciesP2 =
+          report.input.opportunityInconsistenciesP2 ||
+          thirdFinding ||
+          'Las inconsistencias tecnicas y narrativas reducen la confianza antes de que el usuario llegue a contacto.'
+        const nextStepsSubtitle = report.input.nextStepsSubtitle || 'Consistencia de Datos & SEO Semantico'
+        const nextStepOneTitle = report.input.nextStepOneTitle || 'Consolidacion NAP'
+        const nextStepOneText =
+          report.input.nextStepOneText ||
           report.input.nextStepNapText ||
           `Resolver discrepancias de nombre, ubicacion y servicio para unificar la huella digital de ${company} en buscadores locales.`
-        const nextStepDataText =
+        const nextStepTwoTitle = report.input.nextStepTwoTitle || 'Estructuracion de Datos'
+        const nextStepTwoText =
+          report.input.nextStepTwoText ||
           report.input.nextStepDataText ||
           'Implementacion nativa de marcado JSON-LD para optimizar la indexacion por buscadores e inteligencias artificiales.'
-        const nextStepIndexText =
+        const nextStepThreeTitle = report.input.nextStepThreeTitle || 'Limpieza Indexable'
+        const nextStepThreeText =
+          report.input.nextStepThreeText ||
           report.input.nextStepIndexText ||
           'Eliminacion de rutas fantasma e inconsistencias de URL para maximizar crawling y fortalecer la confianza de entidad.'
+        const workPlanSubtitle = report.input.workPlanSubtitle || 'Consistencia de Datos & SEO Semantico'
+        const phaseOneTitle = report.input.phaseOneTitle || 'Rediseno & Migracion'
+        const phaseTwoTitle = report.input.phaseTwoTitle || 'AI-Ready Metadata'
+        const phaseThreeTitle = report.input.phaseThreeTitle || 'CRO & Captacion B2B'
+        const phaseFourTitle = report.input.phaseFourTitle || 'Optimizacion WPO'
         const phaseOneText =
           report.input.phaseOneText ||
           'Transicion a una arquitectura agil para estructurar codigo limpio y semantico de manera nativa.'
@@ -363,6 +379,9 @@ export default function FullReportPage({ params }: FullPageProps) {
                     ANALISIS TECNICO DE RENDIMIENTO
                   </p>
                   <h1 className="mt-4 text-[39px] font-bold leading-none text-white">{company}</h1>
+                  <p className="mt-3 break-all text-[16px] leading-tight text-white/70">
+                    {report.input.websiteUrl}
+                  </p>
                   <p className="mt-6 text-[24px] leading-[1.12] text-white/86">
                     Auditoria web, diagnostico de Core Web Vitals e inyeccion estrategica de datos semanticos para la preparacion de motores de IA (AI-Ready).
                   </p>
@@ -372,13 +391,28 @@ export default function FullReportPage({ params }: FullPageProps) {
               <DeckPage className="px-[58px] pt-[68px]">
                 <Title>Vision General y UX</Title>
                 <div className="mt-[50px] grid grid-cols-2 gap-[62px]">
-                  <TextBlock icon={<Monitor className="h-8 w-8" />} title="Huella Digital e Impacto">
-                    <p>{visionImpactText}</p>
-                    <p>{visionImpactTextSecondary}</p>
+                  <TextBlock icon={<Monitor className="h-8 w-8" />} title="Vision General">
+                    <p>{visionGeneralP1}</p>
+                    <p>{visionGeneralP2}</p>
                   </TextBlock>
-                  <TextBlock icon={<Radio className="h-8 w-8" />} title="Inconsistencia en Conversion">
-                    <p>{visionConversionText}</p>
-                    <p>{visionConversionTextSecondary}</p>
+                  <TextBlock icon={<Radio className="h-8 w-8" />} title="UX">
+                    <p>{visionUxP1}</p>
+                    <p>{visionUxP2}</p>
+                  </TextBlock>
+                </div>
+                <FooterLogo />
+              </DeckPage>
+
+              <DeckPage className="px-[58px] pt-[68px]">
+                <Title>Areas de oportunidad</Title>
+                <div className="mt-[50px] grid grid-cols-2 gap-[62px]">
+                  <TextBlock icon={<LineChart className="h-8 w-8" />} title="Areas de oportunidad">
+                    <p>{opportunityAreasP1}</p>
+                    <p>{opportunityAreasP2}</p>
+                  </TextBlock>
+                  <TextBlock icon={<Radio className="h-8 w-8" />} title="Inconsistencias">
+                    <p>{opportunityInconsistenciesP1}</p>
+                    <p>{opportunityInconsistenciesP2}</p>
                   </TextBlock>
                 </div>
                 <FooterLogo />
@@ -417,11 +451,15 @@ export default function FullReportPage({ params }: FullPageProps) {
                       raw: mobile?.speedIndex ?? null
                     }
                   }}
-                  details={pageSpeedDetails}
                 />
                 <p className="mx-[58px] mt-[14px] text-[14px] leading-[1.25] text-[#1f2937]">
                   El informe de <b>PageSpeed Insights</b> evidencia friccion en el rendimiento movil. El punto critico aparece en el <b>Largest Contentful Paint (LCP)</b>, la carga percibida y el tiempo que tarda el usuario en entender la oferta principal.
                 </p>
+                <div className="absolute bottom-[30px] left-[58px] grid w-[620px] grid-cols-3 gap-x-5 gap-y-2 bg-[#f5f5f5] px-4 py-3 text-[9px] leading-tight text-[#666666]">
+                  {pageSpeedDetails.map((detail) => (
+                    <span key={detail}>{detail}</span>
+                  ))}
+                </div>
                 <FooterLogo />
               </DeckPage>
 
@@ -457,16 +495,16 @@ export default function FullReportPage({ params }: FullPageProps) {
 
               <DeckPage className="px-[58px] pt-[68px]">
                 <Title>Pasos a seguir</Title>
-                <Lead>Consistencia de Datos &amp; SEO Semantico</Lead>
+                <Lead>{nextStepsSubtitle}</Lead>
                 <div className="mt-[45px] grid grid-cols-3 gap-[58px]">
-                  <StepCard icon={<MapPinned className="h-11 w-11" />} title="Consolidacion NAP">
-                    {nextStepNapText}
+                  <StepCard icon={<MapPinned className="h-11 w-11" />} title={nextStepOneTitle}>
+                    {nextStepOneText}
                   </StepCard>
-                  <StepCard icon={<Code2 className="h-11 w-11" />} title="Estructuracion de Datos">
-                    {nextStepDataText}
+                  <StepCard icon={<Code2 className="h-11 w-11" />} title={nextStepTwoTitle}>
+                    {nextStepTwoText}
                   </StepCard>
-                  <StepCard icon={<LineChart className="h-12 w-12" />} title="Limpieza Indexable">
-                    {nextStepIndexText}
+                  <StepCard icon={<LineChart className="h-12 w-12" />} title={nextStepThreeTitle}>
+                    {nextStepThreeText}
                   </StepCard>
                 </div>
                 <FooterLogo />
@@ -474,13 +512,13 @@ export default function FullReportPage({ params }: FullPageProps) {
 
               <DeckPage className="px-[58px] pt-[68px]">
                 <Title>Plan de Trabajo Estrategico</Title>
-                <Lead>Consistencia de Datos &amp; SEO Semantico</Lead>
+                <Lead>{workPlanSubtitle}</Lead>
                 <div className="absolute left-[98px] right-[112px] top-[336px] h-[3px] bg-[#2500ff]" />
                 {[
-                  ['Fase 1', 'Rediseno & Migracion', phaseOneText, 205, 369],
-                  ['Fase 2', 'AI-Ready Metadata', phaseTwoText, 405, 210],
-                  ['Fase 3', 'CRO & Captacion B2B', phaseThreeText, 632, 369],
-                  ['Fase 4', 'Optimizacion WPO', phaseFourText, 864, 210]
+                  ['Fase 1', phaseOneTitle, phaseOneText, 205, 369],
+                  ['Fase 2', phaseTwoTitle, phaseTwoText, 405, 210],
+                  ['Fase 3', phaseThreeTitle, phaseThreeText, 632, 369],
+                  ['Fase 4', phaseFourTitle, phaseFourText, 864, 210]
                 ].map(([phase, name, text, left, top]) => (
                   <div key={phase} className="absolute w-[260px] text-center" style={{ left: Number(left) - 130, top: Number(top) }}>
                     <h3 className="text-[20px] font-bold text-[#2500ff]">{phase}</h3>
