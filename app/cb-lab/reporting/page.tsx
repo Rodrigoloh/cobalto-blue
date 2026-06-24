@@ -13,11 +13,11 @@ export default function ReportingDashboardPage() {
             </p>
             <div className="space-y-3">
               <h1 className="font-['NeueMachina'] text-4xl leading-none md:text-5xl">
-                Generador de reportes comerciales.
+                Generador de PDF full por JSON.
               </h1>
               <p className="max-w-2xl text-white/70">
-                Esta sección no tiene links públicos. Genera un dashboard privado y luego exporta
-                dos versiones de PDF: un onepager de hook y un reporte ejecutivo completo.
+                Pega el JSON final generado por la Gem. El reporte combina esa narrativa con
+                métricas reales de Google PageSpeed para exportar el PDF completo.
               </p>
             </div>
           </div>

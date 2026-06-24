@@ -1,5 +1,4 @@
-import { FullReportPage } from './FullReportPage'
-import fullReportMockData from './mock-data.json'
+import { FullReportRouteClient } from './FullReportRouteClient'
 
 type RoutePageProps = {
   params: {
@@ -7,6 +6,6 @@ type RoutePageProps = {
   }
 }
 
-export default function FullReportRoutePage(_props: RoutePageProps) {
-  return <FullReportPage mockData={fullReportMockData} />
+export default function FullReportRoutePage({ params }: RoutePageProps) {
+  return <FullReportRouteClient id={params.id} />
 }

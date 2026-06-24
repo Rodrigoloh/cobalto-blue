@@ -75,6 +75,12 @@ function normalizeMockData(value: any) {
   const geminiJson = value?.geminiJson && typeof value.geminiJson === 'object' ? value.geminiJson : value
   const input = value?.input && typeof value.input === 'object' ? value.input : {}
   const pagespeed = value?.pagespeed && typeof value.pagespeed === 'object' ? value.pagespeed : {}
+  const financialImpact =
+    value?.financialImpact && typeof value.financialImpact === 'object'
+      ? value.financialImpact
+      : geminiJson?.financialImpact && typeof geminiJson.financialImpact === 'object'
+        ? geminiJson.financialImpact
+        : {}
 
   return {
     ...input,
@@ -91,16 +97,18 @@ function normalizeMockData(value: any) {
     },
     financialImpact: {
       ...defaultImpact(),
-      ...(value?.financialImpact && typeof value.financialImpact === 'object'
-        ? value.financialImpact
-        : {})
+      ...financialImpact
     },
-    findings: Array.isArray(value?.findings) ? value.findings : [],
+    findings: Array.isArray(value?.findings)
+      ? value.findings
+      : Array.isArray(geminiJson?.findings)
+        ? geminiJson.findings
+        : [],
     id: value?.id || 'mock-report',
     overallScore: typeof value?.overallScore === 'number' ? value.overallScore : 0,
-    hookSummary: value?.hookSummary || '',
-    costOfInaction: value?.costOfInaction || '',
-    technicalSummary: value?.technicalSummary || ''
+    hookSummary: value?.hookSummary || geminiJson?.hookSummary || '',
+    costOfInaction: value?.costOfInaction || geminiJson?.costOfInaction || '',
+    technicalSummary: value?.technicalSummary || geminiJson?.technicalSummary || ''
   }
 }
 

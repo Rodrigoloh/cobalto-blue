@@ -4,12 +4,61 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { FormEvent, useEffect, useMemo, useState } from 'react'
 
-import type { ProspectReport } from '@/lib/performance-report'
-import { getStoredReports, saveStoredReport } from '@/lib/report-browser-storage'
+import {
+  FullReportSnapshot,
+  getStoredFullReports,
+  saveStoredFullReport
+} from '@/lib/full-report-browser-storage'
 
 type ReportingDashboardClientProps = {
   geminiConfigured: boolean
 }
+
+const SAMPLE_JSON = `{
+  "id": "cliente-demo",
+  "geminiJson": {
+    "companyName": "Cliente Demo",
+    "websiteUrl": "https://cliente.com",
+    "industry": "Servicios profesionales",
+    "city": "Monterrey",
+    "primaryCta": "WhatsApp",
+    "financialImpact": {
+      "monthlyVisits": 1500,
+      "averageTicket": 15000,
+      "closeRate": 0.2,
+      "conversionRate": 0.025,
+      "frictionRate": 0.22,
+      "lostLeadsMonthly": 8.3,
+      "lostRevenueMonthly": 24900,
+      "lostRevenueAnnual": 298800
+    },
+    "visionGeneralP1": "",
+    "visionGeneralP2": "",
+    "visionUxP1": "",
+    "visionUxP2": "",
+    "opportunityAreasP1": "",
+    "opportunityAreasP2": "",
+    "opportunityInconsistenciesP1": "",
+    "opportunityInconsistenciesP2": "",
+    "nextStepsSubtitle": "",
+    "nextStepOneTitle": "",
+    "nextStepOneText": "",
+    "nextStepTwoTitle": "",
+    "nextStepTwoText": "",
+    "nextStepThreeTitle": "",
+    "nextStepThreeText": "",
+    "workPlanSubtitle": "",
+    "phaseOneTitle": "",
+    "phaseOneText": "",
+    "phaseTwoTitle": "",
+    "phaseTwoText": "",
+    "phaseThreeTitle": "",
+    "phaseThreeText": "",
+    "phaseFourTitle": "",
+    "phaseFourText": ""
+  },
+  "apiPageSpeedData": null
+}`
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat('es-MX', {
@@ -18,47 +67,87 @@ function formatDate(value: string) {
   }).format(new Date(value))
 }
 
+function slugId(value: string) {
+  const normalized = value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+
+  return normalized || `reporte-${Date.now()}`
+}
+
+function getReportName(mockData: any) {
+  return (
+    mockData?.geminiJson?.companyName ||
+    mockData?.companyName ||
+    mockData?.input?.companyName ||
+    'Reporte JSON'
+  )
+}
+
+function getWebsiteUrl(mockData: any) {
+  return mockData?.geminiJson?.websiteUrl || mockData?.websiteUrl || mockData?.input?.websiteUrl || ''
+}
+
+function ensureReportId(mockData: any) {
+  const company = getReportName(mockData)
+  const explicitId = typeof mockData?.id === 'string' ? mockData.id.trim() : ''
+  const id = explicitId || slugId(company)
+
+  return {
+    id,
+    mockData: {
+      ...mockData,
+      id
+    }
+  }
+}
+
 export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboardClientProps) {
   const router = useRouter()
-  const [reports, setReports] = useState<ProspectReport[]>([])
+  const [reports, setReports] = useState<FullReportSnapshot[]>([])
+  const [jsonText, setJsonText] = useState(SAMPLE_JSON)
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
-    setReports(getStoredReports())
+    setReports(getStoredFullReports())
   }, [])
 
   const reportCountLabel = useMemo(() => `${reports.length} items`, [reports.length])
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setError(null)
     setIsSubmitting(true)
 
     try {
-      const formData = new FormData(event.currentTarget)
-      const response = await fetch('/api/reports/run', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Accept: 'application/json'
-        }
-      })
+      const parsed = JSON.parse(jsonText)
 
-      const payload = await response.json().catch(() => null)
-
-      if (!response.ok || !payload?.report) {
-        throw new Error(payload?.error || 'No fue posible generar el reporte.')
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        throw new Error('El JSON debe ser un objeto.')
       }
 
-      saveStoredReport(payload.report as ProspectReport)
-      setReports(getStoredReports())
-      router.push(`/cb-lab/reporting/${payload.report.id}`)
+      const websiteUrl = getWebsiteUrl(parsed)
+      if (!websiteUrl) {
+        throw new Error('El JSON debe incluir geminiJson.websiteUrl o websiteUrl para consultar PageSpeed.')
+      }
+
+      const { id, mockData } = ensureReportId(parsed)
+      saveStoredFullReport({
+        id,
+        createdAt: new Date().toISOString(),
+        mockData
+      })
+      setReports(getStoredFullReports())
+      router.push(`/cb-lab/reporting/${id}/full`)
     } catch (submissionError) {
       setError(
         submissionError instanceof Error
           ? submissionError.message
-          : 'No fue posible generar el reporte.'
+          : 'No fue posible leer el JSON.'
       )
     } finally {
       setIsSubmitting(false)
@@ -73,365 +162,28 @@ export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboar
         </p>
       ) : null}
 
-      <section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+      <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="report-card rounded-[2rem] p-6 lg:p-8">
           <div className="mb-6 space-y-2">
             <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.35em] text-[#1F00FF]">
-              nuevo reporte
+              nuevo reporte full
             </p>
-            <h2 className="font-['NeueMachina'] text-3xl leading-none">Cargar prospecto</h2>
+            <h2 className="font-['NeueMachina'] text-3xl leading-none">Pegar JSON del reporte</h2>
             <p className="text-sm text-black/65">
-              El análisis puede tardar unos segundos mientras consultamos Google PageSpeed.
+              Pega el JSON generado por la Gem. El PDF usará esa narrativa y consultará PageSpeed
+              en vivo con la URL incluida.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="grid gap-4">
             <label className="block space-y-2">
-              <span className="text-sm font-semibold text-black/70">Empresa / prospecto</span>
-              <input
-                type="text"
-                name="companyName"
-                required
-                className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                placeholder="Maquinados Continental"
-              />
-            </label>
-
-            <label className="block space-y-2">
-              <span className="text-sm font-semibold text-black/70">URL del sitio</span>
-              <input
-                type="text"
-                name="websiteUrl"
-                required
-                className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                placeholder="https://cliente.com"
-              />
-            </label>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <label className="block space-y-2">
-                <span className="text-sm font-semibold text-black/70">Industria</span>
-                <input
-                  type="text"
-                  name="industry"
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  placeholder="Maquinados industriales"
-                />
-              </label>
-              <label className="block space-y-2">
-                <span className="text-sm font-semibold text-black/70">Ciudad / plaza</span>
-                <input
-                  type="text"
-                  name="city"
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  placeholder="Monterrey"
-                />
-              </label>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-3">
-              <label className="block space-y-2">
-                <span className="text-sm font-semibold text-black/70">Nombre de contacto</span>
-                <input
-                  type="text"
-                  name="contactName"
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  placeholder="Juan Pérez"
-                />
-              </label>
-              <label className="block space-y-2">
-                <span className="text-sm font-semibold text-black/70">Teléfono</span>
-                <input
-                  type="text"
-                  name="contactPhone"
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  placeholder="+52 81 5555 5555"
-                />
-              </label>
-              <label className="block space-y-2">
-                <span className="text-sm font-semibold text-black/70">Correo</span>
-                <input
-                  type="email"
-                  name="contactEmail"
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  placeholder="contacto@empresa.com"
-                />
-              </label>
-            </div>
-
-            <label className="block space-y-2">
-              <span className="text-sm font-semibold text-black/70">CTA principal</span>
-              <input
-                type="text"
-                name="primaryCta"
-                defaultValue="WhatsApp"
-                className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-              />
-            </label>
-
-            <div className="grid gap-4 md:grid-cols-3">
-              <label className="block space-y-2">
-                <span className="text-sm font-semibold text-black/70">Visitas mensuales</span>
-                <input
-                  type="number"
-                  min="1"
-                  name="monthlyVisits"
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  placeholder="1500"
-                />
-              </label>
-              <label className="block space-y-2">
-                <span className="text-sm font-semibold text-black/70">Ticket promedio MXN</span>
-                <input
-                  type="number"
-                  min="1"
-                  name="averageTicket"
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  placeholder="15000"
-                />
-              </label>
-              <label className="block space-y-2">
-                <span className="text-sm font-semibold text-black/70">Cierre de leads %</span>
-                <input
-                  type="number"
-                  min="1"
-                  max="100"
-                  name="closeRate"
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  placeholder="20"
-                />
-              </label>
-            </div>
-
-            <div className="rounded-3xl border border-black/10 bg-white/55 p-5">
-              <div className="mb-4 space-y-1">
-                <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.3em] text-[#1F00FF]">
-                  contenido editable del deck
-                </p>
-                <p className="text-sm text-black/60">
-                  Puedes pegar textos manualmente o guardar un link fuente de Google Docs para integrarlo después.
-                </p>
-              </div>
-
-              <label className="mb-4 block space-y-2">
-                <span className="text-sm font-semibold text-black/70">Link fuente / Google Docs</span>
-                <input
-                  type="url"
-                  name="contentSourceUrl"
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  placeholder="https://docs.google.com/document/..."
-                />
-              </label>
-
-              <p className="mb-3 mt-5 text-sm font-bold uppercase tracking-[0.18em] text-black/45">
-                Página 2 - Visión General y UX
-              </p>
-              <div className="grid gap-4 md:grid-cols-2">
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Visión general - Párrafo 1</span>
-                  <textarea
-                    name="visionGeneralP1"
-                    rows={4}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                </label>
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Visión general - Párrafo 2</span>
-                  <textarea
-                    name="visionGeneralP2"
-                    rows={4}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                </label>
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">UX - Párrafo 1</span>
-                  <textarea
-                    name="visionUxP1"
-                    rows={4}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                </label>
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">UX - Párrafo 2</span>
-                  <textarea
-                    name="visionUxP2"
-                    rows={4}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                </label>
-              </div>
-
-              <p className="mb-3 mt-6 text-sm font-bold uppercase tracking-[0.18em] text-black/45">
-                Página 3 - Áreas de oportunidad
-              </p>
-              <div className="grid gap-4 md:grid-cols-2">
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Áreas de oportunidad - Párrafo 1</span>
-                  <textarea
-                    name="opportunityAreasP1"
-                    rows={4}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                </label>
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Áreas de oportunidad - Párrafo 2</span>
-                  <textarea
-                    name="opportunityAreasP2"
-                    rows={4}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                </label>
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Inconsistencias - Párrafo 1</span>
-                  <textarea
-                    name="opportunityInconsistenciesP1"
-                    rows={4}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                </label>
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Inconsistencias - Párrafo 2</span>
-                  <textarea
-                    name="opportunityInconsistenciesP2"
-                    rows={4}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                </label>
-              </div>
-
-              <p className="mb-3 mt-6 text-sm font-bold uppercase tracking-[0.18em] text-black/45">
-                Página 6 - Pasos a seguir
-              </p>
-              <label className="mb-4 block space-y-2">
-                <span className="text-sm font-semibold text-black/70">Subtítulo</span>
-                <input
-                  type="text"
-                  name="nextStepsSubtitle"
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  placeholder="Consistencia de Datos & SEO Semántico"
-                />
-              </label>
-              <div className="grid gap-4 md:grid-cols-3">
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Paso 1 - Título</span>
-                  <input
-                    type="text"
-                    name="nextStepOneTitle"
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                  <textarea
-                    name="nextStepOneText"
-                    rows={4}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                </label>
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Paso 2 - Título</span>
-                  <input
-                    type="text"
-                    name="nextStepTwoTitle"
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                  <textarea
-                    name="nextStepTwoText"
-                    rows={4}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                </label>
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Paso 3 - Título</span>
-                  <input
-                    type="text"
-                    name="nextStepThreeTitle"
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                  <textarea
-                    name="nextStepThreeText"
-                    rows={4}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                </label>
-              </div>
-
-              <p className="mb-3 mt-6 text-sm font-bold uppercase tracking-[0.18em] text-black/45">
-                Página 7 - Plan de trabajo estratégico
-              </p>
-              <label className="mb-4 block space-y-2">
-                <span className="text-sm font-semibold text-black/70">Subtítulo</span>
-                <input
-                  type="text"
-                  name="workPlanSubtitle"
-                  className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  placeholder="Consistencia de Datos & SEO Semántico"
-                />
-              </label>
-              <div className="grid gap-4 md:grid-cols-2">
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Fase 1 - Título y texto</span>
-                  <input
-                    type="text"
-                    name="phaseOneTitle"
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                  <textarea
-                    name="phaseOneText"
-                    rows={3}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                    placeholder="12-15 palabras, máximo 3 renglones."
-                  />
-                </label>
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Fase 2 - Título y texto</span>
-                  <input
-                    type="text"
-                    name="phaseTwoTitle"
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                  <textarea
-                    name="phaseTwoText"
-                    rows={3}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                    placeholder="12-15 palabras, máximo 3 renglones."
-                  />
-                </label>
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Fase 3 - Título y texto</span>
-                  <input
-                    type="text"
-                    name="phaseThreeTitle"
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                  <textarea
-                    name="phaseThreeText"
-                    rows={3}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                    placeholder="12-15 palabras, máximo 3 renglones."
-                  />
-                </label>
-                <label className="block space-y-2">
-                  <span className="text-sm font-semibold text-black/70">Fase 4 - Título y texto</span>
-                  <input
-                    type="text"
-                    name="phaseFourTitle"
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                  />
-                  <textarea
-                    name="phaseFourText"
-                    rows={3}
-                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                    placeholder="12-15 palabras, máximo 3 renglones."
-                  />
-                </label>
-              </div>
-            </div>
-
-            <label className="block space-y-2">
-              <span className="text-sm font-semibold text-black/70">Notas opcionales</span>
+              <span className="text-sm font-semibold text-black/70">JSON completo</span>
               <textarea
-                name="notes"
-                rows={4}
-                className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none transition focus:border-[#1F00FF]"
-                placeholder="Ángulo comercial, prioridad o contexto del prospecto."
+                value={jsonText}
+                onChange={(event) => setJsonText(event.target.value)}
+                rows={24}
+                spellCheck={false}
+                className="min-h-[520px] w-full resize-y rounded-2xl border border-black/10 bg-white px-4 py-3 font-mono text-xs leading-relaxed outline-none transition focus:border-[#1F00FF]"
               />
             </label>
 
@@ -440,7 +192,7 @@ export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboar
               disabled={isSubmitting}
               className="mt-2 rounded-full bg-[#1F00FF] px-5 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-black disabled:cursor-wait disabled:opacity-70"
             >
-              {isSubmitting ? 'Generando reporte...' : 'Generar dashboard y reportes'}
+              {isSubmitting ? 'Validando JSON...' : 'Generar PDF full'}
             </button>
           </form>
         </div>
@@ -448,29 +200,22 @@ export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboar
         <div className="space-y-6">
           <div className="report-card rounded-[2rem] p-6 lg:p-8">
             <p className="font-['PPRightGroteskMono'] text-xs uppercase tracking-[0.35em] text-[#1F00FF]">
-              stack
+              flujo
             </p>
             <div className="mt-4 grid gap-4">
               <div className="rounded-3xl border border-black/10 bg-white/60 p-4">
-                <p className="text-sm font-semibold text-black/60">PageSpeed Insights</p>
-                <p className="mt-2 text-lg text-black">Activo</p>
+                <p className="text-sm font-semibold text-black/60">Contenido</p>
+                <p className="mt-2 text-lg text-black">Gemini JSON</p>
                 <p className="mt-2 text-sm text-black/65">
-                  Base del reporte. Se consulta en móvil y desktop. Si vas a usarlo en producción,
-                  conviene definir `PAGESPEED_API_KEY` en Vercel.
+                  La narrativa, fases, pasos y bloque financiero salen del objeto `geminiJson`.
                 </p>
               </div>
               <div className="rounded-3xl border border-black/10 bg-white/60 p-4">
-                <p className="text-sm font-semibold text-black/60">Salida</p>
-                <p className="mt-2 text-lg text-black">Dashboard + 2 PDFs</p>
-                <p className="mt-2 text-sm text-black/65">
-                  Hook report de 1 página y reporte ejecutivo de 7 láminas exportable a PDF.
-                </p>
-              </div>
-              <div className="rounded-3xl border border-black/10 bg-white/60 p-4">
-                <p className="text-sm font-semibold text-black/60">Fuente</p>
+                <p className="text-sm font-semibold text-black/60">Métricas técnicas</p>
                 <p className="mt-2 text-lg text-black">Google PageSpeed</p>
                 <p className="mt-2 text-sm text-black/65">
-                  El score principal sale de Google y el impacto financiero usa supuestos editables.
+                  El PDF consulta PageSpeed en vivo con `geminiJson.websiteUrl`. También acepta
+                  `apiPageSpeedData` si ya viene precargado.
                 </p>
               </div>
               <div className="rounded-3xl border border-black/10 bg-white/60 p-4">
@@ -478,8 +223,8 @@ export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboar
                 <p className="mt-2 text-lg text-black">{geminiConfigured ? 'Gemini listo' : 'Opcional'}</p>
                 <p className="mt-2 text-sm text-black/65">
                   {geminiConfigured
-                    ? 'Puedes pedir sugerencias para lectura comercial y señal de negocio antes del PDF.'
-                    : 'Actívalo con GEMINI_API_KEY para sugerir versiones de los textos editables.'}
+                    ? 'La variable GEMINI_API_KEY está configurada para futuros flujos asistidos.'
+                    : 'El generador actual solo necesita el JSON final que pegues aquí.'}
                 </p>
               </div>
             </div>
@@ -492,10 +237,10 @@ export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboar
                   guardados
                 </p>
                 <h2 className="mt-3 font-['NeueMachina'] text-2xl leading-none">
-                  Dashboards guardados
+                  PDFs full generados
                 </h2>
                 <p className="mt-2 text-sm text-black/60">
-                  Se conservan en este navegador para que puedas revisarlos después.
+                  Se guardan en este navegador para que puedas volver a abrirlos.
                 </p>
               </div>
               <span className="rounded-full border border-black/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-black/55">
@@ -515,37 +260,24 @@ export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboar
                         <p className="text-xs uppercase tracking-[0.2em] text-black/45">
                           {formatDate(report.createdAt)}
                         </p>
-                        <h3 className="mt-2 text-lg">{report.input.companyName}</h3>
-                        <p className="mt-1 text-sm text-black/60">{report.input.websiteUrl}</p>
+                        <h3 className="mt-2 text-lg">{getReportName(report.mockData)}</h3>
+                        <p className="mt-1 break-all text-sm text-black/60">
+                          {getWebsiteUrl(report.mockData)}
+                        </p>
                       </div>
 
-                      <div className="flex flex-wrap gap-2">
-                        <Link
-                          href={`/cb-lab/reporting/${report.id}`}
-                          className="rounded-full border border-black px-3 py-2 text-xs uppercase tracking-[0.18em] transition hover:bg-black hover:text-white"
-                        >
-                          Dashboard
-                        </Link>
-                        <Link
-                          href={`/cb-lab/reporting/${report.id}/hook`}
-                          className="rounded-full border border-black px-3 py-2 text-xs uppercase tracking-[0.18em] transition hover:bg-black hover:text-white"
-                        >
-                          Hook PDF
-                        </Link>
-                        <Link
-                          href={`/cb-lab/reporting/${report.id}/full`}
-                          className="rounded-full bg-[#1F00FF] px-3 py-2 text-xs uppercase tracking-[0.18em] text-white transition hover:bg-black"
-                        >
-                          Full PDF
-                        </Link>
-                      </div>
+                      <Link
+                        href={`/cb-lab/reporting/${report.id}/full`}
+                        className="rounded-full bg-[#1F00FF] px-3 py-2 text-xs uppercase tracking-[0.18em] text-white transition hover:bg-black"
+                      >
+                        Abrir full PDF
+                      </Link>
                     </div>
                   </div>
                 ))
               ) : (
                 <p className="rounded-3xl border border-dashed border-black/15 px-4 py-6 text-sm text-black/55">
-                  Los reportes se guardan en este navegador para evitar el problema de persistencia
-                  de Vercel. Genera el primero para empezar.
+                  Pega un JSON para generar el primer reporte full.
                 </p>
               )}
             </div>
