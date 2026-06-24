@@ -43,25 +43,25 @@ const EXPERTISE: Expertise[] = [
     title: 'SaaS y plataformas web',
     desc: 'Productos digitales listos para operar con usuarios, roles, planes, paneles administrativos y flujos de negocio.',
     items: ['MVP SaaS', 'Portales multiusuario', 'Dashboards', 'Backoffice', 'Suscripciones', 'Reportes'],
-    visual: 'Panel de producto con metricas, usuarios y modulos activos',
+    visual: 'Panel de producto con métricas, usuarios y módulos activos',
     image: 'https://www.cobalto.blue/projects/project04.png'
   },
   {
     title: 'Sistemas internos',
     desc: 'Herramientas a medida para ordenar procesos comerciales, administrativos, operativos o de servicio al cliente.',
-    items: ['CRM interno', 'Inventarios', 'Flujos de aprobacion', 'Gestion documental', 'Operaciones', 'Permisos'],
+    items: ['CRM interno', 'Inventarios', 'Flujos de aprobación', 'Gestión documental', 'Operaciones', 'Permisos'],
     visual: 'Mapa operativo con tareas, estados y responsables',
     image: 'https://www.cobalto.blue/projects/project05.png'
   },
   {
     title: 'Websites de performance',
-    desc: 'Sitios web comerciales y corporativos con arquitectura clara, contenido legible, velocidad y enfoque en conversion.',
-    items: ['Next.js', 'SEO tecnico', 'Landing systems', 'CMS', 'Analitica', 'Core Web Vitals'],
-    visual: 'Sistema web con secciones, contenido SEO y medicion',
+    desc: 'Sitios web comerciales y corporativos con arquitectura clara, contenido legible, velocidad y enfoque en conversión.',
+    items: ['Next.js', 'SEO técnico', 'Landing systems', 'CMS', 'Analítica', 'Core Web Vitals'],
+    visual: 'Sistema web con secciones, contenido SEO y medición',
     image: 'https://www.cobalto.blue/projects/project02.png'
   },
   {
-    title: 'Automatizacion e integraciones',
+    title: 'Automatización e integraciones',
     desc: 'Conectamos herramientas, APIs y datos para reducir tareas manuales y mejorar la visibilidad del negocio.',
     items: ['APIs', 'Pagos', 'CRM', 'Email', 'WhatsApp', 'Dashboards externos'],
     visual: 'Flujo conectado entre herramientas, APIs y reportes',
@@ -72,12 +72,12 @@ const EXPERTISE: Expertise[] = [
 const PROCESS = [
   {
     title: 'Discovery & Strategy',
-    desc: 'Entendemos el negocio, los usuarios, los objetivos, los datos y la operacion que el sistema debe mejorar.',
-    client: 'Definimos prioridades, alcance inicial y criterios de exito.'
+    desc: 'Entendemos el negocio, los usuarios, los objetivos, los datos y la operación que el sistema debe mejorar.',
+    client: 'Definimos prioridades, alcance inicial y criterios de éxito.'
   },
   {
     title: 'Architecture & UX',
-    desc: 'Dibujamos flujos, estructura de modulos, permisos, pantallas clave y arquitectura tecnica antes de construir.',
+    desc: 'Dibujamos flujos, estructura de módulos, permisos, pantallas clave y arquitectura técnica antes de construir.',
     client: 'Validas journeys, contenido y reglas principales.'
   },
   {
@@ -99,32 +99,32 @@ const PROCESS = [
 
 const PRINCIPLES: Person[] = [
   {
-    name: 'Empatia',
-    role: 'Disenamos para personas',
-    focus: 'Entendemos a quienes usan el producto. Resolvemos problemas para que la tecnologia se sienta clara, util y humana.'
+    name: 'Empatía',
+    role: 'Diseñamos para personas',
+    focus: 'Entendemos a quienes usan el producto. Resolvemos problemas para que la tecnología se sienta clara, útil y humana.'
   },
   {
     name: 'Significado',
     role: 'No creemos en decorar',
-    focus: 'Creemos en diseno con sentido: productos y experiencias que tienen impacto real en las personas y en el negocio.'
+    focus: 'Creemos en diseño con sentido: productos y experiencias que tienen impacto real en las personas y en el negocio.'
   },
   {
     name: 'Optimismo',
     role: 'Construimos futuro',
-    focus: 'Vemos oportunidades donde hay friccion. Ayudamos a convertir ideas, procesos y ambiciones en sistemas que avanzan.'
+    focus: 'Vemos oportunidades donde hay fricción. Ayudamos a convertir ideas, procesos y ambiciones en sistemas que avanzan.'
   },
   {
     name: 'Curiosidad',
     role: 'Preguntamos mejor',
-    focus: 'Nos interesa la gente, la cultura, la tecnologia y tu negocio. La curiosidad nos ayuda a encontrar mejores decisiones.'
+    focus: 'Nos interesa la gente, la cultura, la tecnología y tu negocio. La curiosidad nos ayuda a encontrar mejores decisiones.'
   },
   {
     name: 'Realidad',
-    role: 'Disenamos para construir',
-    focus: 'Un producto vale por su ejecucion. Pensamos en desarrollo, datos, estados y mantenimiento desde el inicio.'
+    role: 'Diseñamos para construir',
+    focus: 'Un producto vale por su ejecución. Pensamos en desarrollo, datos, estados y mantenimiento desde el inicio.'
   },
   {
-    name: 'Colaboracion',
+    name: 'Colaboración',
     role: 'Negocio y creatividad juntos',
     focus: 'Trabajamos lado a lado para combinar inteligencia racional, criterio creativo y responsabilidad sobre el resultado.'
   }
@@ -132,42 +132,42 @@ const PRINCIPLES: Person[] = [
 
 const INDUSTRIES = [
   'Servicios profesionales',
-  'Educacion',
+  'Educación',
   'Retail y ecommerce',
   'Operaciones internas',
   'Startups B2B',
   'Real estate',
   'Salud y bienestar',
-  'Comunidades y membresias',
-  'Finanzas y administracion',
+  'Comunidades y membresías',
+  'Finanzas y administración',
   'Marketing y ventas',
-  'Logistica',
+  'Logística',
   'Hospitality'
 ]
 
 const FAQS: Faq[] = [
   {
-    q: 'Que hace Cobalto Blue?',
-    a: 'Cobalto Blue disena y desarrolla productos digitales, plataformas SaaS, sistemas web, dashboards, automatizaciones e integraciones para empresas que necesitan operar mejor.'
+    q: '¿Qué hace Cobalto Blue?',
+    a: 'Cobalto Blue diseña y desarrolla productos digitales, plataformas SaaS, sistemas web, dashboards, automatizaciones e integraciones para empresas que necesitan operar mejor.'
   },
   {
-    q: 'Trabajan con startups o empresas establecidas?',
-    a: 'Si. Podemos construir MVPs para validar una idea, modernizar sistemas existentes o crear herramientas internas para equipos que ya operan y necesitan escalar.'
+    q: '¿Trabajan con startups o empresas establecidas?',
+    a: 'Sí. Podemos construir MVPs para validar una idea, modernizar sistemas existentes o crear herramientas internas para equipos que ya operan y necesitan escalar.'
   },
   {
-    q: 'Pueden trabajar con nuestro equipo interno?',
-    a: 'Si. Podemos actuar como equipo externo completo o integrarnos con equipos de marketing, operaciones, producto, diseno o tecnologia.'
+    q: '¿Pueden trabajar con nuestro equipo interno?',
+    a: 'Sí. Podemos actuar como equipo externo completo o integrarnos con equipos de marketing, operaciones, producto, diseño o tecnología.'
   },
   {
-    q: 'Tambien hacen branding y diseno visual?',
-    a: 'Si, pero ahora lo usamos como parte del producto digital. La identidad, el contenido y la interfaz deben ayudar a que el sistema sea claro, confiable y facil de vender.'
+    q: '¿También hacen branding y diseño visual?',
+    a: 'Sí, pero ahora lo usamos como parte del producto digital. La identidad, el contenido y la interfaz deben ayudar a que el sistema sea claro, confiable y fácil de vender.'
   },
   {
-    q: 'Como usan AI en el proceso?',
-    a: 'Usamos AI como apoyo para investigacion, estructura de contenido, analisis de patrones, documentacion y aceleracion de prototipos. Las decisiones finales de estrategia, diseno y desarrollo se revisan por el equipo.'
+    q: '¿Cómo usan AI en el proceso?',
+    a: 'Usamos AI como apoyo para investigación, estructura de contenido, análisis de patrones, documentación y aceleración de prototipos. Las decisiones finales de estrategia, diseño y desarrollo se revisan por el equipo.'
   },
   {
-    q: 'Que necesito para pedir una cotizacion?',
+    q: '¿Qué necesito para pedir una cotización?',
     a: 'Lo ideal es compartir el objetivo del sistema, usuarios principales, procesos que quieres mejorar, herramientas actuales, fechas importantes y presupuesto estimado.'
   }
 ]
@@ -178,8 +178,8 @@ const jsonLd = {
   name: 'Cobalto Blue',
   url: 'https://cobalto.blue/nosotros',
   description:
-    'Estudio de desarrollo digital especializado en plataformas SaaS, sistemas web, automatizacion, integraciones y UX/UI.',
-  serviceType: ['SaaS', 'Sistemas web', 'Desarrollo web', 'Automatizacion', 'UX UI'],
+    'Estudio de desarrollo digital especializado en plataformas SaaS, sistemas web, automatización, integraciones y UX/UI.',
+  serviceType: ['SaaS', 'Sistemas web', 'Desarrollo web', 'Automatización', 'UX UI'],
   areaServed: ['Mexico', 'Latin America', 'Remote']
 }
 
@@ -190,7 +190,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Cobalto Blue - SaaS, sistemas web y servicios digitales',
     description:
-      'Un estudio de producto digital para crear sistemas web claros, escalables y bien disenados.',
+      'Un estudio de producto digital para crear sistemas web claros, escalables y bien diseñados.',
     url: 'https://cobalto.blue/nosotros',
     siteName: 'Cobalto Blue',
     type: 'website'
@@ -249,7 +249,7 @@ export default function NosotrosPage() {
               </h1>
               <div className="mt-5 border-t border-[#0d0d0d] pt-4 md:mt-8 md:pt-6">
                 <p className="max-w-[92vw] text-lg font-bold leading-tight md:text-3xl lg:max-w-4xl">
-                  Construimos desarrollos y plataformas digitales para empresas que necesitan operar, vender y escalar con claridad. Más de una decada de experiencia nos respalda.
+                  Construimos desarrollos y plataformas digitales para empresas que necesitan operar, vender y escalar con claridad. Más de una década de experiencia nos respalda.
                 </p>
               </div>
             </div>
@@ -270,10 +270,10 @@ export default function NosotrosPage() {
           </h2>
           <div className="mt-8 max-w-full space-y-4 text-lg font-bold leading-tight text-white md:max-w-3xl md:text-2xl">
             <p>
-              Un sistema no es una coleccion de pantallas. Es una forma de ordenar decisiones, personas, datos y tareas.
+              Un sistema no es una colección de pantallas. Es una forma de ordenar decisiones, personas, datos y tareas.
             </p>
             <p className="text-white/70 md:whitespace-nowrap">
-              Menos promesas abstractas. Mas producto funcionando.
+              Menos promesas abstractas. Más producto funcionando.
             </p>
           </div>
         </div>
@@ -287,7 +287,7 @@ export default function NosotrosPage() {
           <div className="border-b border-[#0d0d0d] bg-[#1F00FF] px-5 py-12 text-white sm:px-8 lg:px-12">
             <h2 className="text-4xl font-bold leading-none md:text-7xl">Alcances y servicios</h2>
             <p className="mt-5 max-w-3xl text-xl leading-relaxed text-white/80">
-              Creamos sistemas completos o partes especificas de una operacion digital. Cada alcance se define por objetivos, usuarios, datos y nivel de complejidad.
+              Creamos sistemas completos o partes específicas de una operación digital. Cada alcance se define por objetivos, usuarios, datos y nivel de complejidad.
             </p>
           </div>
 
@@ -327,9 +327,9 @@ export default function NosotrosPage() {
         <aside className="hidden border-r border-[#0d0d0d] bg-[#f7f5ef] lg:block" aria-hidden="true" />
         <div>
           <div className="border-b border-[#0d0d0d] px-5 py-12 sm:px-8 lg:px-12">
-            <h2 className="text-4xl font-bold leading-none md:text-7xl">Nos guian 6 principios.</h2>
+            <h2 className="text-4xl font-bold leading-none md:text-7xl">Nos guían 6 principios.</h2>
             <p className="mt-5 max-w-3xl text-xl leading-relaxed text-neutral-700">
-              Son criterios simples para disenar y construir productos digitales con claridad, responsabilidad y sentido.
+              Son criterios simples para diseñar y construir productos digitales con claridad, responsabilidad y sentido.
             </p>
           </div>
 
@@ -387,7 +387,7 @@ export default function NosotrosPage() {
               Si tienes una idea, un proceso roto o una plataforma que necesita evolucionar, podemos convertirlo en un sistema digital claro.
             </p>
             <Link href="/contacto" className="w-max border border-white px-5 py-3 text-sm font-bold uppercase text-white hover:bg-white hover:text-[#1F00FF]">
-              Empezar conversacion
+              Empezar conversación
             </Link>
           </div>
         </div>
@@ -410,8 +410,8 @@ export default function NosotrosPage() {
           </p>
         </div>
         <nav className="mt-6 flex flex-wrap gap-5 text-xs font-normal text-white/70 lg:mt-0" aria-label="Legal y contacto">
-          <Link href="/privacidad" className="hover:text-white">Politicas de privacidad</Link>
-          <Link href="/terminos" className="hover:text-white">Terminos y condiciones</Link>
+          <Link href="/privacidad" className="hover:text-white">Políticas de privacidad</Link>
+          <Link href="/terminos" className="hover:text-white">Términos y condiciones</Link>
           <a href="mailto:hey@cobalto.blue" className="hover:text-white">Hey@cobalto.blue</a>
         </nav>
         <div className="mt-8 hidden justify-start lg:mt-0 lg:flex lg:justify-end">

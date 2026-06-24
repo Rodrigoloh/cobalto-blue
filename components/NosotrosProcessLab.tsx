@@ -22,11 +22,11 @@ const TRACKS: Track[] = [
     soft: 'rgba(204, 255, 63, 0.08)',
     phases: [
       { title: 'Discovery & strategy', desc: 'Definimos el problema, usuarios, roles, datos, reglas de negocio y el alcance real del MVP.', involvement: 38 },
-      { title: 'Architecture & UX', desc: 'Convertimos el producto en modulos, flujos, permisos, pantallas clave e integraciones necesarias.', involvement: 72 },
-      { title: 'Product design', desc: 'Disenamos una interfaz clara para usuarios reales, con estados, componentes y experiencia repetible.', involvement: 64 },
-      { title: 'Development', desc: 'Construimos front-end, back-end, paneles, autenticacion, base de datos e integraciones.', involvement: 46 },
-      { title: 'QA & data', desc: 'Probamos reglas, estados, permisos, flujos criticos y datos reales antes de publicar.', involvement: 54 },
-      { title: 'Launch', desc: 'Publicamos, medimos, corregimos y dejamos una ruta de crecimiento para la siguiente version.', involvement: 68 }
+      { title: 'Architecture & UX', desc: 'Convertimos el producto en módulos, flujos, permisos, pantallas clave e integraciones necesarias.', involvement: 72 },
+      { title: 'Product design', desc: 'Diseñamos una interfaz clara para usuarios reales, con estados, componentes y experiencia repetible.', involvement: 64 },
+      { title: 'Development', desc: 'Construimos front-end, back-end, paneles, autenticación, base de datos e integraciones.', involvement: 46 },
+      { title: 'QA & data', desc: 'Probamos reglas, estados, permisos, flujos críticos y datos reales antes de publicar.', involvement: 54 },
+      { title: 'Launch', desc: 'Publicamos, medimos, corregimos y dejamos una ruta de crecimiento para la siguiente versión.', involvement: 68 }
     ]
   },
   {
@@ -35,10 +35,10 @@ const TRACKS: Track[] = [
     soft: 'rgba(31, 0, 255, 0.12)',
     phases: [
       { title: 'Content strategy', desc: 'Ordenamos propuesta, servicios, casos, mensajes clave y contenido legible para personas, buscadores y AI.', involvement: 42 },
-      { title: 'Information architecture', desc: 'Definimos navegacion, jerarquia, secciones, landings y estructura tecnica del sitio.', involvement: 70 },
-      { title: 'Interface system', desc: 'Creamos una direccion visual sobria, componentes reutilizables y una experiencia responsive.', involvement: 58 },
-      { title: 'Development', desc: 'Construimos con performance, metadata, analitica, accesibilidad y base lista para crecer.', involvement: 50 },
-      { title: 'Optimization', desc: 'Medimos velocidad, conversion, SEO y comportamiento para mejorar el sitio despues del lanzamiento.', involvement: 74 }
+      { title: 'Information architecture', desc: 'Definimos navegación, jerarquía, secciones, landings y estructura técnica del sitio.', involvement: 70 },
+      { title: 'Interface system', desc: 'Creamos una dirección visual sobria, componentes reutilizables y una experiencia responsive.', involvement: 58 },
+      { title: 'Development', desc: 'Construimos con performance, metadata, analítica, accesibilidad y base lista para crecer.', involvement: 50 },
+      { title: 'Optimization', desc: 'Medimos velocidad, conversión, SEO y comportamiento para mejorar el sitio después del lanzamiento.', involvement: 74 }
     ]
   },
   {
@@ -46,12 +46,12 @@ const TRACKS: Track[] = [
     color: '#ff4a25',
     soft: 'rgba(255, 74, 37, 0.1)',
     phases: [
-      { title: 'Operational audit', desc: 'Analizamos tareas manuales, herramientas actuales, responsables, entradas, salidas y puntos de friccion.', involvement: 52 },
-      { title: 'Workflow design', desc: 'Traducimos la operacion en estados, reglas, permisos, vistas, automatizaciones y alertas.', involvement: 78 },
-      { title: 'Interface design', desc: 'Disenamos pantallas densas pero claras para equipos que usaran el sistema todos los dias.', involvement: 62 },
+      { title: 'Operational audit', desc: 'Analizamos tareas manuales, herramientas actuales, responsables, entradas, salidas y puntos de fricción.', involvement: 52 },
+      { title: 'Workflow design', desc: 'Traducimos la operación en estados, reglas, permisos, vistas, automatizaciones y alertas.', involvement: 78 },
+      { title: 'Interface design', desc: 'Diseñamos pantallas densas pero claras para equipos que usarán el sistema todos los días.', involvement: 62 },
       { title: 'Integration', desc: 'Conectamos APIs, CRMs, pagos, formularios, reportes o bases de datos existentes.', involvement: 44 },
       { title: 'Security & roles', desc: 'Definimos accesos, permisos, trazabilidad y controles para que cada usuario vea lo correcto.', involvement: 58 },
-      { title: 'Training & iteration', desc: 'Acompanamos adopcion, documentamos uso y ajustamos el sistema con feedback del equipo.', involvement: 66 }
+      { title: 'Training & iteration', desc: 'Acompañamos adopción, documentamos uso y ajustamos el sistema con feedback del equipo.', involvement: 66 }
     ]
   }
 ]
@@ -100,7 +100,7 @@ export default function NosotrosProcessLab() {
               Un proceso claro para convertir necesidades operativas en productos digitales que se pueden usar, medir y mejorar.
             </p>
             <p className="text-white/70">
-              Selecciona un tipo de proyecto para explorar fases, nivel de participacion del cliente y decisiones clave.
+              Selecciona un tipo de proyecto para explorar fases, nivel de participación del cliente y decisiones clave.
             </p>
           </div>
         </div>

@@ -16,7 +16,7 @@ const SERVICE_LINKS = [
   'SaaS y plataformas web',
   'Sistemas internos',
   'Websites de performance',
-  'Automatizacion e integraciones'
+  'Automatización e integraciones'
 ]
 
 function MenuIcon({ open }: { open: boolean }) {
@@ -43,7 +43,7 @@ export default function NosotrosMenu() {
       <div data-nosotros-menu className="nosotros-menu fixed bottom-3 left-3 z-50 grid overflow-hidden border border-[#0d0d0d] bg-[#171717] text-sm font-bold text-white lg:hidden">
         <button
           type="button"
-          aria-label={open ? 'Cerrar menu' : 'Abrir menu'}
+          aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
           className="grid h-14 w-14 place-items-center transition hover:bg-[#1F00FF]"
@@ -59,14 +59,14 @@ export default function NosotrosMenu() {
           <div data-nosotros-menu className="pointer-events-auto grid grid-cols-[72px_1fr_auto] overflow-hidden border border-t-0 border-[#0d0d0d] bg-[#171717] text-sm font-bold text-white">
             <button
               type="button"
-              aria-label={open ? 'Cerrar menu' : 'Abrir menu'}
+              aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
               aria-expanded={open}
               onClick={() => setOpen((value) => !value)}
               className="grid h-14 w-[72px] place-items-center border-r border-white/25 transition hover:bg-[#1F00FF]"
             >
               <MenuIcon open={open} />
             </button>
-            <nav className="grid grid-cols-3" aria-label="Navegacion principal de Cobalto Blue">
+            <nav className="grid grid-cols-3" aria-label="Navegación principal de Cobalto Blue">
               <Link href="/work" className="grid place-items-center px-3 hover:bg-[#1F00FF]">
                 Work
               </Link>
@@ -92,7 +92,7 @@ export default function NosotrosMenu() {
         className={`nosotros-menu fixed bottom-[76px] left-3 right-3 z-50 max-h-[calc(100svh-96px)] overflow-y-auto border border-[#0d0d0d] bg-white text-[#111322] shadow-2xl transition duration-300 lg:bottom-auto lg:left-[var(--nosotros-menu-line)] lg:right-[var(--nosotros-rail)] lg:top-[calc(var(--nosotros-top-offset,56px)+56px)] lg:max-h-[calc(100svh-72px)] lg:w-auto ${
           open ? 'translate-y-0 opacity-100 md:translate-x-0' : 'pointer-events-none translate-y-4 opacity-0 md:translate-x-5 md:translate-y-0'
         }`}
-        aria-label="Menu expandido de Cobalto Blue"
+        aria-label="Menú expandido de Cobalto Blue"
       >
         <div className="border-b border-[#0d0d0d] bg-[#171717] px-6 py-5 text-sm font-bold uppercase tracking-[0.08em] text-white">
           Cobalto Blue

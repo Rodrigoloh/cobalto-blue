@@ -53,7 +53,7 @@ const marqueeItems = [
   'SaaS y plataformas web',
   'Sistemas internos',
   'Websites de performance',
-  'Automatizacion'
+  'Automatización'
 ]
 
 const painPoints = [
@@ -174,7 +174,7 @@ function HomeFloatingMenu({ targetRef, variant = 'desktop' }: { targetRef: RefOb
         >
           <button
             type="button"
-            aria-label={open ? 'Cerrar menu' : 'Abrir menu'}
+            aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={open}
             onClick={() => setOpen((value) => !value)}
             className={isMobile ? 'grid h-14 w-14 place-items-center transition hover:bg-[#1F00FF]' : 'grid h-16 w-16 place-items-center transition hover:bg-[#1F00FF]'}
@@ -493,8 +493,8 @@ function HomeFooter() {
         </p>
       </div>
       <nav className="mt-6 flex flex-wrap gap-5 text-xs font-normal text-white/70 lg:mt-0" aria-label="Legal y contacto">
-        <Link href="/privacidad" className="hover:text-white">Politicas de privacidad</Link>
-        <Link href="/terminos" className="hover:text-white">Terminos y condiciones</Link>
+        <Link href="/privacidad" className="hover:text-white">Políticas de privacidad</Link>
+        <Link href="/terminos" className="hover:text-white">Términos y condiciones</Link>
         <a href="mailto:hey@cobalto.blue" className="hover:text-white">Hey@cobalto.blue</a>
       </nav>
       <div className="mt-8 hidden justify-start lg:mt-0 lg:flex lg:justify-end">
