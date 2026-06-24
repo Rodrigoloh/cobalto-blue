@@ -496,6 +496,7 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
   const browserEngineDetail = apiPageSpeedData?.browserEngine
     ? apiPageSpeedData.browserEngine.replace(/^Using\s+/i, '')
     : 'HeadlessChromium'
+  const isPdfExportDisabled = shouldRenderPageSpeedSlide && isPageSpeedLoading
 
   useEffect(() => {
     const websiteUrl = getConfiguredWebsiteUrl(data, geminiJson)
@@ -536,7 +537,7 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
         }
       } catch {
         if (!cancelled) {
-          setApiPageSpeedData(null)
+          setApiPageSpeedData(defaultApiPageSpeedData())
         }
       } finally {
         if (!cancelled) {
@@ -558,6 +559,8 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
               dashboardHref="https://www.cobalto.blue/cb-lab/reporting"
               pdfTargetId="full-report-canvas"
               pdfFileName={reportFileName(company, 'ReporteCompleto')}
+              exportDisabled={isPdfExportDisabled}
+              exportDisabledLabel="Esperando metricas..."
             />
 
             <div id="full-report-canvas" data-pdf-format="deck">

@@ -8,6 +8,8 @@ type ReportPrintActionsProps = {
   dashboardHref?: string
   pdfTargetId?: string
   pdfFileName?: string
+  exportDisabled?: boolean
+  exportDisabledLabel?: string
 }
 
 type SaveFilePicker = (options?: {
@@ -86,11 +88,17 @@ async function savePdfWithPicker(pdf: jsPDF, fileName: string) {
 export function ReportPrintActions({
   dashboardHref = '/cb-lab/reporting',
   pdfTargetId,
-  pdfFileName = 'reporte-hook.pdf'
+  pdfFileName = 'reporte-hook.pdf',
+  exportDisabled = false,
+  exportDisabledLabel = 'Preparando PDF...'
 }: ReportPrintActionsProps) {
   const [isExporting, setIsExporting] = useState(false)
 
   async function handleSavePdf() {
+    if (exportDisabled) {
+      return
+    }
+
     if (!pdfTargetId) {
       window.print()
       return
@@ -206,10 +214,10 @@ export function ReportPrintActions({
       <button
         type="button"
         onClick={handleSavePdf}
-        disabled={isExporting}
-        className="rounded-full bg-[#1F00FF] px-4 py-2 text-white transition hover:bg-black"
+        disabled={isExporting || exportDisabled}
+        className="rounded-full bg-[#1F00FF] px-4 py-2 text-white transition hover:bg-black disabled:cursor-wait disabled:opacity-60"
       >
-        {isExporting ? 'Generando PDF...' : 'Guardar como PDF'}
+        {isExporting ? 'Generando PDF...' : exportDisabled ? exportDisabledLabel : 'Guardar como PDF'}
       </button>
     </div>
   )
