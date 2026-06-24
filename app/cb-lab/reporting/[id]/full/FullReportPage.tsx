@@ -163,6 +163,44 @@ function normalizeApiPageSpeedData(value: any, fallbackAudit?: any): ApiPageSpee
   }
 }
 
+function defaultApiPageSpeedData(): ApiPageSpeedData {
+  const emptyMetric = { value: 'N/D', raw: 0 }
+
+  return {
+    performanceScore: 0,
+    accessibilityScore: 0,
+    bestPracticesScore: 0,
+    seoScore: 0,
+    fcp: emptyMetric,
+    lcp: emptyMetric,
+    tbt: emptyMetric,
+    cls: emptyMetric,
+    speedIndexMetric: emptyMetric,
+    capturedAt: null,
+    emulatedDevice: null,
+    sessionType: null,
+    loadType: null,
+    throttling: null,
+    browserEngine: null
+  }
+}
+
+function getConfiguredWebsiteUrl(data: any, geminiJson: any) {
+  const raw = data.websiteUrl || geminiJson.websiteUrl || ''
+
+  return typeof raw === 'string' ? raw.trim() : ''
+}
+
+function hasConfiguredWebsite(data: any, geminiJson: any) {
+  const websiteUrl = getConfiguredWebsiteUrl(data, geminiJson)
+
+  return Boolean(
+    geminiJson.hasExistingWebsite !== false &&
+      websiteUrl &&
+      websiteUrl !== 'NO_CONFIGURADA'
+  )
+}
+
 function slugFileName(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 }
@@ -446,6 +484,8 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
   const secondFinding = data.findings[1] ?? data.costOfInaction
   const thirdFinding = data.findings[2] ?? data.technicalSummary
   const company = geminiJson.companyName || 'Empresa analizada'
+  const websiteUrl = getConfiguredWebsiteUrl(data, geminiJson)
+  const shouldRenderPageSpeedSlide = hasConfiguredWebsite(data, geminiJson)
   const city = geminiJson.city || 'su mercado'
   const industry = geminiJson.industry || 'su industria'
   const cta = geminiJson.primaryCta || 'contacto comercial'
@@ -515,9 +555,15 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
   ]
 
   useEffect(() => {
-    const websiteUrl = data.websiteUrl || geminiJson.websiteUrl
+    const websiteUrl = getConfiguredWebsiteUrl(data, geminiJson)
 
-    if (initialApiPageSpeedData || !websiteUrl) {
+    if (!hasConfiguredWebsite(data, geminiJson)) {
+      setApiPageSpeedData(defaultApiPageSpeedData())
+      setIsPageSpeedLoading(false)
+      return
+    }
+
+    if (initialApiPageSpeedData) {
       setIsPageSpeedLoading(false)
       return
     }
@@ -561,7 +607,7 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
     return () => {
       cancelled = true
     }
-  }, [data.websiteUrl, geminiJson.websiteUrl, initialApiPageSpeedData])
+  }, [data.websiteUrl, geminiJson.websiteUrl, geminiJson.hasExistingWebsite, initialApiPageSpeedData])
 
   return (
           <main className="report-shell min-h-screen px-6 py-6 text-[#111827]">
@@ -580,7 +626,7 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
                   </p>
                   <h1 className="mt-4 text-[39px] font-bold leading-none text-white">{company}</h1>
                   <p className="mt-3 break-all text-[16px] leading-tight text-white/70">
-                    {data.websiteUrl || 'Sin sitio web registrado'}
+                    {shouldRenderPageSpeedSlide ? websiteUrl : 'Sin sitio web registrado'}
                   </p>
                   <p className="mt-6 text-[24px] leading-[1.12] text-white/86">
                     Auditoria web, diagnostico de Core Web Vitals e inyeccion estrategica de datos semanticos para la preparacion de motores de IA (AI-Ready).
@@ -618,39 +664,41 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
                 <FooterLogo />
               </DeckPage>
 
-              <DeckPage className="pt-[68px]">
-                <div className="px-[58px]">
-                  <Title>Rendimiento y Core Web Vitals</Title>
-                </div>
-                {isPageSpeedLoading || !apiPageSpeedData ? (
-                  <PageSpeedSkeleton />
-                ) : (
-                  <PageSpeedMock
-                    scores={[
-                      { label: 'Performance', score: apiPageSpeedData.performanceScore },
-                      { label: 'Accessibility', score: apiPageSpeedData.accessibilityScore },
-                      { label: 'Best Practices', score: apiPageSpeedData.bestPracticesScore },
-                      { label: 'SEO', score: apiPageSpeedData.seoScore }
-                    ]}
-                    metrics={{
-                      fcp: apiPageSpeedData.fcp,
-                      lcp: apiPageSpeedData.lcp,
-                      tbt: apiPageSpeedData.tbt,
-                      cls: apiPageSpeedData.cls,
-                      speedIndex: apiPageSpeedData.speedIndexMetric
-                    }}
-                  />
-                )}
-                <p className="mx-[58px] mt-[14px] text-[14px] leading-[1.25] text-[#1f2937]">
-                  El informe de <b>PageSpeed Insights</b> evidencia friccion en el rendimiento movil. El punto critico aparece en el <b>Largest Contentful Paint (LCP)</b>, la carga percibida y el tiempo que tarda el usuario en entender la oferta principal.
-                </p>
-                <div className="absolute bottom-[30px] left-[58px] grid w-[620px] grid-cols-3 gap-x-5 gap-y-2 bg-[#f5f5f5] px-4 py-3 text-[9px] leading-tight text-[#666666]">
-                  {pageSpeedDetails.map((detail) => (
-                    <span key={detail}>{detail}</span>
-                  ))}
-                </div>
-                <FooterLogo />
-              </DeckPage>
+              {shouldRenderPageSpeedSlide ? (
+                <DeckPage className="pt-[68px]">
+                  <div className="px-[58px]">
+                    <Title>Rendimiento y Core Web Vitals</Title>
+                  </div>
+                  {isPageSpeedLoading || !apiPageSpeedData ? (
+                    <PageSpeedSkeleton />
+                  ) : (
+                    <PageSpeedMock
+                      scores={[
+                        { label: 'Performance', score: apiPageSpeedData.performanceScore },
+                        { label: 'Accessibility', score: apiPageSpeedData.accessibilityScore },
+                        { label: 'Best Practices', score: apiPageSpeedData.bestPracticesScore },
+                        { label: 'SEO', score: apiPageSpeedData.seoScore }
+                      ]}
+                      metrics={{
+                        fcp: apiPageSpeedData.fcp,
+                        lcp: apiPageSpeedData.lcp,
+                        tbt: apiPageSpeedData.tbt,
+                        cls: apiPageSpeedData.cls,
+                        speedIndex: apiPageSpeedData.speedIndexMetric
+                      }}
+                    />
+                  )}
+                  <p className="mx-[58px] mt-[14px] text-[14px] leading-[1.25] text-[#1f2937]">
+                    El informe de <b>PageSpeed Insights</b> evidencia friccion en el rendimiento movil. El punto critico aparece en el <b>Largest Contentful Paint (LCP)</b>, la carga percibida y el tiempo que tarda el usuario en entender la oferta principal.
+                  </p>
+                  <div className="absolute bottom-[30px] left-[58px] grid w-[620px] grid-cols-3 gap-x-5 gap-y-2 bg-[#f5f5f5] px-4 py-3 text-[9px] leading-tight text-[#666666]">
+                    {pageSpeedDetails.map((detail) => (
+                      <span key={detail}>{detail}</span>
+                    ))}
+                  </div>
+                  <FooterLogo />
+                </DeckPage>
+              ) : null}
 
               <DeckPage className="px-[58px] pt-[68px]">
                 <Title>Costo de Oportunidad Semanal</Title>

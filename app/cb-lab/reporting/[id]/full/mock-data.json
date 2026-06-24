@@ -3,6 +3,7 @@
   "apiPageSpeedData": null,
   "geminiJson": {
     "companyName": "Empresa analizada",
+    "hasExistingWebsite": true,
     "websiteUrl": "",
     "industry": "su industria",
     "city": "su mercado",

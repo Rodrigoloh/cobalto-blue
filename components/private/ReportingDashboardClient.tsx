@@ -18,6 +18,7 @@ const SAMPLE_JSON = `{
   "id": "cliente-demo",
   "geminiJson": {
     "companyName": "Cliente Demo",
+    "hasExistingWebsite": true,
     "websiteUrl": "https://cliente.com",
     "industry": "Servicios profesionales",
     "city": "Monterrey",
@@ -91,6 +92,15 @@ function getWebsiteUrl(mockData: any) {
   return mockData?.geminiJson?.websiteUrl || mockData?.websiteUrl || mockData?.input?.websiteUrl || ''
 }
 
+function requiresWebsiteUrl(mockData: any) {
+  const geminiJson = mockData?.geminiJson && typeof mockData.geminiJson === 'object'
+    ? mockData.geminiJson
+    : mockData
+  const websiteUrl = getWebsiteUrl(mockData)
+
+  return geminiJson?.hasExistingWebsite !== false && websiteUrl !== 'NO_CONFIGURADA'
+}
+
 function ensureReportId(mockData: any) {
   const company = getReportName(mockData)
   const explicitId = typeof mockData?.id === 'string' ? mockData.id.trim() : ''
@@ -131,7 +141,7 @@ export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboar
       }
 
       const websiteUrl = getWebsiteUrl(parsed)
-      if (!websiteUrl) {
+      if (!websiteUrl && requiresWebsiteUrl(parsed)) {
         throw new Error('El JSON debe incluir geminiJson.websiteUrl o websiteUrl para consultar PageSpeed.')
       }
 
@@ -214,8 +224,8 @@ export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboar
                 <p className="text-sm font-semibold text-black/60">Métricas técnicas</p>
                 <p className="mt-2 text-lg text-black">Google PageSpeed</p>
                 <p className="mt-2 text-sm text-black/65">
-                  El PDF consulta PageSpeed en vivo con `geminiJson.websiteUrl`. También acepta
-                  `apiPageSpeedData` si ya viene precargado.
+                  El PDF consulta PageSpeed en vivo si existe `geminiJson.websiteUrl`. Si
+                  `hasExistingWebsite` es falso o la URL es `NO_CONFIGURADA`, omite esa lámina.
                 </p>
               </div>
               <div className="rounded-3xl border border-black/10 bg-white/60 p-4">
