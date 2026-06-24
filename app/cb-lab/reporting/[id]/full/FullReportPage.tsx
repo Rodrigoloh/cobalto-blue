@@ -459,9 +459,15 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
   const shouldRenderPageSpeedSlide = hasConfiguredWebsite(data, geminiJson)
   const cta = geminiJson.primaryCta || 'contacto comercial'
   const costoOportunidadPage =
-    geminiJson.costo_oportunidad_page && typeof geminiJson.costo_oportunidad_page === 'object'
-      ? geminiJson.costo_oportunidad_page
-      : {}
+    data.costo_oportunidad_page && typeof data.costo_oportunidad_page === 'object'
+      ? data.costo_oportunidad_page
+      : geminiJson.costo_oportunidad_page && typeof geminiJson.costo_oportunidad_page === 'object'
+        ? geminiJson.costo_oportunidad_page
+        : geminiJson.costoOportunidadPage && typeof geminiJson.costoOportunidadPage === 'object'
+          ? geminiJson.costoOportunidadPage
+          : data.costoOportunidadPage && typeof data.costoOportunidadPage === 'object'
+            ? data.costoOportunidadPage
+            : {}
   const visionGeneralP1 = geminiJson.visionGeneralP1 || ''
   const visionGeneralP2 = geminiJson.visionGeneralP2 || ''
   const visionUxP1 = geminiJson.visionUxP1 || ''
