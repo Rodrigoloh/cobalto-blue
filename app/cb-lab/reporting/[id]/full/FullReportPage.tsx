@@ -480,71 +480,34 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
   const impact = data.financialImpact ?? defaultImpact()
   const weeklyLoss = Math.round(impact.lostRevenueMonthly / 4)
   const weeklyVisitors = Math.max(10, Math.round(impact.monthlyVisits / 4))
-  const firstFinding = data.findings[0] ?? data.hookSummary
-  const secondFinding = data.findings[1] ?? data.costOfInaction
-  const thirdFinding = data.findings[2] ?? data.technicalSummary
   const company = geminiJson.companyName || 'Empresa analizada'
   const websiteUrl = getConfiguredWebsiteUrl(data, geminiJson)
   const shouldRenderPageSpeedSlide = hasConfiguredWebsite(data, geminiJson)
-  const city = geminiJson.city || 'su mercado'
-  const industry = geminiJson.industry || 'su industria'
   const cta = geminiJson.primaryCta || 'contacto comercial'
-  const visionGeneralP1 =
-    geminiJson.visionGeneralP1 ||
-    geminiJson.visionImpactText ||
-    `La experiencia de ${company} en ${industry} se ve limitada digitalmente por una estructura que no comunica con la velocidad que el mercado espera en ${city}.`
-  const visionGeneralP2 =
-    geminiJson.visionGeneralP2 ||
-    geminiJson.visionImpactTextSecondary ||
-    'El sitio web actua como un catalogo estatico, desaprovechando su potencial de conversion corporativa y limitando el flujo activo de adquisicion.'
-  const visionUxP1 = geminiJson.visionUxP1 || geminiJson.visionConversionText || firstFinding
-  const visionUxP2 =
-    geminiJson.visionUxP2 ||
-    geminiJson.visionConversionTextSecondary ||
-    secondFinding ||
-    `La ausencia de rutas claras hacia ${cta} diluye la prospeccion y reduce la confianza de compradores que buscan respuesta inmediata.`
-  const opportunityAreasP1 = geminiJson.opportunityAreasP1 || firstFinding
-  const opportunityAreasP2 =
-    geminiJson.opportunityAreasP2 ||
-    `La experiencia necesita conectar mejor el mensaje principal con ${cta} para reducir dudas y acelerar solicitudes calificadas.`
-  const opportunityInconsistenciesP1 = geminiJson.opportunityInconsistenciesP1 || secondFinding
-  const opportunityInconsistenciesP2 =
-    geminiJson.opportunityInconsistenciesP2 ||
-    thirdFinding ||
-    'Las inconsistencias tecnicas y narrativas reducen la confianza antes de que el usuario llegue a contacto.'
-  const nextStepsSubtitle = geminiJson.nextStepsSubtitle || 'Consistencia de Datos & SEO Semantico'
-  const nextStepOneTitle = geminiJson.nextStepOneTitle || 'Consolidacion NAP'
-  const nextStepOneText =
-    geminiJson.nextStepOneText ||
-    geminiJson.nextStepNapText ||
-    `Resolver discrepancias de nombre, ubicacion y servicio para unificar la huella digital de ${company} en buscadores locales.`
-  const nextStepTwoTitle = geminiJson.nextStepTwoTitle || 'Estructuracion de Datos'
-  const nextStepTwoText =
-    geminiJson.nextStepTwoText ||
-    geminiJson.nextStepDataText ||
-    'Implementacion nativa de marcado JSON-LD para optimizar la indexacion por buscadores e inteligencias artificiales.'
-  const nextStepThreeTitle = geminiJson.nextStepThreeTitle || 'Limpieza Indexable'
-  const nextStepThreeText =
-    geminiJson.nextStepThreeText ||
-    geminiJson.nextStepIndexText ||
-    'Eliminacion de rutas fantasma e inconsistencias de URL para maximizar crawling y fortalecer la confianza de entidad.'
-  const workPlanSubtitle = geminiJson.workPlanSubtitle || 'Consistencia de Datos & SEO Semantico'
-  const phaseOneTitle = geminiJson.phaseOneTitle || 'Rediseno & Migracion'
-  const phaseTwoTitle = geminiJson.phaseTwoTitle || 'AI-Ready Metadata'
-  const phaseThreeTitle = geminiJson.phaseThreeTitle || 'CRO & Captacion B2B'
-  const phaseFourTitle = geminiJson.phaseFourTitle || 'Optimizacion WPO'
-  const phaseOneText =
-    geminiJson.phaseOneText ||
-    'Transicion a una arquitectura agil para estructurar codigo limpio y semantico de manera nativa.'
-  const phaseTwoText =
-    geminiJson.phaseTwoText ||
-    'Integracion de marcado JSON-LD preciso unificando identidad corporativa, ubicacion y horarios extendidos.'
-  const phaseThreeText =
-    geminiJson.phaseThreeText ||
-    `Modulo y flujo de conversion enfocado en ${cta}, velocidad de respuesta y seguimiento comercial.`
-  const phaseFourText =
-    geminiJson.phaseFourText ||
-    'Conversion grafica moderna, cache, CDN y configuracion tecnica orientada a rendimiento.'
+  const visionGeneralP1 = geminiJson.visionGeneralP1 || ''
+  const visionGeneralP2 = geminiJson.visionGeneralP2 || ''
+  const visionUxP1 = geminiJson.visionUxP1 || ''
+  const visionUxP2 = geminiJson.visionUxP2 || ''
+  const opportunityAreasP1 = geminiJson.opportunityAreasP1 || ''
+  const opportunityAreasP2 = geminiJson.opportunityAreasP2 || ''
+  const inconsistenciesP1 = geminiJson.inconsistenciesP1 || ''
+  const inconsistenciesP2 = geminiJson.inconsistenciesP2 || ''
+  const nextStepsSubtitle = geminiJson.nextStepsSubtitle || ''
+  const nextStepOneTitle = geminiJson.nextStepOneTitle || ''
+  const nextStepOneText = geminiJson.nextStepOneText || geminiJson.nextStepNapText || ''
+  const nextStepTwoTitle = geminiJson.nextStepTwoTitle || ''
+  const nextStepTwoText = geminiJson.nextStepTwoText || geminiJson.nextStepDataText || ''
+  const nextStepThreeTitle = geminiJson.nextStepThreeTitle || ''
+  const nextStepThreeText = geminiJson.nextStepThreeText || geminiJson.nextStepIndexText || ''
+  const workPlanSubtitle = geminiJson.workPlanSubtitle || ''
+  const phaseOneTitle = geminiJson.phaseOneTitle || ''
+  const phaseTwoTitle = geminiJson.phaseTwoTitle || ''
+  const phaseThreeTitle = geminiJson.phaseThreeTitle || ''
+  const phaseFourTitle = geminiJson.phaseFourTitle || ''
+  const phaseOneText = geminiJson.phaseOneText || ''
+  const phaseTwoText = geminiJson.phaseTwoText || ''
+  const phaseThreeText = geminiJson.phaseThreeText || ''
+  const phaseFourText = geminiJson.phaseFourText || ''
   const pageSpeedDetails = [
     formatCaptureDate(apiPageSpeedData?.capturedAt),
     apiPageSpeedData?.emulatedDevice ?? 'Emulated Moto G Power with Lighthouse',
@@ -643,7 +606,7 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
                     <p>{visionGeneralP1}</p>
                     <p>{visionGeneralP2}</p>
                   </TextBlock>
-                  <TextBlock icon={<Radio className="h-8 w-8" />} title="UX">
+                  <TextBlock icon={<Radio className="h-8 w-8" />} title="Inconsistencias de UX">
                     <p>{visionUxP1}</p>
                     <p>{visionUxP2}</p>
                   </TextBlock>
@@ -652,15 +615,15 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
               </DeckPage>
 
               <DeckPage className="px-[58px] pt-[68px]">
-                <Title>Areas de oportunidad</Title>
+                <Title>Enfoque Tecnico/Conversion</Title>
                 <div className="mt-[50px] grid grid-cols-2 gap-[62px]">
                   <TextBlock icon={<LineChart className="h-8 w-8" />} title="Areas de oportunidad">
                     <p>{opportunityAreasP1}</p>
                     <p>{opportunityAreasP2}</p>
                   </TextBlock>
-                  <TextBlock icon={<Radio className="h-8 w-8" />} title="Inconsistencias">
-                    <p>{opportunityInconsistenciesP1}</p>
-                    <p>{opportunityInconsistenciesP2}</p>
+                  <TextBlock icon={<Radio className="h-8 w-8" />} title="Inconsistencias Tecnicas y SEO">
+                    <p>{inconsistenciesP1}</p>
+                    <p>{inconsistenciesP2}</p>
                   </TextBlock>
                 </div>
                 <FooterLogo />
