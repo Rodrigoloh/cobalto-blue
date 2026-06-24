@@ -5,7 +5,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { Code2, LineChart, MapPinned, Monitor, Radio, Smartphone } from 'lucide-react'
 
 import { ReportPrintActions } from '@/components/private/ReportPrintActions'
-import type { FinancialImpact } from '@/lib/performance-report'
 import {
   formatCLS,
   formatMilliseconds,
@@ -40,47 +39,10 @@ type ApiPageSpeedData = {
   browserEngine?: string | null
 }
 
-function currency(value: number) {
-  return new Intl.NumberFormat('es-MX', {
-    style: 'currency',
-    currency: 'MXN',
-    maximumFractionDigits: 0
-  }).format(value)
-}
-
-function compactCurrency(value: number) {
-  return currency(value).replace('MXN', '').trim()
-}
-
-function percent(value: number) {
-  return `${Math.round(value * 100)}%`
-}
-
-function defaultImpact(): FinancialImpact {
-  return {
-    monthlyVisits: 1500,
-    averageTicket: 15000,
-    closeRate: 0.2,
-    conversionRate: 0.025,
-    frictionRate: 0.22,
-    lostLeadsMonthly: 8.3,
-    lostRevenueMonthly: 24900,
-    lostRevenueAnnual: 298800,
-    assumption:
-      'Estimacion comercial: visitas mensuales x conversion base 2.5% x friccion tecnica x tasa de cierre x ticket promedio.'
-  }
-}
-
 function normalizeMockData(value: any) {
   const geminiJson = value?.geminiJson && typeof value.geminiJson === 'object' ? value.geminiJson : value
   const input = value?.input && typeof value.input === 'object' ? value.input : {}
   const pagespeed = value?.pagespeed && typeof value.pagespeed === 'object' ? value.pagespeed : {}
-  const financialImpact =
-    value?.financialImpact && typeof value.financialImpact === 'object'
-      ? value.financialImpact
-      : geminiJson?.financialImpact && typeof geminiJson.financialImpact === 'object'
-        ? geminiJson.financialImpact
-        : {}
 
   return {
     ...input,
@@ -94,10 +56,6 @@ function normalizeMockData(value: any) {
       ...pagespeed,
       mobile: pagespeed.mobile && typeof pagespeed.mobile === 'object' ? pagespeed.mobile : null,
       desktop: pagespeed.desktop && typeof pagespeed.desktop === 'object' ? pagespeed.desktop : null
-    },
-    financialImpact: {
-      ...defaultImpact(),
-      ...financialImpact
     },
     findings: Array.isArray(value?.findings)
       ? value.findings
@@ -481,13 +439,14 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
     initialApiPageSpeedData
   )
   const [isPageSpeedLoading, setIsPageSpeedLoading] = useState(!initialApiPageSpeedData)
-  const impact = data.financialImpact ?? defaultImpact()
-  const weeklyLoss = Math.round(impact.lostRevenueMonthly / 4)
-  const weeklyVisitors = Math.max(10, Math.round(impact.monthlyVisits / 4))
   const company = geminiJson.companyName || 'Empresa analizada'
   const websiteUrl = getConfiguredWebsiteUrl(data, geminiJson)
   const shouldRenderPageSpeedSlide = hasConfiguredWebsite(data, geminiJson)
   const cta = geminiJson.primaryCta || 'contacto comercial'
+  const costoOportunidadPage =
+    geminiJson.costo_oportunidad_page && typeof geminiJson.costo_oportunidad_page === 'object'
+      ? geminiJson.costo_oportunidad_page
+      : {}
   const visionGeneralP1 = geminiJson.visionGeneralP1 || ''
   const visionGeneralP2 = geminiJson.visionGeneralP2 || ''
   const visionUxP1 = geminiJson.visionUxP1 || ''
@@ -675,29 +634,33 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
               ) : null}
 
               <DeckPage className="px-[58px] pt-[68px]">
-                <Title>Costo de Oportunidad Semanal</Title>
+                <Title>{costoOportunidadPage.titulo || ''}</Title>
                 <div className="mt-[43px] grid grid-cols-[590px_1fr] gap-[70px]">
                   <div>
-                    <Lead>¿Como se escapa este capital?</Lead>
+                    <Lead>{costoOportunidadPage.subtitulo || ''}</Lead>
                     <div className="mt-5 space-y-5 text-[18px] leading-[1.18] text-[#444444]">
                       <p>
-                        <b>Trafico Frustrado:</b> De aproximadamente ~{weeklyVisitors.toLocaleString('es-MX')} visitantes que llegan semanalmente, una parte abandona la pagina por velocidad de carga movil, rutas poco claras o baja percepcion de confianza.
+                        {costoOportunidadPage.p1_trafico || ''}
                       </p>
                       <p>
-                        <b>Friccion en la Cotizacion:</b> Al no contar con un flujo directo hacia {cta}, los clientes comparan contra competidores que ofrecen respuestas mas claras y agiles en linea.
+                        {costoOportunidadPage.p2_friccion || ''}
                       </p>
                       <p>
-                        <b>El Impacto Real:</b> Una perdida estimada de {impact.lostLeadsMonthly.toLocaleString('es-MX')} leads al mes. Con un ticket promedio de <b>{currency(impact.averageTicket)}</b> y una tasa de cierre de <b>{percent(impact.closeRate)}</b>, el costo de inactividad supera <b>{currency(impact.lostRevenueMonthly)} mensuales</b>.
+                        {costoOportunidadPage.p3_impacto || ''}
                       </p>
                     </div>
                   </div>
                   <div className="flex flex-col items-center justify-center pb-[40px] text-center">
                     <p className="text-[60px] font-bold leading-none text-[#ff007a]">
-                      -{compactCurrency(weeklyLoss)}
+                      {costoOportunidadPage.texto_grande_monto || ''}
                     </p>
-                    <p className="mt-4 text-[23px] font-bold text-[#ff007a]">MXN / SEMANA</p>
+                    <p className="mt-4 text-[23px] font-bold text-[#ff007a]">
+                      {costoOportunidadPage.texto_grande_moneda || ''}
+                    </p>
                     <p className="mt-5 max-w-[320px] text-[11px] leading-tight text-[#64748b]">
-                      Perdida proyectada de flujo de capital no capturado por fugas en el embudo tecnico y de conversion digital.
+                      {costoOportunidadPage.texto_pequeno_pie ||
+                        costoOportunidadPage.texto_pequeño_pie ||
+                        ''}
                     </p>
                   </div>
                 </div>
