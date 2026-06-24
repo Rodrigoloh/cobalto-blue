@@ -10,6 +10,23 @@ type ReportPrintActionsProps = {
   pdfFileName?: string
 }
 
+type SaveFilePicker = (options?: {
+  suggestedName?: string
+  types?: Array<{
+    description: string
+    accept: Record<string, string[]>
+  }>
+}) => Promise<{
+  createWritable: () => Promise<{
+    write: (data: Blob) => Promise<void>
+    close: () => Promise<void>
+  }>
+}>
+
+type WindowWithSaveFilePicker = Window & {
+  showSaveFilePicker?: SaveFilePicker
+}
+
 async function waitForImages(root: HTMLElement) {
   const images = Array.from(root.querySelectorAll<HTMLImageElement>('img'))
 
@@ -32,6 +49,38 @@ function getElementBackground(element: HTMLElement) {
   const background = window.getComputedStyle(element).backgroundColor
 
   return background && background !== 'rgba(0, 0, 0, 0)' ? background : '#ffffff'
+}
+
+async function savePdfWithPicker(pdf: jsPDF, fileName: string) {
+  const saveFilePicker = (window as WindowWithSaveFilePicker).showSaveFilePicker
+
+  if (!saveFilePicker) {
+    pdf.save(fileName)
+    return
+  }
+
+  try {
+    const handle = await saveFilePicker({
+      suggestedName: fileName,
+      types: [
+        {
+          description: 'PDF',
+          accept: {
+            'application/pdf': ['.pdf']
+          }
+        }
+      ]
+    })
+    const writable = await handle.createWritable()
+    await writable.write(pdf.output('blob'))
+    await writable.close()
+  } catch (error) {
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      return
+    }
+
+    pdf.save(fileName)
+  }
 }
 
 export function ReportPrintActions({
@@ -139,7 +188,7 @@ export function ReportPrintActions({
         pdf.addImage(dataUrl, 'PNG', x, y, renderWidth, renderHeight, undefined, 'FAST')
       }
 
-      pdf.save(pdfFileName)
+      await savePdfWithPicker(pdf, pdfFileName)
     } catch (error) {
       console.error('No fue posible exportar el PDF del Hook.', error)
       window.print()
