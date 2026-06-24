@@ -159,8 +159,23 @@ function hasConfiguredWebsite(data: any, geminiJson: any) {
   )
 }
 
-function slugFileName(value: string) {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+function reportDateStamp(date = new Date()) {
+  const months = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC']
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = months[date.getMonth()]
+  const year = String(date.getFullYear()).slice(-2)
+
+  return `${day}${month}${year}`
+}
+
+function reportFileName(companyName: string, reportType: string) {
+  const company = companyName
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+
+  return `${company || 'Reporte'}_${reportType}_cobaltoblue_${reportDateStamp()}.pdf`
 }
 
 function DeckPage({
@@ -542,7 +557,7 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
             <ReportPrintActions
               dashboardHref="https://www.cobalto.blue/cb-lab/reporting"
               pdfTargetId="full-report-canvas"
-              pdfFileName={`${slugFileName(company)}-reporte-completo.pdf`}
+              pdfFileName={reportFileName(company, 'ReporteCompleto')}
             />
 
             <div id="full-report-canvas" data-pdf-format="deck">
