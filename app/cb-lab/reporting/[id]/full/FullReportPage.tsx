@@ -263,7 +263,7 @@ function TextBlock({
         <div className="text-[#2500ff]">{icon}</div>
         <h3 className="text-[23px] font-bold leading-tight">{title}</h3>
       </div>
-      <div className="space-y-7 text-[20px] leading-[1.14] text-[#444444]">{children}</div>
+      <div className="space-y-7 text-[19px] leading-[1.14] text-[#444444]">{children}</div>
     </div>
   )
 }
