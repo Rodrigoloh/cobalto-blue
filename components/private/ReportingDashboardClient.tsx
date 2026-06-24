@@ -14,53 +14,6 @@ type ReportingDashboardClientProps = {
   geminiConfigured: boolean
 }
 
-const SAMPLE_JSON = `{
-  "id": "cliente-demo",
-  "geminiJson": {
-    "companyName": "Cliente Demo",
-    "hasExistingWebsite": true,
-    "websiteUrl": "https://cliente.com",
-    "industry": "Servicios profesionales",
-    "city": "Monterrey",
-    "primaryCta": "WhatsApp",
-    "financialImpact": {
-      "monthlyVisits": 1500,
-      "averageTicket": 15000,
-      "closeRate": 0.2,
-      "conversionRate": 0.025,
-      "frictionRate": 0.22,
-      "lostLeadsMonthly": 8.3,
-      "lostRevenueMonthly": 24900,
-      "lostRevenueAnnual": 298800
-    },
-    "visionGeneralP1": "",
-    "visionGeneralP2": "",
-    "visionUxP1": "",
-    "visionUxP2": "",
-    "opportunityAreasP1": "",
-    "opportunityAreasP2": "",
-    "opportunityInconsistenciesP1": "",
-    "opportunityInconsistenciesP2": "",
-    "nextStepsSubtitle": "",
-    "nextStepOneTitle": "",
-    "nextStepOneText": "",
-    "nextStepTwoTitle": "",
-    "nextStepTwoText": "",
-    "nextStepThreeTitle": "",
-    "nextStepThreeText": "",
-    "workPlanSubtitle": "",
-    "phaseOneTitle": "",
-    "phaseOneText": "",
-    "phaseTwoTitle": "",
-    "phaseTwoText": "",
-    "phaseThreeTitle": "",
-    "phaseThreeText": "",
-    "phaseFourTitle": "",
-    "phaseFourText": ""
-  },
-  "apiPageSpeedData": null
-}`
-
 function formatDate(value: string) {
   return new Intl.DateTimeFormat('es-MX', {
     dateStyle: 'medium',
@@ -118,7 +71,7 @@ function ensureReportId(mockData: any) {
 export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboardClientProps) {
   const router = useRouter()
   const [reports, setReports] = useState<FullReportSnapshot[]>([])
-  const [jsonText, setJsonText] = useState(SAMPLE_JSON)
+  const [jsonText, setJsonText] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -193,6 +146,7 @@ export function ReportingDashboardClient({ geminiConfigured }: ReportingDashboar
                 onChange={(event) => setJsonText(event.target.value)}
                 rows={24}
                 spellCheck={false}
+                placeholder="Pega aqui el JSON completo generado por la Gem."
                 className="min-h-[520px] w-full resize-y rounded-2xl border border-black/10 bg-white px-4 py-3 font-mono text-xs leading-relaxed outline-none transition focus:border-[#1F00FF]"
               />
             </label>
