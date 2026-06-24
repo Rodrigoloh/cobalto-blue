@@ -10,6 +10,30 @@ type ReportPrintActionsProps = {
   pdfFileName?: string
 }
 
+async function waitForImages(root: HTMLElement) {
+  const images = Array.from(root.querySelectorAll<HTMLImageElement>('img'))
+
+  await Promise.all(
+    images.map((image) => {
+      if (image.complete && image.naturalWidth > 0) {
+        return Promise.resolve()
+      }
+
+      return new Promise<void>((resolve) => {
+        const done = () => resolve()
+        image.addEventListener('load', done, { once: true })
+        image.addEventListener('error', done, { once: true })
+      })
+    })
+  )
+}
+
+function getElementBackground(element: HTMLElement) {
+  const background = window.getComputedStyle(element).backgroundColor
+
+  return background && background !== 'rgba(0, 0, 0, 0)' ? background : '#ffffff'
+}
+
 export function ReportPrintActions({
   dashboardHref = '/cb-lab/reporting',
   pdfTargetId,
@@ -84,10 +108,14 @@ export function ReportPrintActions({
         clone.style.maxHeight = `${exportHeight}px`
         clone.style.transform = 'none'
         clone.style.boxSizing = 'border-box'
+        clone.style.backgroundColor = getElementBackground(sourcePage)
+
+        await document.fonts?.ready
+        await waitForImages(clone)
 
         const dataUrl = await toPng(clone, {
           cacheBust: true,
-          backgroundColor: '#ffffff',
+          backgroundColor: getElementBackground(sourcePage),
           width: exportWidth,
           height: exportHeight,
           canvasWidth: exportWidth,

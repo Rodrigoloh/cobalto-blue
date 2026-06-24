@@ -219,6 +219,10 @@ function DeckPage({
       className={`report-export-page relative mx-auto mt-6 h-[608px] w-[1080px] overflow-hidden ${
         blue ? 'bg-[#2500ff] text-white' : 'bg-[#eeeeee] text-[#111827]'
       } ${className}`}
+      style={{
+        backgroundColor: blue ? '#2500ff' : '#eeeeee',
+        color: blue ? '#ffffff' : '#111827'
+      }}
     >
       {children}
     </section>
@@ -577,7 +581,7 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
   return (
           <main className="report-shell min-h-screen px-6 py-6 text-[#111827]">
             <ReportPrintActions
-              dashboardHref={`/cb-lab/reporting/${data.id}`}
+              dashboardHref="https://www.cobalto.blue/cb-lab/reporting"
               pdfTargetId="full-report-canvas"
               pdfFileName={`${slugFileName(company)}-reporte-completo.pdf`}
             />

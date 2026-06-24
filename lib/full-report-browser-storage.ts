@@ -64,3 +64,12 @@ export function saveStoredFullReport(snapshot: FullReportSnapshot) {
 
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
 }
+
+export function deleteStoredFullReport(id: string) {
+  if (!isBrowser()) {
+    return
+  }
+
+  const next = getStoredFullReports().filter((report) => report.id !== id)
+  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+}
