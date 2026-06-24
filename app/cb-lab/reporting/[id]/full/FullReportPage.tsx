@@ -190,7 +190,7 @@ function DeckPage({
 function FooterLogo() {
   return (
     <img
-      src="/brand/logo-main-fullwhite.png"
+      src="/brand/logo-mobile-cobalto-blue.svg"
       alt="cobalto.blue"
       className="absolute bottom-[30px] right-[50px] h-[38px] w-auto"
     />
@@ -547,16 +547,20 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
 
             <div id="full-report-canvas" data-pdf-format="deck">
               <DeckPage blue className="px-[88px] pt-[128px]">
-                <img src="/brand/logo-main-fullwhite.png" alt="cobalto.blue" className="h-[49px] w-auto" />
-                <div className="mt-[148px] max-w-[610px]">
-                  <p className="text-[20px] uppercase tracking-[0.02em] text-white/72">
+                <img
+                  src="/brand/logo-main-fullwhite.png"
+                  alt="cobalto.blue"
+                  className="absolute left-[88px] top-[132px] h-[116px] w-auto max-w-none"
+                />
+                <div className="mt-[168px] max-w-[620px]">
+                  <p className="text-[18px] uppercase tracking-[0.02em] text-white/72">
                     ANALISIS TECNICO DE RENDIMIENTO
                   </p>
-                  <h1 className="mt-4 text-[39px] font-bold leading-none text-white">{company}</h1>
-                  <p className="mt-3 break-all text-[16px] leading-tight text-white/70">
+                  <h1 className="mt-3 text-[37px] font-bold leading-none text-white">{company}</h1>
+                  <p className="mt-3 break-all text-[18px] leading-tight text-white/70">
                     {shouldRenderPageSpeedSlide ? websiteUrl : 'Sin sitio web registrado'}
                   </p>
-                  <p className="mt-6 text-[24px] leading-[1.12] text-white/86">
+                  <p className="mt-6 text-[23px] leading-[1.12] text-white/86">
                     Auditoria web, diagnostico de Core Web Vitals e inyeccion estrategica de datos semanticos para la preparacion de motores de IA (AI-Ready).
                   </p>
                 </div>
@@ -687,23 +691,28 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
               <DeckPage className="px-[58px] pt-[68px]">
                 <Title>Plan de Trabajo Estrategico</Title>
                 <Lead>{workPlanSubtitle}</Lead>
-                <div className="flex justify-between items-start gap-6 w-full mt-10">
+                <div className="relative mx-auto mt-[62px] h-[295px] w-[875px]">
+                  <div className="absolute left-0 right-0 top-[134px] h-[3px] bg-[#2500ff]" />
                   {[
-                    ['Fase 1', phaseOneTitle, phaseOneText],
-                    ['Fase 2', phaseTwoTitle, phaseTwoText],
-                    ['Fase 3', phaseThreeTitle, phaseThreeText],
-                    ['Fase 4', phaseFourTitle, phaseFourText]
-                  ].map(([phase, name, text]) => (
-                    <div key={phase} className="min-w-0 flex-1 text-center">
-                      <div className="flex items-center">
-                        <div className="h-[3px] flex-1 bg-[#2500ff]" />
-                        <div className="mx-3 h-[28px] w-[28px] shrink-0 rounded-full border-2 border-[#666666] bg-[#eeeeee]" />
-                        <div className="h-[3px] flex-1 bg-[#2500ff]" />
-                      </div>
-                      <div className="mt-6 px-1">
-                        <h3 className="text-[20px] font-bold text-[#2500ff]">{phase}</h3>
-                        <p className="mt-2 text-[13px] font-bold leading-tight text-[#444444]">{name}</p>
-                        <p className="mt-2 text-[13px] leading-tight text-[#444444]">{text}</p>
+                    { phase: 'Fase 1', name: phaseOneTitle, text: phaseOneText, left: '12%', position: 'bottom' },
+                    { phase: 'Fase 2', name: phaseTwoTitle, text: phaseTwoText, left: '35%', position: 'top' },
+                    { phase: 'Fase 3', name: phaseThreeTitle, text: phaseThreeText, left: '62%', position: 'bottom' },
+                    { phase: 'Fase 4', name: phaseFourTitle, text: phaseFourText, left: '88%', position: 'top' }
+                  ].map((item) => (
+                    <div key={item.phase}>
+                      <div
+                        className="absolute top-[121px] h-[28px] w-[28px] -translate-x-1/2 rounded-full border-2 border-[#666666] bg-[#eeeeee]"
+                        style={{ left: item.left }}
+                      />
+                      <div
+                        className={`absolute w-[250px] -translate-x-1/2 text-center ${
+                          item.position === 'top' ? 'bottom-[178px]' : 'top-[166px]'
+                        }`}
+                        style={{ left: item.left }}
+                      >
+                        <h3 className="text-[20px] font-bold text-[#2500ff]">{item.phase}</h3>
+                        <p className="mt-2 text-[13px] font-bold leading-tight text-[#111827]">{item.name}</p>
+                        <p className="mt-2 text-[13px] leading-tight text-[#111827]">{item.text}</p>
                       </div>
                     </div>
                   ))}
