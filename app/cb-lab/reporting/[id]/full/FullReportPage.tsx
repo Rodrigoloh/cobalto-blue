@@ -550,9 +550,11 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
     apiPageSpeedData?.emulatedDevice ?? 'Emulated Moto G Power with Lighthouse',
     apiPageSpeedData?.sessionType ?? 'Single page session',
     apiPageSpeedData?.loadType ?? 'Initial page load',
-    apiPageSpeedData?.throttling ?? 'Slow 4G throttling',
-    apiPageSpeedData?.browserEngine ?? 'Using HeadlessChromium with lr'
+    apiPageSpeedData?.throttling ?? 'Slow 4G throttling'
   ]
+  const browserEngineDetail = apiPageSpeedData?.browserEngine
+    ? apiPageSpeedData.browserEngine.replace(/^Using\s+/i, '')
+    : 'HeadlessChromium'
 
   useEffect(() => {
     const websiteUrl = getConfiguredWebsiteUrl(data, geminiJson)
@@ -691,10 +693,15 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
                   <p className="mx-[58px] mt-[14px] text-[14px] leading-[1.25] text-[#1f2937]">
                     El informe de <b>PageSpeed Insights</b> evidencia friccion en el rendimiento movil. El punto critico aparece en el <b>Largest Contentful Paint (LCP)</b>, la carga percibida y el tiempo que tarda el usuario en entender la oferta principal.
                   </p>
-                  <div className="absolute bottom-[30px] left-[58px] grid w-[620px] grid-cols-3 gap-x-5 gap-y-2 bg-[#f5f5f5] px-4 py-3 text-[9px] leading-tight text-[#666666]">
-                    {pageSpeedDetails.map((detail) => (
-                      <span key={detail}>{detail}</span>
-                    ))}
+                  <div className="absolute bottom-[28px] left-[58px] w-[690px] bg-[#f5f5f5] px-3 py-2 text-[8px] leading-tight text-[#666666]">
+                    <div className="grid grid-cols-5 gap-x-3">
+                      {pageSpeedDetails.map((detail) => (
+                        <span key={detail} className="truncate">{detail}</span>
+                      ))}
+                    </div>
+                    <p className="mt-1 truncate text-[7px] text-[#777777]">
+                      Browser: {browserEngineDetail}
+                    </p>
                   </div>
                   <FooterLogo />
                 </DeckPage>
