@@ -1,6 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Code2, LineChart, MapPinned, Monitor, Radio, Smartphone } from 'lucide-react'
 
 import { ReportPrintActions } from '@/components/private/ReportPrintActions'
@@ -14,6 +15,29 @@ import fullReportMockData from './mock-data.json'
 
 type FullPageProps = {
   mockData?: any
+}
+
+type ApiMetric = {
+  value: string
+  raw: number | null
+}
+
+type ApiPageSpeedData = {
+  performanceScore: number | null
+  accessibilityScore: number | null
+  bestPracticesScore: number | null
+  seoScore: number | null
+  fcp: ApiMetric
+  lcp: ApiMetric
+  tbt: ApiMetric
+  cls: ApiMetric
+  speedIndexMetric: ApiMetric
+  capturedAt?: string | null
+  emulatedDevice?: string | null
+  sessionType?: string | null
+  loadType?: string | null
+  throttling?: string | null
+  browserEngine?: string | null
 }
 
 function currency(value: number) {
@@ -48,12 +72,18 @@ function defaultImpact(): FinancialImpact {
 }
 
 function normalizeMockData(value: any) {
+  const geminiJson = value?.geminiJson && typeof value.geminiJson === 'object' ? value.geminiJson : value
   const input = value?.input && typeof value.input === 'object' ? value.input : {}
   const pagespeed = value?.pagespeed && typeof value.pagespeed === 'object' ? value.pagespeed : {}
 
   return {
     ...input,
+    ...geminiJson,
     ...value,
+    geminiJson: {
+      ...input,
+      ...geminiJson
+    },
     pagespeed: {
       ...pagespeed,
       mobile: pagespeed.mobile && typeof pagespeed.mobile === 'object' ? pagespeed.mobile : null,
@@ -71,6 +101,57 @@ function normalizeMockData(value: any) {
     hookSummary: value?.hookSummary || '',
     costOfInaction: value?.costOfInaction || '',
     technicalSummary: value?.technicalSummary || ''
+  }
+}
+
+function toScore(value: unknown) {
+  if (typeof value !== 'number' || Number.isNaN(value)) return null
+  return Math.max(0, Math.min(100, Math.round(value)))
+}
+
+function normalizeApiMetric(value: any, fallbackRaw: number | null, formatter: (value: number | null) => string): ApiMetric {
+  if (value && typeof value === 'object') {
+    const raw = typeof value.raw === 'number' ? value.raw : fallbackRaw
+    return {
+      value: typeof value.value === 'string' ? value.value : formatter(raw),
+      raw
+    }
+  }
+
+  return {
+    value: formatter(fallbackRaw),
+    raw: fallbackRaw
+  }
+}
+
+function normalizeApiPageSpeedData(value: any, fallbackAudit?: any): ApiPageSpeedData | null {
+  const source = value && typeof value === 'object' ? value : null
+  const audit = fallbackAudit && typeof fallbackAudit === 'object' ? fallbackAudit : null
+
+  if (!source && !audit) {
+    return null
+  }
+
+  return {
+    performanceScore: toScore(source?.performanceScore ?? audit?.performanceScore),
+    accessibilityScore: toScore(source?.accessibilityScore ?? audit?.accessibilityScore),
+    bestPracticesScore: toScore(source?.bestPracticesScore ?? audit?.bestPracticesScore),
+    seoScore: toScore(source?.seoScore ?? audit?.seoScore),
+    fcp: normalizeApiMetric(source?.fcp, audit?.firstContentfulPaint ?? null, formatMilliseconds),
+    lcp: normalizeApiMetric(source?.lcp, audit?.largestContentfulPaint ?? null, formatMilliseconds),
+    tbt: normalizeApiMetric(source?.tbt, audit?.totalBlockingTime ?? null, formatMilliseconds),
+    cls: normalizeApiMetric(source?.cls, audit?.cumulativeLayoutShift ?? null, formatCLS),
+    speedIndexMetric: normalizeApiMetric(
+      source?.speedIndexMetric,
+      audit?.speedIndex ?? null,
+      formatMilliseconds
+    ),
+    capturedAt: source?.capturedAt ?? audit?.capturedAt ?? null,
+    emulatedDevice: source?.emulatedDevice ?? audit?.emulatedDevice ?? null,
+    sessionType: source?.sessionType ?? audit?.sessionType ?? null,
+    loadType: source?.loadType ?? audit?.loadType ?? null,
+    throttling: source?.throttling ?? audit?.throttling ?? null,
+    browserEngine: source?.browserEngine ?? audit?.browserEngine ?? null
   }
 }
 
@@ -303,83 +384,176 @@ function PageSpeedMock({
   )
 }
 
+function PageSpeedSkeleton() {
+  return (
+    <div className="mt-[22px] flex h-[322px] bg-white">
+      <div className="flex w-[382px] flex-col items-center justify-center border-r border-black/10 px-7">
+        <div className="grid w-full grid-cols-2 gap-x-5 gap-y-5">
+          {['Performance', 'Accessibility', 'Best Practices', 'SEO'].map((label) => (
+            <div key={label} className="flex flex-col items-center">
+              <div className="h-[86px] w-[86px] rounded-full bg-[#e5e7eb]" />
+              <div className="mt-3 h-[12px] w-[82px] bg-[#e5e7eb]" />
+            </div>
+          ))}
+        </div>
+        <div className="mt-4 h-[10px] w-[180px] bg-[#e5e7eb]" />
+      </div>
+
+      <div className="flex-1 px-6 py-5">
+        <div className="mb-5 flex items-center justify-center">
+          <div className="h-[24px] w-[96px] bg-[#e5e7eb]" />
+        </div>
+        <div className="grid grid-cols-2 gap-x-9 pt-3">
+          {[0, 1].map((column) => (
+            <div key={column} className="space-y-4">
+              {[0, 1, 2].map((row) => (
+                <div key={row} className="border-b border-black/5 pb-3">
+                  <div className="h-[10px] w-[150px] bg-[#e5e7eb]" />
+                  <div className="ml-7 mt-3 h-[24px] w-[92px] bg-[#e5e7eb]" />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function FullReportPage({ mockData = fullReportMockData }: FullPageProps) {
   const data = normalizeMockData(mockData)
-  const mobile = data.pagespeed.mobile
+  const geminiJson = data.geminiJson
+  const initialApiPageSpeedData = useMemo(
+    () => normalizeApiPageSpeedData(data.apiPageSpeedData, data.pagespeed.mobile),
+    [data.apiPageSpeedData, data.pagespeed.mobile]
+  )
+  const [apiPageSpeedData, setApiPageSpeedData] = useState<ApiPageSpeedData | null>(
+    initialApiPageSpeedData
+  )
+  const [isPageSpeedLoading, setIsPageSpeedLoading] = useState(!initialApiPageSpeedData)
   const impact = data.financialImpact ?? defaultImpact()
   const weeklyLoss = Math.round(impact.lostRevenueMonthly / 4)
   const weeklyVisitors = Math.max(10, Math.round(impact.monthlyVisits / 4))
   const firstFinding = data.findings[0] ?? data.hookSummary
   const secondFinding = data.findings[1] ?? data.costOfInaction
   const thirdFinding = data.findings[2] ?? data.technicalSummary
-  const company = data.companyName || 'Empresa analizada'
-  const city = data.city || 'su mercado'
-  const industry = data.industry || 'su industria'
-  const cta = data.primaryCta || 'contacto comercial'
+  const company = geminiJson.companyName || 'Empresa analizada'
+  const city = geminiJson.city || 'su mercado'
+  const industry = geminiJson.industry || 'su industria'
+  const cta = geminiJson.primaryCta || 'contacto comercial'
   const visionGeneralP1 =
-    data.visionGeneralP1 ||
-    data.visionImpactText ||
+    geminiJson.visionGeneralP1 ||
+    geminiJson.visionImpactText ||
     `La experiencia de ${company} en ${industry} se ve limitada digitalmente por una estructura que no comunica con la velocidad que el mercado espera en ${city}.`
   const visionGeneralP2 =
-    data.visionGeneralP2 ||
-    data.visionImpactTextSecondary ||
+    geminiJson.visionGeneralP2 ||
+    geminiJson.visionImpactTextSecondary ||
     'El sitio web actua como un catalogo estatico, desaprovechando su potencial de conversion corporativa y limitando el flujo activo de adquisicion.'
-  const visionUxP1 = data.visionUxP1 || data.visionConversionText || firstFinding
+  const visionUxP1 = geminiJson.visionUxP1 || geminiJson.visionConversionText || firstFinding
   const visionUxP2 =
-    data.visionUxP2 ||
-    data.visionConversionTextSecondary ||
+    geminiJson.visionUxP2 ||
+    geminiJson.visionConversionTextSecondary ||
     secondFinding ||
     `La ausencia de rutas claras hacia ${cta} diluye la prospeccion y reduce la confianza de compradores que buscan respuesta inmediata.`
-  const opportunityAreasP1 = data.opportunityAreasP1 || firstFinding
+  const opportunityAreasP1 = geminiJson.opportunityAreasP1 || firstFinding
   const opportunityAreasP2 =
-    data.opportunityAreasP2 ||
+    geminiJson.opportunityAreasP2 ||
     `La experiencia necesita conectar mejor el mensaje principal con ${cta} para reducir dudas y acelerar solicitudes calificadas.`
-  const opportunityInconsistenciesP1 = data.opportunityInconsistenciesP1 || secondFinding
+  const opportunityInconsistenciesP1 = geminiJson.opportunityInconsistenciesP1 || secondFinding
   const opportunityInconsistenciesP2 =
-    data.opportunityInconsistenciesP2 ||
+    geminiJson.opportunityInconsistenciesP2 ||
     thirdFinding ||
     'Las inconsistencias tecnicas y narrativas reducen la confianza antes de que el usuario llegue a contacto.'
-  const nextStepsSubtitle = data.nextStepsSubtitle || 'Consistencia de Datos & SEO Semantico'
-  const nextStepOneTitle = data.nextStepOneTitle || 'Consolidacion NAP'
+  const nextStepsSubtitle = geminiJson.nextStepsSubtitle || 'Consistencia de Datos & SEO Semantico'
+  const nextStepOneTitle = geminiJson.nextStepOneTitle || 'Consolidacion NAP'
   const nextStepOneText =
-    data.nextStepOneText ||
-    data.nextStepNapText ||
+    geminiJson.nextStepOneText ||
+    geminiJson.nextStepNapText ||
     `Resolver discrepancias de nombre, ubicacion y servicio para unificar la huella digital de ${company} en buscadores locales.`
-  const nextStepTwoTitle = data.nextStepTwoTitle || 'Estructuracion de Datos'
+  const nextStepTwoTitle = geminiJson.nextStepTwoTitle || 'Estructuracion de Datos'
   const nextStepTwoText =
-    data.nextStepTwoText ||
-    data.nextStepDataText ||
+    geminiJson.nextStepTwoText ||
+    geminiJson.nextStepDataText ||
     'Implementacion nativa de marcado JSON-LD para optimizar la indexacion por buscadores e inteligencias artificiales.'
-  const nextStepThreeTitle = data.nextStepThreeTitle || 'Limpieza Indexable'
+  const nextStepThreeTitle = geminiJson.nextStepThreeTitle || 'Limpieza Indexable'
   const nextStepThreeText =
-    data.nextStepThreeText ||
-    data.nextStepIndexText ||
+    geminiJson.nextStepThreeText ||
+    geminiJson.nextStepIndexText ||
     'Eliminacion de rutas fantasma e inconsistencias de URL para maximizar crawling y fortalecer la confianza de entidad.'
-  const workPlanSubtitle = data.workPlanSubtitle || 'Consistencia de Datos & SEO Semantico'
-  const phaseOneTitle = data.phaseOneTitle || 'Rediseno & Migracion'
-  const phaseTwoTitle = data.phaseTwoTitle || 'AI-Ready Metadata'
-  const phaseThreeTitle = data.phaseThreeTitle || 'CRO & Captacion B2B'
-  const phaseFourTitle = data.phaseFourTitle || 'Optimizacion WPO'
+  const workPlanSubtitle = geminiJson.workPlanSubtitle || 'Consistencia de Datos & SEO Semantico'
+  const phaseOneTitle = geminiJson.phaseOneTitle || 'Rediseno & Migracion'
+  const phaseTwoTitle = geminiJson.phaseTwoTitle || 'AI-Ready Metadata'
+  const phaseThreeTitle = geminiJson.phaseThreeTitle || 'CRO & Captacion B2B'
+  const phaseFourTitle = geminiJson.phaseFourTitle || 'Optimizacion WPO'
   const phaseOneText =
-    data.phaseOneText ||
+    geminiJson.phaseOneText ||
     'Transicion a una arquitectura agil para estructurar codigo limpio y semantico de manera nativa.'
   const phaseTwoText =
-    data.phaseTwoText ||
+    geminiJson.phaseTwoText ||
     'Integracion de marcado JSON-LD preciso unificando identidad corporativa, ubicacion y horarios extendidos.'
   const phaseThreeText =
-    data.phaseThreeText ||
+    geminiJson.phaseThreeText ||
     `Modulo y flujo de conversion enfocado en ${cta}, velocidad de respuesta y seguimiento comercial.`
   const phaseFourText =
-    data.phaseFourText ||
+    geminiJson.phaseFourText ||
     'Conversion grafica moderna, cache, CDN y configuracion tecnica orientada a rendimiento.'
   const pageSpeedDetails = [
-    formatCaptureDate(mobile?.capturedAt),
-    mobile?.emulatedDevice ?? 'Emulated Moto G Power with Lighthouse',
-    mobile?.sessionType ?? 'Single page session',
-    mobile?.loadType ?? 'Initial page load',
-    mobile?.throttling ?? 'Slow 4G throttling',
-    mobile?.browserEngine ?? 'Using HeadlessChromium with lr'
+    formatCaptureDate(apiPageSpeedData?.capturedAt),
+    apiPageSpeedData?.emulatedDevice ?? 'Emulated Moto G Power with Lighthouse',
+    apiPageSpeedData?.sessionType ?? 'Single page session',
+    apiPageSpeedData?.loadType ?? 'Initial page load',
+    apiPageSpeedData?.throttling ?? 'Slow 4G throttling',
+    apiPageSpeedData?.browserEngine ?? 'Using HeadlessChromium with lr'
   ]
+
+  useEffect(() => {
+    const websiteUrl = data.websiteUrl || geminiJson.websiteUrl
+
+    if (initialApiPageSpeedData || !websiteUrl) {
+      setIsPageSpeedLoading(false)
+      return
+    }
+
+    let cancelled = false
+
+    async function loadPageSpeed() {
+      setIsPageSpeedLoading(true)
+
+      try {
+        const response = await fetch('/api/reports/pagespeed', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ websiteUrl })
+        })
+        const payload = await response.json().catch(() => null)
+
+        if (!response.ok || !payload?.apiPageSpeedData) {
+          throw new Error(payload?.error || 'No fue posible consultar PageSpeed.')
+        }
+
+        if (!cancelled) {
+          setApiPageSpeedData(normalizeApiPageSpeedData(payload.apiPageSpeedData))
+        }
+      } catch {
+        if (!cancelled) {
+          setApiPageSpeedData(null)
+        }
+      } finally {
+        if (!cancelled) {
+          setIsPageSpeedLoading(false)
+        }
+      }
+    }
+
+    loadPageSpeed()
+
+    return () => {
+      cancelled = true
+    }
+  }, [data.websiteUrl, geminiJson.websiteUrl, initialApiPageSpeedData])
 
   return (
           <main className="report-shell min-h-screen px-6 py-6 text-[#111827]">
@@ -440,36 +614,25 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
                 <div className="px-[58px]">
                   <Title>Rendimiento y Core Web Vitals</Title>
                 </div>
-                <PageSpeedMock
-                  scores={[
-                    { label: 'Performance', score: mobile?.performanceScore ?? data.overallScore },
-                    { label: 'Accessibility', score: mobile?.accessibilityScore ?? null },
-                    { label: 'Best Practices', score: mobile?.bestPracticesScore ?? null },
-                    { label: 'SEO', score: mobile?.seoScore ?? null }
-                  ]}
-                  metrics={{
-                    fcp: {
-                      value: formatMilliseconds(mobile?.firstContentfulPaint ?? null),
-                      raw: mobile?.firstContentfulPaint ?? null
-                    },
-                    lcp: {
-                      value: formatMilliseconds(mobile?.largestContentfulPaint ?? null),
-                      raw: mobile?.largestContentfulPaint ?? null
-                    },
-                    tbt: {
-                      value: formatMilliseconds(mobile?.totalBlockingTime ?? null),
-                      raw: mobile?.totalBlockingTime ?? null
-                    },
-                    cls: {
-                      value: formatCLS(mobile?.cumulativeLayoutShift ?? null),
-                      raw: mobile?.cumulativeLayoutShift ?? null
-                    },
-                    speedIndex: {
-                      value: formatMilliseconds(mobile?.speedIndex ?? null),
-                      raw: mobile?.speedIndex ?? null
-                    }
-                  }}
-                />
+                {isPageSpeedLoading || !apiPageSpeedData ? (
+                  <PageSpeedSkeleton />
+                ) : (
+                  <PageSpeedMock
+                    scores={[
+                      { label: 'Performance', score: apiPageSpeedData.performanceScore },
+                      { label: 'Accessibility', score: apiPageSpeedData.accessibilityScore },
+                      { label: 'Best Practices', score: apiPageSpeedData.bestPracticesScore },
+                      { label: 'SEO', score: apiPageSpeedData.seoScore }
+                    ]}
+                    metrics={{
+                      fcp: apiPageSpeedData.fcp,
+                      lcp: apiPageSpeedData.lcp,
+                      tbt: apiPageSpeedData.tbt,
+                      cls: apiPageSpeedData.cls,
+                      speedIndex: apiPageSpeedData.speedIndexMetric
+                    }}
+                  />
+                )}
                 <p className="mx-[58px] mt-[14px] text-[14px] leading-[1.25] text-[#1f2937]">
                   El informe de <b>PageSpeed Insights</b> evidencia friccion en el rendimiento movil. El punto critico aparece en el <b>Largest Contentful Paint (LCP)</b>, la carga percibida y el tiempo que tarda el usuario en entender la oferta principal.
                 </p>
@@ -531,7 +694,7 @@ export function FullReportPage({ mockData = fullReportMockData }: FullPageProps)
               <DeckPage className="px-[58px] pt-[68px]">
                 <Title>Plan de Trabajo Estrategico</Title>
                 <Lead>{workPlanSubtitle}</Lead>
-                <div className="flex justify-between items-start gap-4 w-full mt-10">
+                <div className="flex justify-between items-start gap-6 w-full mt-10">
                   {[
                     ['Fase 1', phaseOneTitle, phaseOneText],
                     ['Fase 2', phaseTwoTitle, phaseTwoText],

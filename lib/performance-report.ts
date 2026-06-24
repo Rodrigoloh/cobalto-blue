@@ -223,7 +223,7 @@ function normalizePageSpeed(strategy: 'mobile' | 'desktop', payload: any): Audit
   }
 }
 
-async function runPageSpeedAudit(url: string, strategy: 'mobile' | 'desktop') {
+export async function runPageSpeedAudit(url: string, strategy: 'mobile' | 'desktop') {
   const endpoint = new URL('https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed')
   endpoint.searchParams.set('url', url)
   endpoint.searchParams.set('strategy', strategy)
